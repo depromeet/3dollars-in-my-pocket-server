@@ -2,7 +2,9 @@ package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.dto.TokenDto;
 import com.depromeet.team5.service.SocialService;
+import com.depromeet.team5.util.GoogleProviders;
 import com.depromeet.team5.util.KakaoProviders;
+import com.depromeet.team5.vo.GoogleUserVo;
 import com.depromeet.team5.vo.KakaoUserVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,13 @@ public class SocialServiceImpl implements SocialService {
     public KakaoUserVo getKakaoUserInfo(TokenDto dto) {
         HttpEntity<String> entity = new HttpEntity<>("parameters", createHeader(dto.getToken()));
         return restTemplate.exchange(KakaoProviders.KAKAO.getUserinfoEndpoint(), HttpMethod.GET, entity, KakaoUserVo.class).getBody();
+    }
+
+    @Override
+    public GoogleUserVo getGoogleUserInfo(TokenDto dto) {
+        HttpEntity<String> entity = new HttpEntity<>("parameters", createHeader(dto.getToken()));
+        log.info(restTemplate.exchange(GoogleProviders.GOOGLE.getUserinfoEndpoint(), HttpMethod.GET, entity, GoogleUserVo.class).getBody().toString());
+        return restTemplate.exchange(GoogleProviders.GOOGLE.getUserinfoEndpoint(), HttpMethod.GET, entity, GoogleUserVo.class).getBody();
     }
 
     private HttpHeaders createHeader(String token) {
