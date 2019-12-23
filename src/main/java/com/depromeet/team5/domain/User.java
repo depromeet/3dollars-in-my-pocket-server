@@ -2,9 +2,7 @@ package com.depromeet.team5.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -13,7 +11,10 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @Enumerated(value = EnumType.STRING)
+    private SocialTypes socialType;
+
     private Long socialId;
 
-    private String nickName;
+    private String name;
 }
