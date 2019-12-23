@@ -13,7 +13,9 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    private String socialType;
+
     private Long socialId;
 
-    private String nickName;
+    private String name;
 }
