@@ -1,5 +1,6 @@
 package com.depromeet.team5.dto;
 
+import com.depromeet.team5.domain.SocialTypes;
 import lombok.Data;
 
 @Data
@@ -8,5 +9,5 @@ public class UserDto {
 
     private String name;
 
-    private String socialType;
+    private SocialTypes socialType;
 }
