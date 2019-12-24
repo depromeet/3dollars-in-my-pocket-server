@@ -1,8 +1,6 @@
 package com.depromeet.team5.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum  SocialTypes {
