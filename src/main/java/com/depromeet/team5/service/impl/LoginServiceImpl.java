@@ -23,32 +23,25 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     public LoginDto login(UserDto userDto) {
 
-        User user = userRepository.findBySocialIdAndSocialType(userDto.getSocialId(), userDto.getSocialType());
-
-        LoginDto loginDto = new LoginDto();
-
-        if (user == null) {
-            User newUser = new User();
-
-            newUser.setSocialType(userDto.getSocialType());
-            newUser.setSocialId(userDto.getSocialId());
-            newUser.setName(userDto.getName());
-
-            userRepository.save(newUser);
-
-            JwtService.TokenRes token = new JwtService.TokenRes(jwtService.create(newUser.getId()));
-            loginDto.setToken(token.getToken());
-
-            User user1 = userRepository.findBySocialIdAndSocialType(userDto.getSocialId(), userDto.getSocialType());
-            loginDto.setUserId(user1.getId());
-
-            return loginDto;
-        }
+        User user = userRepository.findBySocialIdAndSocialType(userDto.getSocialId(), userDto.getSocialType())
+                .orElseGet(() -> createUser(userDto));
 
         JwtService.TokenRes token = new JwtService.TokenRes(jwtService.create(user.getId()));
+
+        LoginDto loginDto = new LoginDto();
         loginDto.setToken(token.getToken());
         loginDto.setUserId(user.getId());
 
         return loginDto;
+    }
+
+    private User createUser(UserDto userDto) {
+        User user = User.from(
+                userDto.getSocialType(),
+                userDto.getSocialId(),
+                userDto.getName()
+        );
+        userRepository.save(user);
+        return user;
     }
 }

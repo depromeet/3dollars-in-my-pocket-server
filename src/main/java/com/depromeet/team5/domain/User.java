@@ -17,4 +17,12 @@ public class User {
     private Long socialId;
 
     private String name;
+
+    public static User from(SocialTypes socialType, Long socialId, String name) {
+        User user = new User();
+        user.socialType = socialType;
+        user.socialId = socialId;
+        user.name = name;
+        return user;
+    }
 }
