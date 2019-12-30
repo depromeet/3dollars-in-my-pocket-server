@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain;
 
+import com.depromeet.team5.dto.UserDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,11 +19,11 @@ public class User {
 
     private String name;
 
-    public static User from(SocialTypes socialType, Long socialId, String name) {
+    public static User from(UserDto userDto) {
         User user = new User();
-        user.socialType = socialType;
-        user.socialId = socialId;
-        user.name = name;
+        user.socialType = userDto.getSocialType();
+        user.socialId = userDto.getSocialId();
+        user.name = userDto.getName();
         return user;
     }
 }
