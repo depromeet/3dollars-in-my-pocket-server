@@ -14,11 +14,11 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private SocialTypes socialType;
 
-    private Long socialId;
+    private String socialId;
 
     private String name;
 
-    public static User from(SocialTypes socialType, Long socialId, String name) {
+    public static User from(SocialTypes socialType, String socialId, String name) {
         User user = new User();
         user.socialType = socialType;
         user.socialId = socialId;

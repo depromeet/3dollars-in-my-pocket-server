@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findBySocialIdAndSocialType(Long socialId, SocialTypes socialType);
+public interface UserRepository extends JpaRepository<User, String> {
+    Optional<User> findBySocialIdAndSocialType(String socialId, SocialTypes socialType);
 }
