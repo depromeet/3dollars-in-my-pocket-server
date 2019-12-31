@@ -21,11 +21,6 @@ public class StoreController {
         return new ResponseEntity<>("store save success", HttpStatus.OK);
     }
 
-//    @PutMapping("/update")
-//    public ResponseEntity<String> update() {
-//        storeService.updateStore();
-//        return new ResponseEntity<>("store update success", HttpStatus.OK);
-//    }
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam Long storeId) {

@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,17 +26,13 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void saveStore(StoreDto storeDto, Long userId){
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Store store = Store.from(storeDto, user);
+        List<String> image = new ArrayList<>();
+        image.add("aa");
+        image.add("bb");
+        Store store = Store.from(storeDto, image, user);
         storeRepository.save(store);
     }
 
-//    @Override
-//    @Transactional
-//    public void updateStore(StoreDto storeDto, Long userId, Long storeId) {
-//        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-////        Store.setStore()
-//    }
 
     @Override
     @Transactional

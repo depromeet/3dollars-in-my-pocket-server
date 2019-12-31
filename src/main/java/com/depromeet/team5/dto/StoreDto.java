@@ -1,6 +1,7 @@
 package com.depromeet.team5.dto;
 
 import com.depromeet.team5.domain.CategoryTypes;
+import com.depromeet.team5.domain.Menu;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,8 +17,8 @@ public class StoreDto {
 
     private CategoryTypes category;
 
-    private List<MultipartFile> image;
+//    private List<MultipartFile> image;
 
-    private List<MenuDto> menu;
+//    private List<Menu> menu;
 
 }
