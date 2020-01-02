@@ -3,6 +3,7 @@ package com.depromeet.team5.service.impl;
 import com.depromeet.team5.domain.Image;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
+import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,8 +38,11 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<Store> getAll(Long latitude, Long longitude, Long radius) {
-        List<Store> storeList= storeRepository.findAllByAddress(latitude, longitude, radius);
+    public List<StoreCardDto> getAll(Long latitude, Long longitude, Long radius) {
+        List<StoreCardDto> storeList= storeRepository.findAllByAddress(latitude, longitude, radius)
+                .stream()
+                .map(StoreCardDto::from)
+                .collect(Collectors.toList());
         return storeList;
     }
 

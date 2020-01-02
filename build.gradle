@@ -29,6 +29,7 @@ dependencies {
     }
 
     compile group: 'com.auth0', name: 'java-jwt', version: '3.7.0'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml'
 }
 
 test {

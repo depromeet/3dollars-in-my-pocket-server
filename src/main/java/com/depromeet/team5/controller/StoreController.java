@@ -2,6 +2,7 @@ package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.service.StoreService;
@@ -25,7 +26,7 @@ public class StoreController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<Store>> getAll(@RequestParam Long latitude, @RequestParam Long longitude, @RequestParam Long radius) {
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Long latitude, @RequestParam Long longitude, @RequestParam Long radius) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude, radius), HttpStatus.OK);
     }
 
