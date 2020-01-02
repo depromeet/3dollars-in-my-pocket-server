@@ -36,8 +36,8 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<Store> getAll() {
-        List<Store> storeList= storeRepository.findAll();
+    public List<Store> getAll(Long latitude, Long longitude, Long radius) {
+        List<Store> storeList= storeRepository.findAllByAddress(latitude, longitude, radius);
         return storeList;
     }
 
