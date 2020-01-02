@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StoreService {
     void saveStore(StoreDto storeDto, Long userId);
-    List<Store> getStore();
+    List<Store> getAll();
     Store getDetail(Long storeId);
 
     void deleteStore(Long storeId);

@@ -26,7 +26,7 @@ public class StoreController {
 
     @GetMapping("/get")
     public ResponseEntity<List<Store>> getAll() {
-        return new ResponseEntity<>(storeService.getStore(), HttpStatus.OK);
+        return new ResponseEntity<>(storeService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/get/detail")

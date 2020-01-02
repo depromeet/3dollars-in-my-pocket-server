@@ -35,12 +35,14 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getStore() {
+    @Transactional
+    public List<Store> getAll() {
         List<Store> storeList= storeRepository.findAll();
         return storeList;
     }
 
     @Override
+    @Transactional
     public Store getDetail(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
         return store;
