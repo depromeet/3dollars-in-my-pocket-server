@@ -1,5 +1,6 @@
 package com.depromeet.team5.service.impl;
 
+import com.depromeet.team5.domain.Image;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
 import com.depromeet.team5.dto.StoreDto;
@@ -26,11 +27,23 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void saveStore(StoreDto storeDto, Long userId){
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<String> image = new ArrayList<>();
-        image.add("aa");
-        image.add("bb");
+        List<Image> image = new ArrayList<>();
+
         Store store = Store.from(storeDto, image, user);
+        log.info(storeRepository.findAll().toString());
         storeRepository.save(store);
+    }
+
+    @Override
+    public List<Store> getStore() {
+        List<Store> storeList= storeRepository.findAll();
+        return storeList;
+    }
+
+    @Override
+    public Store getDetail(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        return store;
     }
 
 
@@ -40,6 +53,8 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
         storeRepository.delete(store);
     }
+
+
 
 
 }

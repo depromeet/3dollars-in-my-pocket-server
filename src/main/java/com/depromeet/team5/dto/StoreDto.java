@@ -17,8 +17,8 @@ public class StoreDto {
 
     private CategoryTypes category;
 
-//    private List<MultipartFile> image;
+    private List<MultipartFile> image;
 
-//    private List<Menu> menu;
+    private List<Menu> menu;
 
 }
