@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,13 +21,17 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody StoreDto storeDto, @RequestParam Long userId) {
+    public ResponseEntity<String> save(StoreDto storeDto,
+                                       @RequestPart(value = "image", required = false) List<MultipartFile> image,
+                                       @RequestParam Long userId) {
+        if (image != null) storeDto.setImage(image);
         storeService.saveStore(storeDto, userId);
         return new ResponseEntity<>("store save success", HttpStatus.OK);
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude, @RequestParam Float longitude) {
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude,
+                                                     @RequestParam Float longitude) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
     }
 
@@ -36,7 +41,8 @@ public class StoreController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> getUpdate(@RequestBody StoreDto storeDto, @RequestParam Long storeId) {
+    public ResponseEntity<String> getUpdate(@RequestBody StoreDto storeDto,
+                                            @RequestParam Long storeId) {
         storeService.updateStore(storeDto, storeId);
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }

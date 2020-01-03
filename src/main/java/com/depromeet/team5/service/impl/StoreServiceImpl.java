@@ -9,12 +9,16 @@ import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.StoreRepository;
 import com.depromeet.team5.repository.UserRepository;
+import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,16 +28,29 @@ import java.util.stream.Collectors;
 public class StoreServiceImpl implements StoreService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+    private final S3FileUploadService s3FileUploadService;
 
     @Override
     @Transactional
     public void saveStore(StoreDto storeDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Image> image = new ArrayList<>();
+        try {
+            List<Image> image = new ArrayList<>();
+            if(storeDto.getImage() != null) {
+                for (MultipartFile multipartFile: storeDto.getImage()) {
+                    Image image1 = new Image();
+                    image1.setUrl(s3FileUploadService.upload(multipartFile));
+                    image.add(image1);
+                }
+            }
 
-        Store store = Store.from(storeDto, image, user);
-        log.info(storeRepository.findAll().toString());
-        storeRepository.save(store);
+            Store store = Store.from(storeDto, image, user);
+            log.info(storeRepository.findAll().toString());
+            storeRepository.save(store);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+
     }
 
     @Override
