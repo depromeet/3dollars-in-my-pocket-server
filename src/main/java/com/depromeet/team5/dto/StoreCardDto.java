@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class StoreCardDto {
-
     private Long id;
     private CategoryTypes category;
     private Long review;
@@ -26,10 +25,9 @@ public class StoreCardDto {
         return storeCardDto;
     }
 
-    public static StoreCardDto calculationDistance(StoreCardDto storeCardDto, Float lat, Float lng) {
+    public static void calculationDistance(StoreCardDto storeCardDto, Float lat, Float lng) {
         LocationDistance locationDistance = new LocationDistance();
         storeCardDto.distance = (int)locationDistance.distance(storeCardDto.getLatitude(), storeCardDto.getLongitude(), lat, lng, "meter");
-        return storeCardDto;
     }
 
 }
