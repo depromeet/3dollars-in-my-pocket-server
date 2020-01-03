@@ -15,7 +15,7 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private SocialTypes socialType;
 
-    private Long socialId;
+    private String socialId;
 
     private String name;
 
