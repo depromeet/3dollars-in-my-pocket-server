@@ -34,23 +34,11 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void saveStore(StoreDto storeDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        try {
-            List<Image> image = new ArrayList<>();
-            if(storeDto.getImage() != null) {
-                for (MultipartFile multipartFile: storeDto.getImage()) {
-                    Image image1 = new Image();
-                    image1.setUrl(s3FileUploadService.upload(multipartFile));
-                    image.add(image1);
-                }
-            }
+        List<Image> image = convertImage(storeDto.getImage());
 
-            Store store = Store.from(storeDto, image, user);
-            log.info(storeRepository.findAll().toString());
-            storeRepository.save(store);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-
+        Store store = Store.from(storeDto, image, user);
+        log.info(storeRepository.findAll().toString());
+        storeRepository.save(store);
     }
 
     @Override
@@ -78,7 +66,8 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void updateStore(StoreDto storeDto, Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-        store.setStore(storeDto);
+        List<Image> image = convertImage(storeDto.getImage());
+        store.setStore(storeDto, image);
         storeRepository.save(store);
     }
 
@@ -90,5 +79,22 @@ public class StoreServiceImpl implements StoreService {
         storeRepository.delete(store);
     }
 
+
+    private List<Image> convertImage(List<MultipartFile> multipartFileList) {
+        List<Image> image = new ArrayList<>();
+        try {
+            if (multipartFileList != null) {
+                for (MultipartFile multipartFile : multipartFileList) {
+                    Image image1 = new Image();
+                    image1.setUrl(s3FileUploadService.upload(multipartFile));
+                    image.add(image1);
+                }
+            }
+
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return image;
+    }
 
 }

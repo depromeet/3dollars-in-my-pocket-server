@@ -41,8 +41,10 @@ public class StoreController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> getUpdate(@RequestBody StoreDto storeDto,
+    public ResponseEntity<String> getUpdate(StoreDto storeDto,
+                                            @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                             @RequestParam Long storeId) {
+        if (image != null) storeDto.setImage(image);
         storeService.updateStore(storeDto, storeId);
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }

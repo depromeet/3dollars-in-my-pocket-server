@@ -36,24 +36,25 @@ public class Store {
     @ManyToOne
     private User user;
 
-    public static Store from(StoreDto storeDto, List<Image> image, User user) {
+    public static Store from(StoreDto storeDto, List<Image> imageList, User user) {
         Store store = new Store();
         store.latitude = storeDto.getLatitude();
         store.longitude = storeDto.getLongitude();
         store.storeName = storeDto.getStoreName();
         store.category = storeDto.getCategory();
-        store.image = image;
+        store.image = imageList;
         store.menu = storeDto.getMenu();
         store.review = 0L;
         store.user = user;
         return store;
     }
 
-    public void setStore(StoreDto storeDto) {
+    public void setStore(StoreDto storeDto, List<Image> imageList) {
         latitude = storeDto.getLatitude();
         longitude = storeDto.getLongitude();
         storeName = storeDto.getStoreName();
-//        image = storeDto.getImage();
+        image.clear();
+        image.addAll(imageList);
         menu.clear();
         menu.addAll(storeDto.getMenu());
     }
