@@ -26,7 +26,7 @@ public class StoreController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Long latitude, @RequestParam Long longitude, @RequestParam Long radius) {
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude, @RequestParam Float longitude, @RequestParam Float radius) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude, radius), HttpStatus.OK);
     }
 

@@ -38,11 +38,15 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<StoreCardDto> getAll(Long latitude, Long longitude, Long radius) {
+    public List<StoreCardDto> getAll(Float latitude, Float longitude, Float radius) {
         List<StoreCardDto> storeList= storeRepository.findAllByAddress(latitude, longitude, radius)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
+
+        for (StoreCardDto storeCardDto:storeList) {
+            StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
+        }
         return storeList;
     }
 

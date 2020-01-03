@@ -14,9 +14,9 @@ public class Store {
     @GeneratedValue
     private Long id;
 
-    private Long latitude;
+    private Float latitude;
 
-    private Long longitude;
+    private Float longitude;
 
     private String storeName;
 

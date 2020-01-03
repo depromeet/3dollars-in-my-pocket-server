@@ -11,15 +11,24 @@ public class StoreCardDto {
     private Long id;
     private CategoryTypes category;
     private Long review;
-    private Double distance;
+    private Integer distance;
+    private Float latitude;
+    private Float longitude;
 
     public static StoreCardDto from(Store store) {
-        LocationDistance locationDistance = new LocationDistance();
         StoreCardDto storeCardDto = new StoreCardDto();
         storeCardDto.id = store.getId();
         storeCardDto.category = store.getCategory();
         storeCardDto.review = store.getReview();
-        storeCardDto.distance = locationDistance.distance(store.getLatitude(), store.getLongitude(), store.getLatitude(), store.getLongitude(), "meter");
+        storeCardDto.distance = 0;
+        storeCardDto.latitude = store.getLatitude();
+        storeCardDto.longitude = store.getLongitude();
+        return storeCardDto;
+    }
+
+    public static StoreCardDto calculationDistance(StoreCardDto storeCardDto, Float lat, Float lng) {
+        LocationDistance locationDistance = new LocationDistance();
+        storeCardDto.distance = (int)locationDistance.distance(storeCardDto.getLatitude(), storeCardDto.getLongitude(), lat, lng, "meter");
         return storeCardDto;
     }
 
