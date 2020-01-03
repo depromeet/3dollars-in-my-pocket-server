@@ -36,11 +36,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     private User createUser(UserDto userDto) {
-        User user = User.from(
-                userDto.getSocialType(),
-                userDto.getSocialId(),
-                userDto.getName()
-        );
+        User user = User.from(userDto);
         userRepository.save(user);
         return user;
     }
