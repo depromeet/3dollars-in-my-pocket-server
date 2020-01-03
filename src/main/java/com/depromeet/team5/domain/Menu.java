@@ -8,6 +8,8 @@ import javax.persistence.*;
 @Entity
 public class Menu {
     @Id
+    @GeneratedValue
+    private Long id;
     private String name;
     private Long price;
 }
