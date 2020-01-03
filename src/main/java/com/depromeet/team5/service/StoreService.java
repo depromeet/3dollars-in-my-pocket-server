@@ -10,6 +10,6 @@ public interface StoreService {
     void saveStore(StoreDto storeDto, Long userId);
     List<StoreCardDto> getAll(Float latitude, Float longitude);
     Store getDetail(Long storeId);
-    //update
+    void updateStore(StoreDto storeDto, Long storeId);
     void deleteStore(Long storeId);
 }

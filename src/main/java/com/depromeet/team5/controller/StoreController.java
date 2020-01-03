@@ -26,13 +26,19 @@ public class StoreController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude, @RequestParam Float longitude, @RequestParam Float radius) {
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude, @RequestParam Float longitude) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
     }
 
     @GetMapping("/get/detail")
     public ResponseEntity<Store> getDetail(@RequestParam Long storeId) {
         return new ResponseEntity<>(storeService.getDetail(storeId), HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> getUpdate(@RequestBody StoreDto storeDto, @RequestParam Long storeId) {
+        storeService.updateStore(storeDto, storeId);
+        return new ResponseEntity<>("store update success", HttpStatus.OK);
     }
 
 

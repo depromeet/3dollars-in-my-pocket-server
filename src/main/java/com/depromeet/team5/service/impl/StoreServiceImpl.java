@@ -27,7 +27,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void saveStore(StoreDto storeDto, Long userId){
+    public void saveStore(StoreDto storeDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Image> image = new ArrayList<>();
 
@@ -39,12 +39,12 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public List<StoreCardDto> getAll(Float latitude, Float longitude) {
-        List<StoreCardDto> storeList= storeRepository.findAllByAddress(latitude, longitude)
+        List<StoreCardDto> storeList = storeRepository.findAllByAddress(latitude, longitude)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
 
-        for (StoreCardDto storeCardDto:storeList) {
+        for (StoreCardDto storeCardDto : storeList) {
             StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
         }
         return storeList;
@@ -57,6 +57,14 @@ public class StoreServiceImpl implements StoreService {
         return store;
     }
 
+    @Override
+    @Transactional
+    public void updateStore(StoreDto storeDto, Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        store.setStore(storeDto);
+        storeRepository.save(store);
+    }
+
 
     @Override
     @Transactional
@@ -64,8 +72,6 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
         storeRepository.delete(store);
     }
-
-
 
 
 }

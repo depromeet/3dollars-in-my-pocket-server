@@ -49,5 +49,13 @@ public class Store {
         return store;
     }
 
+    public void setStore(StoreDto storeDto) {
+        latitude = storeDto.getLatitude();
+        longitude = storeDto.getLongitude();
+        storeName = storeDto.getStoreName();
+//        image = storeDto.getImage();
+        menu.clear();
+        menu.addAll(storeDto.getMenu());
+    }
 
 }
