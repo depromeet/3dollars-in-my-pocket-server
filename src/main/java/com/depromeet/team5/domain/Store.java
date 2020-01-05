@@ -31,6 +31,7 @@ public class Store {
     @JoinColumn(name = "menu_id")
     private List<Menu> menu = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
     private Long review;
 
     @ManyToOne

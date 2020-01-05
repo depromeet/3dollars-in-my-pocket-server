@@ -64,8 +64,4 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
         storeRepository.delete(store);
     }
-
-
-
-
 }

@@ -1,10 +1,8 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.Store;
-import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,7 +39,4 @@ public class StoreController {
         storeService.deleteStore(storeId);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
     }
-
-
-
 }
