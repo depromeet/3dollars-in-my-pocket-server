@@ -19,11 +19,20 @@ public class User {
 
     private String name;
 
+    private Boolean state;
+
     public static User from(UserDto userDto) {
         User user = new User();
         user.socialType = userDto.getSocialType();
         user.socialId = userDto.getSocialId();
         user.name = userDto.getName();
+        user.state = false;
         return user;
     }
+
+    public void setName(String nickName) {
+        name = nickName;
+        state = true;
+    }
+
 }
