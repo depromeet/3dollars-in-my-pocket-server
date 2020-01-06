@@ -3,6 +3,7 @@ package com.depromeet.team5.service.impl;
 import com.depromeet.team5.domain.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
+import com.depromeet.team5.exception.NickNameCheckException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
@@ -44,6 +45,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void setNickname(Long userId, String nickName) {
+        if(userRepository.findByNameLike(nickName).isPresent()){
+            throw new NickNameCheckException();
+        }
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         user.setName(nickName);
         userRepository.save(user);
