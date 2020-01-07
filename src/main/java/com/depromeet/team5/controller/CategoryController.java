@@ -1,6 +1,7 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.CategoryTypes;
+import com.depromeet.team5.dto.CategoryDto;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.service.CategoryService;
 import com.depromeet.team5.util.auth.Auth;
@@ -21,15 +22,15 @@ public class CategoryController {
 
     @Auth
     @GetMapping("/category/distance")
-    public ResponseEntity<List<StoreCardDto>> getDistanceAll(@RequestParam Float latitude,
-                                                     @RequestParam Float longitude,
-                                                     @RequestParam CategoryTypes category) {
+    public ResponseEntity<CategoryDto> getDistanceAll(@RequestParam Float latitude,
+                                                      @RequestParam Float longitude,
+                                                      @RequestParam CategoryTypes category) {
         return new ResponseEntity<>(categoryService.getDistanceList(latitude, longitude, category), HttpStatus.OK);
     }
 
     @Auth
     @GetMapping("/category/review")
-    public ResponseEntity<List<StoreCardDto>> getReviewAll(@RequestParam Float latitude,
+    public ResponseEntity<CategoryDto> getReviewAll(@RequestParam Float latitude,
                                                      @RequestParam Float longitude,
                                                      @RequestParam CategoryTypes category) {
         return new ResponseEntity<>(categoryService.getReviewList(latitude, longitude, category), HttpStatus.OK);

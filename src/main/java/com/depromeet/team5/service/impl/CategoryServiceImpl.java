@@ -1,6 +1,7 @@
 package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.CategoryTypes;
+import com.depromeet.team5.dto.CategoryDto;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.repository.StoreRepository;
 import com.depromeet.team5.service.CategoryService;
@@ -20,22 +21,26 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<StoreCardDto> getDistanceList(Float latitude, Float longitude, CategoryTypes category) {
-        List<StoreCardDto> storeList = DistanceList(latitude, longitude, 1F, category);
-        return storeList;
+    public CategoryDto getDistanceList(Float latitude, Float longitude, CategoryTypes category) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setStoreList50(DistanceList(latitude, longitude, 0F, 50F, category));
+        categoryDto.setStoreList100(DistanceList(latitude, longitude, 50F, 100F, category));
+        return categoryDto;
     }
 
     @Override
     @Transactional
-    public List<StoreCardDto> getReviewList(Float latitude, Float longitude, CategoryTypes category) {
-        List<StoreCardDto> storeList = ReviewList(latitude, longitude, 1F, category);
-        return storeList;
+    public CategoryDto getReviewList(Float latitude, Float longitude, CategoryTypes category) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setStoreList50(ReviewList(latitude, longitude, 0F, 50F, category));
+        categoryDto.setStoreList100(ReviewList(latitude, longitude, 50F, 100F, category));
+        return categoryDto;
     }
 
 
 
-    private List<StoreCardDto> DistanceList(Float latitude, Float longitude, Float radius, CategoryTypes category) {
-        List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radius)
+    private List<StoreCardDto> DistanceList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
+        List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
@@ -46,8 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
         return storeList;
     }
 
-    private List<StoreCardDto> ReviewList(Float latitude, Float longitude, Float radius, CategoryTypes category) {
-        List<StoreCardDto> storeList = storeRepository.findAllByReview(latitude, longitude, radius)
+    private List<StoreCardDto> ReviewList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
+        List<StoreCardDto> storeList = storeRepository.findAllByReview(latitude, longitude,  radiusStart, radiusEnd)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
