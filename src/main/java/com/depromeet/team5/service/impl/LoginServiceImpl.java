@@ -38,12 +38,14 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
+    @Transactional
     public User userInfo(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return user;
     }
 
     @Override
+    @Transactional
     public void setNickname(Long userId, String nickName) {
         if(userRepository.findByNameLike(nickName).isPresent()){
             throw new NickNameCheckException();

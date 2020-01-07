@@ -1,10 +1,8 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.Store;
-import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.service.StoreService;
 import com.depromeet.team5.util.auth.Auth;
 import lombok.RequiredArgsConstructor;

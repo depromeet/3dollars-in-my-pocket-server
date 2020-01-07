@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class StoreCardDto {
     private Long id;
+    private String storeName;
     private CategoryTypes category;
     private Long review;
     private Integer distance;
@@ -17,6 +18,7 @@ public class StoreCardDto {
     public static StoreCardDto from(Store store) {
         StoreCardDto storeCardDto = new StoreCardDto();
         storeCardDto.id = store.getId();
+        storeCardDto.storeName = store.getStoreName();
         storeCardDto.category = store.getCategory();
         storeCardDto.review = store.getReview();
         storeCardDto.distance = 0;
