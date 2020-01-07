@@ -1,6 +1,5 @@
 package com.depromeet.team5.repository;
 
-import com.depromeet.team5.domain.CategoryTypes;
 import com.depromeet.team5.domain.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,7 +26,6 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
     List<Store> findAllByAddress(@Param("latitude") final float latitude,
                                  @Param("longitude") final float longitude);
 
-
     @Modifying
     @Query(value = "SELECT *, (" +
             "    3959 * acos (" +
@@ -47,7 +45,6 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
                                   @Param("longitude") final float longitude,
                                   @Param("radiusStart") final float radiusStart,
                                   @Param("radiusEnd") final float radiusEnd);
-
 
     @Modifying
     @Query(value = "SELECT *, (" +

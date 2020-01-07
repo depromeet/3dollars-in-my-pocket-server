@@ -37,8 +37,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDto;
     }
 
-
-
     private List<StoreCardDto> DistanceList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
         List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd)
                 .stream()
