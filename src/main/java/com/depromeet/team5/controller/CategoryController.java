@@ -20,11 +20,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @Auth
-    @GetMapping("/category")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude,
+    @GetMapping("/category/distance")
+    public ResponseEntity<List<StoreCardDto>> getDistanceAll(@RequestParam Float latitude,
                                                      @RequestParam Float longitude,
-                                                     @RequestParam Float radius,
                                                      @RequestParam CategoryTypes category) {
-        return new ResponseEntity<>(categoryService.getDistanceList(latitude, longitude, radius, category), HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.getDistanceList(latitude, longitude, category), HttpStatus.OK);
+    }
+
+    @Auth
+    @GetMapping("/category/review")
+    public ResponseEntity<List<StoreCardDto>> getReviewAll(@RequestParam Float latitude,
+                                                     @RequestParam Float longitude,
+                                                     @RequestParam CategoryTypes category) {
+        return new ResponseEntity<>(categoryService.getReviewList(latitude, longitude, category), HttpStatus.OK);
     }
 }

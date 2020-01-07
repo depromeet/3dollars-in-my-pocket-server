@@ -39,11 +39,31 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
             "    )" +
             "  ) AS distance" +
             "  FROM store" +
-            "  HAVING distance < :radius AND category LIKE :category" +
+            "  GROUP BY id" +
+            "  HAVING distance < :radius " +
             "  ORDER BY distance" +
             "  LIMIT 0 , 20", nativeQuery = true)
     List<Store> findAllByDistance(@Param("latitude") final float latitude,
                                   @Param("longitude") final float longitude,
-                                  @Param("radius") final float radius,
-                                  @Param("category") final CategoryTypes category);
+                                  @Param("radius") final float radius);
+
+
+    @Modifying
+    @Query(value = "SELECT *, (" +
+            "    3959 * acos (" +
+            "      cos ( radians( :latitude ) )  " +
+            "      * cos( radians( latitude ) )" +
+            "      * cos( radians( longitude ) - radians( :longitude ) )" +
+            "      + sin ( radians( :latitude ) )" +
+            "      * sin( radians( latitude ) )" +
+            "    )" +
+            "  ) AS distance" +
+            "  FROM store" +
+            "  GROUP BY id" +
+            "  HAVING distance < :radius " +
+            "  ORDER BY review DESC" +
+            "  LIMIT 0 , 20", nativeQuery = true)
+    List<Store> findAllByReview(@Param("latitude") final float latitude,
+                                  @Param("longitude") final float longitude,
+                                  @Param("radius") final float radius);
 }
