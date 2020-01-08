@@ -8,17 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
 
     @Auth
-    @GetMapping("/category/distance")
+    @GetMapping("/distance")
     public ResponseEntity<CategoryDto> getDistanceAll(@RequestParam Float latitude,
                                                       @RequestParam Float longitude,
                                                       @RequestParam CategoryTypes category) {
@@ -26,7 +28,7 @@ public class CategoryController {
     }
 
     @Auth
-    @GetMapping("/category/review")
+    @GetMapping("/review")
     public ResponseEntity<CategoryDto> getReviewAll(@RequestParam Float latitude,
                                                      @RequestParam Float longitude,
                                                      @RequestParam CategoryTypes category) {

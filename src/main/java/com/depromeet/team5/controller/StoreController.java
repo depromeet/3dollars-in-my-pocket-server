@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
+@RequestMapping("/store")
 @RequiredArgsConstructor
 public class StoreController {
 
@@ -37,7 +38,7 @@ public class StoreController {
     }
 
     @Auth
-    @GetMapping("/get/detail")
+    @GetMapping("/detail")
     public ResponseEntity<Store> getDetail(@RequestParam Long storeId) {
         return new ResponseEntity<>(storeService.getDetail(storeId), HttpStatus.OK);
     }

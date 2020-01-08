@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -22,13 +23,13 @@ public class UserController {
     }
 
     @Auth
-    @GetMapping("/user/info")
+    @GetMapping("/info")
     public ResponseEntity<User> userInfo(@RequestParam Long userId) {
         return new ResponseEntity<>(loginService.userInfo(userId), HttpStatus.OK);
     }
 
     @Auth
-    @PutMapping("/user/nickname")
+    @PutMapping("/nickname")
     public ResponseEntity<String> setNickname(@RequestParam Long userId, @RequestParam String nickName) {
         loginService.setNickname(userId, nickName);
         return new ResponseEntity<>("nickname update success", HttpStatus.OK);
