@@ -1,8 +1,8 @@
 HELP.md
 .gradle
 build/
-*/application-dev.yml
-*/application-prod.yml
+src/main/resources/application-dev.yml
+src/main/resources/application-prod.yml
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
@@ -32,3 +32,4 @@ out/
 
 ### VS Code ###
 .vscode/
+
