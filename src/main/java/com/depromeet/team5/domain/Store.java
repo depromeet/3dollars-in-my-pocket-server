@@ -32,8 +32,9 @@ public class Store {
     @JoinColumn(name = "menu_id")
     private List<Menu> menu = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Long review;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "review_id")
+    private List<Review> review = new ArrayList<>();
 
     @ManyToOne
     private User user;
@@ -46,7 +47,6 @@ public class Store {
         store.category = storeDto.getCategory();
         store.image = imageList;
         store.menu = storeDto.getMenu();
-        store.review = 0L;
         store.user = user;
         return store;
     }

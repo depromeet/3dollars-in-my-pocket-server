@@ -3,6 +3,7 @@ package com.depromeet.team5.controller;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
+import com.depromeet.team5.dto.StoreMyPageDto;
 import com.depromeet.team5.dto.UpdateDto;
 import com.depromeet.team5.service.StoreService;
 import com.depromeet.team5.util.auth.Auth;
@@ -42,6 +43,13 @@ public class StoreController {
     public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude,
                                                      @RequestParam Float longitude) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
+    }
+
+    @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @Auth
+    @GetMapping("/get")
+    public ResponseEntity<List<StoreMyPageDto>> getAllByUser(@RequestParam Long userId) {
+        return new ResponseEntity<>(storeService.getAllByUser(userId), HttpStatus.OK);
     }
 
     @ApiOperation("특정 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")

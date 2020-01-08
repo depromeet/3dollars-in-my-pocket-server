@@ -10,7 +10,6 @@ public class StoreCardDto {
     private Long id;
     private String storeName;
     private CategoryTypes category;
-    private Long review;
     private Integer distance;
     private Float latitude;
     private Float longitude;
@@ -20,7 +19,6 @@ public class StoreCardDto {
         storeCardDto.id = store.getId();
         storeCardDto.storeName = store.getStoreName();
         storeCardDto.category = store.getCategory();
-        storeCardDto.review = store.getReview();
         storeCardDto.distance = 0;
         storeCardDto.latitude = store.getLatitude();
         storeCardDto.longitude = store.getLongitude();

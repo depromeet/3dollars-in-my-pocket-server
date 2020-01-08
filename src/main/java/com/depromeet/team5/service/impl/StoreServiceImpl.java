@@ -5,6 +5,7 @@ import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
+import com.depromeet.team5.dto.StoreMyPageDto;
 import com.depromeet.team5.dto.UpdateDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
@@ -57,9 +58,18 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
+    public List<StoreMyPageDto> getAllByUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return storeRepository.findAllByUser(user)
+                .stream()
+                .map(StoreMyPageDto::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
     public Store getDetail(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-        return store;
+        return storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
     }
 
     @Override

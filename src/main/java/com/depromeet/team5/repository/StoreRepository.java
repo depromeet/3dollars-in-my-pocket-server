@@ -1,6 +1,7 @@
 package com.depromeet.team5.repository;
 
 import com.depromeet.team5.domain.Store;
+import com.depromeet.team5.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -63,4 +64,6 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
                                   @Param("longitude") final float longitude,
                                 @Param("radiusStart") final float radiusStart,
                                 @Param("radiusEnd") final float radiusEnd);
+
+    List<Store> findAllByUser(User user);
 }
