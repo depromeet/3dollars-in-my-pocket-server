@@ -2,6 +2,7 @@ package com.depromeet.team5.service;
 
 import com.depromeet.team5.domain.Review;
 import com.depromeet.team5.dto.ReviewDto;
+import com.depromeet.team5.dto.ReviewUpdateDto;
 
 import java.util.List;
 
@@ -11,11 +12,7 @@ public interface ReviewService {
 
     List<ReviewDto> getAllByUser(Long userId);
 
-    List<ReviewDto> getAllByStore(Long storeId);
-
-    Review getDetail(Long reviewId);
-
-    void updateReview(ReviewDto reviewDto, Long reviewId);
+    void updateReview(ReviewUpdateDto reviewUpdateDto, Long reviewId);
 
     void deleteReview(Long reviewId);
 }
