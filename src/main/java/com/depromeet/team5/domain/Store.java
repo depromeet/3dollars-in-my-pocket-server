@@ -53,7 +53,6 @@ public class Store {
         latitude = storeDto.getLatitude();
         longitude = storeDto.getLongitude();
         storeName = storeDto.getStoreName();
-        image.clear();
         image.addAll(imageList);
         menu.clear();
         menu.addAll(storeDto.getMenu());
