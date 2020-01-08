@@ -49,7 +49,7 @@ public class AuthAspect {
         } else {
             final Optional<User> user = userRepository.findById(token.getUser_idx());
 
-            if (user == null) return RES_RESPONSE_ENTITY;
+            if (!user.isPresent()) return RES_RESPONSE_ENTITY;
             return pjp.proceed(pjp.getArgs());
         }
     }
