@@ -79,7 +79,6 @@ public class StoreServiceImpl implements StoreService {
         storeRepository.delete(store);
     }
 
-
     private List<Image> convertImage(List<MultipartFile> multipartFileList) {
         List<Image> image = new ArrayList<>();
         try {
@@ -96,5 +95,4 @@ public class StoreServiceImpl implements StoreService {
         }
         return image;
     }
-
 }

@@ -69,5 +69,4 @@ public class StoreController {
         storeService.deleteStore(storeId);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
     }
-
 }
