@@ -1,6 +1,7 @@
 package com.depromeet.team5.domain;
 
 import com.depromeet.team5.dto.StoreDto;
+import com.depromeet.team5.dto.UpdateDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -49,14 +50,13 @@ public class Store {
         return store;
     }
 
-    public void setStore(StoreDto storeDto, List<Image> imageList) {
-        latitude = storeDto.getLatitude();
-        longitude = storeDto.getLongitude();
-        storeName = storeDto.getStoreName();
-        image.clear();
+    public void setStore(UpdateDto updateDto, List<Image> imageList) {
+        latitude = updateDto.getLatitude();
+        longitude = updateDto.getLongitude();
+        storeName = updateDto.getStoreName();
         image.addAll(imageList);
         menu.clear();
-        menu.addAll(storeDto.getMenu());
+        menu.addAll(updateDto.getMenu());
     }
 
 }

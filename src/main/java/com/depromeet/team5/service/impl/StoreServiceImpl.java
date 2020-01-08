@@ -5,6 +5,7 @@ import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
 import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
+import com.depromeet.team5.dto.UpdateDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.StoreRepository;
@@ -63,10 +64,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void updateStore(StoreDto storeDto, Long storeId) {
+    public void updateStore(UpdateDto updateDto, Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-        List<Image> image = convertImage(storeDto.getImage());
-        store.setStore(storeDto, image);
+        List<Image> image = convertImage(updateDto.getImage());
+        store.setStore(updateDto, image);
         storeRepository.save(store);
     }
 
