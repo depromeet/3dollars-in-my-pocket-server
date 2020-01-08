@@ -31,6 +31,8 @@ dependencies {
     compile group: 'com.auth0', name: 'java-jwt', version: '3.7.0'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.0.1.RELEASE'
+    compile "io.springfox:springfox-swagger2:2.9.2"
+    compile "io.springfox:springfox-swagger-ui:2.9.2"
 }
 
 test {
