@@ -34,6 +34,7 @@ public class SwaggerConfig {
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
+                .globalOperationParameters(global)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.depromeet.team5.controller"))
                 .paths(PathSelectors.any())
