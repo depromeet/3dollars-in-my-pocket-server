@@ -32,7 +32,7 @@ public class ReviewController {
 
     @ApiOperation("사용자가 작성한 리뷰를 조회합니다. 인증이 필요한 요청입니다.")
     @Auth
-    @GetMapping("/get")
+    @GetMapping("/user")
     public ResponseEntity<List<ReviewDto>> getAllByUser(@RequestParam Long userId) {
         return new ResponseEntity<>(reviewService.getAllByUser(userId), HttpStatus.OK);
     }

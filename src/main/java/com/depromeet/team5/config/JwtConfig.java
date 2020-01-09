@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:jwt.yml")
+@PropertySource("classpath:jwt.properties")
 public class JwtConfig {
 
     @Value("${jwt.issuer}")
