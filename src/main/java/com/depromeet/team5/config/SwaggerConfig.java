@@ -22,19 +22,8 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        List<Parameter> global = new ArrayList<>();
-        global.add(new ParameterBuilder()
-                .name("Authorization")
-                .description("Access Token")
-                .parameterType("header")
-                .required(false)
-                .defaultValue("Bearer ")
-                .modelRef(new ModelRef("string"))
-                .build());
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .globalOperationParameters(global)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.depromeet.team5.controller"))
                 .paths(PathSelectors.any())

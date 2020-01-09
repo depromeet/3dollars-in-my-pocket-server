@@ -8,6 +8,7 @@ import com.depromeet.team5.dto.UpdateDto;
 import com.depromeet.team5.service.StoreService;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class StoreController {
     private final StoreService storeService;
 
     @ApiOperation("가게 정보를 저장합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
     public ResponseEntity<String> save(StoreDto storeDto,
@@ -38,6 +40,7 @@ public class StoreController {
     }
 
     @ApiOperation("모든 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/get")
     public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude,
@@ -46,6 +49,7 @@ public class StoreController {
     }
 
     @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/user")
     public ResponseEntity<List<StoreMyPageDto>> getAllByUser(@RequestParam Long userId) {
@@ -53,6 +57,7 @@ public class StoreController {
     }
 
     @ApiOperation("특정 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/detail")
     public ResponseEntity<Store> getDetail(@RequestParam Long storeId) {
@@ -60,6 +65,7 @@ public class StoreController {
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
     public ResponseEntity<String> getUpdate(UpdateDto updateDto,
@@ -71,6 +77,7 @@ public class StoreController {
     }
 
     @ApiOperation("특정 가게의 정보를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam Long storeId) {

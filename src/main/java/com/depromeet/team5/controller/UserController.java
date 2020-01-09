@@ -6,6 +6,7 @@ import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.service.LoginService;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class UserController {
     }
 
     @ApiOperation("사용자의 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/info")
     public ResponseEntity<User> userInfo(@RequestParam Long userId) {
@@ -35,6 +37,7 @@ public class UserController {
     }
 
     @ApiOperation("사용자의 닉네임을 설정합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/nickname")
     public ResponseEntity<String> setNickname(@RequestParam Long userId, @RequestParam String nickName) {
