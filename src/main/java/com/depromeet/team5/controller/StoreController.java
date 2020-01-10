@@ -62,7 +62,7 @@ public class StoreController {
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }
 
-    @ApiOperation("특정 가게의 정보를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiOperation("특정 가게의 정보를 삭제 요청합니다. 인증이 필요한 요청입니다.")
     @Auth
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam Long storeId,
