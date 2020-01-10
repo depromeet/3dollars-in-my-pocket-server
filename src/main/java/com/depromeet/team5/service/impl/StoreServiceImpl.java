@@ -1,6 +1,5 @@
 package com.depromeet.team5.service.impl;
 
-import com.depromeet.team5.domain.DeleteRequestId;
 import com.depromeet.team5.domain.Image;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
@@ -79,25 +78,14 @@ public class StoreServiceImpl implements StoreService {
     public void deleteStore(Long storeId, Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-        List<DeleteRequestId> deleteRequestId = store.getDeleteId();
 
         if (deleteRepository.findByUserIdLike(userId).isPresent()) {
             throw new UserIdCheckException();
-        }
-        DeleteRequestId deleteRequestId1 = new DeleteRequestId();
-        deleteRequestId1.setUserId(userId);
-
-        List<DeleteRequestId> deleteId = new ArrayList<>();
-        deleteId.addAll(deleteRequestId);
-        deleteId.add(deleteRequestId1);
-
-        store.getDeleteId().clear();
-        store.getDeleteId().addAll(deleteId);
-
-        if (deleteRequestId.size() == 5) {
+        } else if (store.getDeleteRequest().size() == 4) {
             storeRepository.delete(store);
+        } else {
+            store.addDeleteId(userId);
         }
-        
     }
 
 

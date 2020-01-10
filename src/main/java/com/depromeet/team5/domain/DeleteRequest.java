@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class DeleteRequestId {
+public class DeleteRequest {
     @Id
     @GeneratedValue
     private Long id;
