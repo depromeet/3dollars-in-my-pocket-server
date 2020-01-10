@@ -56,8 +56,9 @@ public class StoreController {
 
     @Auth
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long storeId) {
-        storeService.deleteStore(storeId);
+    public ResponseEntity<String> delete(@RequestParam Long storeId,
+                                         @RequestParam Long userId) {
+        storeService.deleteStore(storeId, userId);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
     }
 

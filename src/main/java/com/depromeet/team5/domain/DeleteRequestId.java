@@ -8,9 +8,9 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class Image {
+public class DeleteRequestId {
     @Id
     @GeneratedValue
     private Long id;
-    private String url;
+    private Long userId;
 }

@@ -34,6 +34,10 @@ public class Store {
 
     private Long review;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "delete_id")
+    private List<DeleteRequestId> deleteId = new ArrayList<>();
+
     @ManyToOne
     private User user;
 
@@ -46,6 +50,7 @@ public class Store {
         store.image = imageList;
         store.menu = storeDto.getMenu();
         store.review = 0L;
+        store.deleteId = new ArrayList<>();
         store.user = user;
         return store;
     }

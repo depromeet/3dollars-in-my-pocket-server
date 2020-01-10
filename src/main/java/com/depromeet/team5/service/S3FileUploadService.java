@@ -28,7 +28,6 @@ public class S3FileUploadService {
 
     private final AmazonS3Client amazonS3Client;
 
-
     public String upload(MultipartFile uploadFile) throws IOException {
         String origName = uploadFile.getOriginalFilename();
         String url;
