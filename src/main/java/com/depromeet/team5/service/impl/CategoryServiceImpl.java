@@ -23,8 +23,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto getDistanceList(Float latitude, Float longitude, CategoryTypes category) {
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setStoreList50(DistanceList(latitude, longitude, 0F, 50F, category));
-        categoryDto.setStoreList100(DistanceList(latitude, longitude, 50F, 100F, category));
+        categoryDto.setStoreList50(DistanceList(latitude, longitude, 0F, 50F, category.toString()));
+        categoryDto.setStoreList100(DistanceList(latitude, longitude, 50F, 100F, category.toString()));
         return categoryDto;
     }
 
@@ -32,13 +32,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto getReviewList(Float latitude, Float longitude, CategoryTypes category) {
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setStoreList50(ReviewList(latitude, longitude, 0F, 50F, category));
-        categoryDto.setStoreList100(ReviewList(latitude, longitude, 50F, 100F, category));
+        categoryDto.setStoreList50(ReviewList(latitude, longitude, 0F, 50F, category.toString()));
+        categoryDto.setStoreList100(ReviewList(latitude, longitude, 50F, 100F, category.toString()));
         return categoryDto;
     }
 
-    private List<StoreCardDto> DistanceList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
-        List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd)
+    private List<StoreCardDto> DistanceList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, String category) {
+        List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd, category)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
@@ -49,8 +49,8 @@ public class CategoryServiceImpl implements CategoryService {
         return storeList;
     }
 
-    private List<StoreCardDto> ReviewList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
-        List<StoreCardDto> storeList = storeRepository.findAllByReview(latitude, longitude,  radiusStart, radiusEnd)
+    private List<StoreCardDto> ReviewList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, String category) {
+        List<StoreCardDto> storeList = storeRepository.findAllByReview(latitude, longitude,  radiusStart, radiusEnd, category)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());

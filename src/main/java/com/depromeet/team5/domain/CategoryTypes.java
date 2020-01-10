@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -10,5 +11,4 @@ public enum  CategoryTypes {
     HOTTEOK("호떡");
 
     private final String category;
-
 }
