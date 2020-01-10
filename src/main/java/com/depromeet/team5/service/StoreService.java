@@ -12,5 +12,5 @@ public interface StoreService {
     List<StoreCardDto> getAll(Float latitude, Float longitude);
     Store getDetail(Long storeId);
     void updateStore(UpdateDto updateDto, Long storeId);
-    void deleteStore(Long storeId);
+    void deleteStore(Long storeId, Long userId);
 }

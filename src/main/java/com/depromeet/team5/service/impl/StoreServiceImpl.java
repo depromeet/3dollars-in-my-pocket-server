@@ -7,7 +7,9 @@ import com.depromeet.team5.dto.StoreCardDto;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.UpdateDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
+import com.depromeet.team5.exception.UserIdCheckException;
 import com.depromeet.team5.exception.UserNotFoundException;
+import com.depromeet.team5.repository.DeleteRepository;
 import com.depromeet.team5.repository.StoreRepository;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.S3FileUploadService;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class StoreServiceImpl implements StoreService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+    private final DeleteRepository deleteRepository;
     private final S3FileUploadService s3FileUploadService;
 
     @Override
@@ -35,9 +38,7 @@ public class StoreServiceImpl implements StoreService {
     public void saveStore(StoreDto storeDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Image> image = convertImage(storeDto.getImage());
-
         Store store = Store.from(storeDto, image, user);
-        log.info(storeRepository.findAll().toString());
         storeRepository.save(store);
     }
 
@@ -74,9 +75,17 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void deleteStore(Long storeId) {
+    public void deleteStore(Long storeId, Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-        storeRepository.delete(store);
+
+        if (deleteRepository.findByUserIdLike(userId).isPresent()) {
+            throw new UserIdCheckException();
+        } else if (store.getDeleteRequest().size() == 4) {
+            storeRepository.delete(store);
+        } else {
+            store.addDeleteId(userId);
+        }
     }
 
 

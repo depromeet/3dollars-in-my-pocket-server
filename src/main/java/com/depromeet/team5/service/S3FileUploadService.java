@@ -20,14 +20,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3FileUploadService {
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket.name}")
     private String bucket;
 
     @Value("${cloud.aws.s3.bucket.url}")
     private String defaultUrl;
 
     private final AmazonS3Client amazonS3Client;
-
 
     public String upload(MultipartFile uploadFile) throws IOException {
         String origName = uploadFile.getOriginalFilename();
