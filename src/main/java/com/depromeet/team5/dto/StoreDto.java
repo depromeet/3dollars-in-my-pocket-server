@@ -9,9 +9,9 @@ import java.util.List;
 
 @Data
 public class StoreDto {
-    private Float latitude;
+    private Double latitude;
 
-    private Float longitude;
+    private Double longitude;
 
     private String storeName;
 

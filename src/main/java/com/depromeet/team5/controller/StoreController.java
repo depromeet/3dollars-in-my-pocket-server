@@ -43,8 +43,8 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/get")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude,
-                                                     @RequestParam Float longitude) {
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
+                                                     @RequestParam Double longitude) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
     }
 
@@ -80,8 +80,9 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long storeId) {
-        storeService.deleteStore(storeId);
+    public ResponseEntity<String> delete(@RequestParam Long storeId,
+                                         @RequestParam Long userId) {
+        storeService.deleteStore(storeId, userId);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
     }
 }

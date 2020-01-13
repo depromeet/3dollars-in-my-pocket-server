@@ -12,12 +12,12 @@ import java.util.List;
 @Entity
 public class Store {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Float latitude;
+    private Double latitude;
 
-    private Float longitude;
+    private Double longitude;
 
     private String storeName;
 
@@ -36,6 +36,10 @@ public class Store {
     @JoinColumn(name = "review_id")
     private List<Review> review = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "delete_id")
+    private List<DeleteRequest> deleteRequest = new ArrayList<>();
+
     @ManyToOne
     private User user;
 
@@ -47,6 +51,7 @@ public class Store {
         store.category = storeDto.getCategory();
         store.image = imageList;
         store.menu = storeDto.getMenu();
+        store.deleteRequest = new ArrayList<>();
         store.user = user;
         return store;
     }
@@ -58,6 +63,12 @@ public class Store {
         image.addAll(imageList);
         menu.clear();
         menu.addAll(updateDto.getMenu());
+    }
+
+    public void addDeleteId(Long userId) {
+        DeleteRequest deleteRequestId = new DeleteRequest();
+        deleteRequestId.setUserId(userId);
+        deleteRequest.add(deleteRequestId);
     }
 
 }

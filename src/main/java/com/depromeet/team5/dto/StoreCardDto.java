@@ -11,8 +11,8 @@ public class StoreCardDto {
     private String storeName;
     private CategoryTypes category;
     private Integer distance;
-    private Float latitude;
-    private Float longitude;
+    private Double latitude;
+    private Double longitude;
 
     public static StoreCardDto from(Store store) {
         StoreCardDto storeCardDto = new StoreCardDto();
@@ -25,7 +25,7 @@ public class StoreCardDto {
         return storeCardDto;
     }
 
-    public static void calculationDistance(StoreCardDto storeCardDto, Float lat, Float lng) {
+    public static void calculationDistance(StoreCardDto storeCardDto, Double lat, Double lng) {
         LocationDistance locationDistance = new LocationDistance();
         storeCardDto.distance = (int)locationDistance.distance(storeCardDto.getLatitude(), storeCardDto.getLongitude(), lat, lng, "meter");
     }
