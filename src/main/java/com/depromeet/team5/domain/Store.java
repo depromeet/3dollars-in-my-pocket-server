@@ -70,5 +70,4 @@ public class Store {
         deleteRequestId.setUserId(userId);
         deleteRequest.add(deleteRequestId);
     }
-
 }

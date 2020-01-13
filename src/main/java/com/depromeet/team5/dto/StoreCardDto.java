@@ -29,5 +29,4 @@ public class StoreCardDto {
         LocationDistance locationDistance = new LocationDistance();
         storeCardDto.distance = (int)locationDistance.distance(storeCardDto.getLatitude(), storeCardDto.getLongitude(), lat, lng, "meter");
     }
-
 }

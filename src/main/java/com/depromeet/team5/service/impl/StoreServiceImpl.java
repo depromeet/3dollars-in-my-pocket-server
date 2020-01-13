@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
+
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
     private final DeleteRepository deleteRepository;

@@ -26,6 +26,7 @@ public class AuthAspect {
     private final static String AUTHORIZATION = "Authorization";
 
     private final static DefaultRes DEFAULT_RES = DefaultRes.builder().message("인증 실패").build();
+
     private final static ResponseEntity<DefaultRes> RES_RESPONSE_ENTITY = new ResponseEntity<>(DEFAULT_RES, HttpStatus.UNAUTHORIZED);
 
     private final HttpServletRequest httpServletRequest;
