@@ -44,7 +44,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<StoreCardDto> getAll(Float latitude, Float longitude) {
+    public List<StoreCardDto> getAll(Double latitude, Double longitude) {
         List<StoreCardDto> storeList = storeRepository.findAllByAddress(latitude, longitude)
                 .stream()
                 .map(StoreCardDto::from)

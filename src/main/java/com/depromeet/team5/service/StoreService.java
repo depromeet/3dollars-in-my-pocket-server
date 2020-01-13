@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface StoreService {
     void saveStore(StoreDto storeDto, Long userId);
-    List<StoreCardDto> getAll(Float latitude, Float longitude);
+    List<StoreCardDto> getAll(Double latitude, Double longitude);
     Store getDetail(Long storeId);
     void updateStore(UpdateDto updateDto, Long storeId);
     void deleteStore(Long storeId, Long userId);

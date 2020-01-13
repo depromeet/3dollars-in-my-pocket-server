@@ -1,5 +1,6 @@
 package com.depromeet.team5.repository;
 
+import com.depromeet.team5.domain.CategoryTypes;
 import com.depromeet.team5.domain.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface StoreRepository extends JpaRepository<Store,Long> {
+public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Modifying
     @Query(value = "SELECT *, (" +
@@ -23,8 +24,8 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
             "  FROM store" +
             "  ORDER BY distance" +
             "  LIMIT 0 , 5", nativeQuery = true)
-    List<Store> findAllByAddress(@Param("latitude") final float latitude,
-                                 @Param("longitude") final float longitude);
+    List<Store> findAllByAddress(@Param("latitude") final Double latitude,
+                                 @Param("longitude") final Double longitude);
 
     @Modifying
     @Query(value = "SELECT *, (" +
@@ -37,13 +38,15 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
             "    )" +
             "  ) AS distance" +
             "  FROM store" +
+            "  WHERE category LIKE :category" +
             "  GROUP BY id" +
             "  HAVING distance >= :radiusStart AND distance <= :radiusEnd" +
             "  ORDER BY distance", nativeQuery = true)
-    List<Store> findAllByDistance(@Param("latitude") final float latitude,
-                                  @Param("longitude") final float longitude,
-                                  @Param("radiusStart") final float radiusStart,
-                                  @Param("radiusEnd") final float radiusEnd);
+    List<Store> findAllByDistance(@Param("latitude") final Double latitude,
+                                  @Param("longitude") final Double longitude,
+                                  @Param("radiusStart") final Double radiusStart,
+                                  @Param("radiusEnd") final Double radiusEnd,
+                                  @Param("category") final String category);
 
     @Modifying
     @Query(value = "SELECT *, (" +
@@ -56,11 +59,13 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
             "    )" +
             "  ) AS distance" +
             "  FROM store" +
+            "  WHERE category LIKE :category" +
             "  GROUP BY id" +
             "  HAVING distance >= :radiusStart AND distance <= :radiusEnd" +
             "  ORDER BY review DESC", nativeQuery = true)
-    List<Store> findAllByReview(@Param("latitude") final float latitude,
-                                  @Param("longitude") final float longitude,
-                                @Param("radiusStart") final float radiusStart,
-                                @Param("radiusEnd") final float radiusEnd);
+    List<Store> findAllByReview(@Param("latitude") final Double latitude,
+                                @Param("longitude") final Double longitude,
+                                @Param("radiusStart") final Double radiusStart,
+                                @Param("radiusEnd") final Double radiusEnd,
+                                @Param("category") final String category);
 }

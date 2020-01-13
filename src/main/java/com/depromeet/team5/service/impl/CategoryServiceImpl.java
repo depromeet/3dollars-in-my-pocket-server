@@ -21,24 +21,28 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryDto getDistanceList(Float latitude, Float longitude, CategoryTypes category) {
+    public CategoryDto getDistanceList(Double latitude, Double longitude, CategoryTypes category) {
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setStoreList50(DistanceList(latitude, longitude, 0F, 50F, category));
-        categoryDto.setStoreList100(DistanceList(latitude, longitude, 50F, 100F, category));
+        categoryDto.setStoreList50(DistanceList(latitude, longitude, 0D, 0.05D, category.toString()));
+        categoryDto.setStoreList100(DistanceList(latitude, longitude, 0.05D, 0.1D, category.toString()));
+        categoryDto.setStoreList100(DistanceList(latitude, longitude, 0.1D, 0.5D, category.toString()));
+        categoryDto.setStoreList100(DistanceList(latitude, longitude, 0.5D, 1D, category.toString()));
         return categoryDto;
     }
 
     @Override
     @Transactional
-    public CategoryDto getReviewList(Float latitude, Float longitude, CategoryTypes category) {
+    public CategoryDto getReviewList(Double latitude, Double longitude, CategoryTypes category) {
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setStoreList50(ReviewList(latitude, longitude, 0F, 50F, category));
-        categoryDto.setStoreList100(ReviewList(latitude, longitude, 50F, 100F, category));
+        categoryDto.setStoreList50(ReviewList(latitude, longitude, 0D, 0.05D, category.toString()));
+        categoryDto.setStoreList100(ReviewList(latitude, longitude, 0.05D, 0.1D, category.toString()));
+        categoryDto.setStoreList100(ReviewList(latitude, longitude, 0.1D, 0.5D, category.toString()));
+        categoryDto.setStoreList100(ReviewList(latitude, longitude, 0.5D, 1D, category.toString()));
         return categoryDto;
     }
 
-    private List<StoreCardDto> DistanceList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
-        List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd)
+    private List<StoreCardDto> DistanceList(Double latitude, Double longitude, Double radiusStart, Double radiusEnd, String category) {
+        List<StoreCardDto> storeList = storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd, category)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
@@ -49,8 +53,8 @@ public class CategoryServiceImpl implements CategoryService {
         return storeList;
     }
 
-    private List<StoreCardDto> ReviewList(Float latitude, Float longitude, Float radiusStart, Float radiusEnd, CategoryTypes category) {
-        List<StoreCardDto> storeList = storeRepository.findAllByReview(latitude, longitude,  radiusStart, radiusEnd)
+    private List<StoreCardDto> ReviewList(Double latitude, Double longitude, Double radiusStart, Double radiusEnd, String category) {
+        List<StoreCardDto> storeList = storeRepository.findAllByReview(latitude, longitude,  radiusStart, radiusEnd, category)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());

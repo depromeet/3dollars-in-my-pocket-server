@@ -10,5 +10,4 @@ public enum  CategoryTypes {
     HOTTEOK("호떡");
 
     private final String category;
-
 }
