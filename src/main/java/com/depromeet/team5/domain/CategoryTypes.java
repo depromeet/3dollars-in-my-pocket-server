@@ -1,6 +1,5 @@
 package com.depromeet.team5.domain;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
