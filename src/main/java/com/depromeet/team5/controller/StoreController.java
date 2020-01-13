@@ -39,8 +39,8 @@ public class StoreController {
     @ApiOperation("모든 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
     @Auth
     @GetMapping("/get")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Float latitude,
-                                                     @RequestParam Float longitude) {
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
+                                                     @RequestParam Double longitude) {
         return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
     }
 

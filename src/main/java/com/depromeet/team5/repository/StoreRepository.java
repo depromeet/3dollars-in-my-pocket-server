@@ -24,8 +24,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             "  FROM store" +
             "  ORDER BY distance" +
             "  LIMIT 0 , 5", nativeQuery = true)
-    List<Store> findAllByAddress(@Param("latitude") final float latitude,
-                                 @Param("longitude") final float longitude);
+    List<Store> findAllByAddress(@Param("latitude") final Double latitude,
+                                 @Param("longitude") final Double longitude);
 
     @Modifying
     @Query(value = "SELECT *, (" +
@@ -42,10 +42,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             "  GROUP BY id" +
             "  HAVING distance >= :radiusStart AND distance <= :radiusEnd" +
             "  ORDER BY distance", nativeQuery = true)
-    List<Store> findAllByDistance(@Param("latitude") final float latitude,
-                                  @Param("longitude") final float longitude,
-                                  @Param("radiusStart") final float radiusStart,
-                                  @Param("radiusEnd") final float radiusEnd,
+    List<Store> findAllByDistance(@Param("latitude") final Double latitude,
+                                  @Param("longitude") final Double longitude,
+                                  @Param("radiusStart") final Double radiusStart,
+                                  @Param("radiusEnd") final Double radiusEnd,
                                   @Param("category") final String category);
 
     @Modifying
@@ -63,9 +63,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
             "  GROUP BY id" +
             "  HAVING distance >= :radiusStart AND distance <= :radiusEnd" +
             "  ORDER BY review DESC", nativeQuery = true)
-    List<Store> findAllByReview(@Param("latitude") final float latitude,
-                                @Param("longitude") final float longitude,
-                                @Param("radiusStart") final float radiusStart,
-                                @Param("radiusEnd") final float radiusEnd,
+    List<Store> findAllByReview(@Param("latitude") final Double latitude,
+                                @Param("longitude") final Double longitude,
+                                @Param("radiusStart") final Double radiusStart,
+                                @Param("radiusEnd") final Double radiusEnd,
                                 @Param("category") final String category);
 }
