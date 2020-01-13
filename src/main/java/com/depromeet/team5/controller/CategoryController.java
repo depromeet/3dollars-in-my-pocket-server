@@ -4,6 +4,8 @@ import com.depromeet.team5.domain.CategoryTypes;
 import com.depromeet.team5.dto.CategoryDto;
 import com.depromeet.team5.service.CategoryService;
 import com.depromeet.team5.util.auth.Auth;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @ApiOperation("거리순으로 특정 카테고리의 가게 정보를 가져옵니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/distance")
     public ResponseEntity<CategoryDto> getDistanceAll(@RequestParam Double latitude,
@@ -27,6 +31,8 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.getDistanceList(latitude, longitude, category), HttpStatus.OK);
     }
 
+    @ApiOperation("리뷰순으로 특정 카테고리의 가게 정보를 가져옵니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/review")
     public ResponseEntity<CategoryDto> getReviewAll(@RequestParam Double latitude,
