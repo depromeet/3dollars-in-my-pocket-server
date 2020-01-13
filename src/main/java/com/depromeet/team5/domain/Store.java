@@ -1,7 +1,7 @@
 package com.depromeet.team5.domain;
 
 import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.UpdateDto;
+import com.depromeet.team5.dto.StoreUpdateDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -56,13 +56,13 @@ public class Store {
         return store;
     }
 
-    public void setStore(UpdateDto updateDto, List<Image> imageList) {
-        latitude = updateDto.getLatitude();
-        longitude = updateDto.getLongitude();
-        storeName = updateDto.getStoreName();
+    public void setStore(StoreUpdateDto storeUpdateDto, List<Image> imageList) {
+        latitude = storeUpdateDto.getLatitude();
+        longitude = storeUpdateDto.getLongitude();
+        storeName = storeUpdateDto.getStoreName();
         image.addAll(imageList);
         menu.clear();
-        menu.addAll(updateDto.getMenu());
+        menu.addAll(storeUpdateDto.getMenu());
     }
 
     public void addDeleteId(Long userId) {
