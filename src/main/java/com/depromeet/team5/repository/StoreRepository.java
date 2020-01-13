@@ -1,6 +1,5 @@
 package com.depromeet.team5.repository;
 
-import com.depromeet.team5.domain.CategoryTypes;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -69,4 +68,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                                 @Param("radiusStart") final Double radiusStart,
                                 @Param("radiusEnd") final Double radiusEnd,
                                 @Param("category") final String category);
+
+    List<Store> findAllByUser(User user);
 }
