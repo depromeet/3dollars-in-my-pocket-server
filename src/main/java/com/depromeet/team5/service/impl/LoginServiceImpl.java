@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
         LoginDto loginDto = new LoginDto();
         loginDto.setToken(token.getToken());
         loginDto.setUserId(user.getId());
-
+        loginDto.setState(user.getState());
         return loginDto;
     }
 
