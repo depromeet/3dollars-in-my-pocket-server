@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 public class Store {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -8,10 +8,13 @@ import javax.persistence.*;
 @Data
 @Entity
 public class Menu {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String price;
 
     public static Menu from(MenuDto menuDto) {
