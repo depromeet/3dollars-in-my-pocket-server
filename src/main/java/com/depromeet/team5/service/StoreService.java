@@ -9,7 +9,7 @@ import com.depromeet.team5.dto.StoreUpdateDto;
 import java.util.List;
 
 public interface StoreService {
-    void saveStore(StoreDto storeDto, Long userId);
+    Store saveStore(StoreDto storeDto, Long userId);
     List<StoreCardDto> getAll(Double latitude, Double longitude);
     List<StoreMyPageDto> getAllByUser(Long userId);
     Store getDetail(Long storeId);

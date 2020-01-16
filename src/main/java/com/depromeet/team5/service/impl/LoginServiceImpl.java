@@ -40,8 +40,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     @Transactional
     public User userInfo(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return user;
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     @Override

@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -50,7 +51,7 @@ public class Store {
         store.storeName = storeDto.getStoreName();
         store.category = storeDto.getCategory();
         store.image = imageList;
-        store.menu = storeDto.getMenu();
+        store.menu = storeDto.getMenu().stream().map(Menu::from).collect(Collectors.toList());
         store.deleteRequest = new ArrayList<>();
         store.user = user;
         return store;
