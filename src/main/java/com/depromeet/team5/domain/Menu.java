@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain;
 
+import com.depromeet.team5.dto.MenuDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,4 +13,11 @@ public class Menu {
     private Long id;
     private String name;
     private Long price;
+
+    public static Menu from(MenuDto menuDto) {
+        Menu menu = new Menu();
+        menu.setName(menuDto.getName());
+        menu.setPrice(menuDto.getPrice());
+        return menu;
+    }
 }

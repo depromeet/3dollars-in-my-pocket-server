@@ -83,8 +83,7 @@ public class StoreServiceImpl implements StoreService {
         store.setStore(storeUpdateDto, image);
         storeRepository.save(store);
     }
-
-
+    
     @Override
     @Transactional
     public void deleteStore(Long storeId, Long userId) {
