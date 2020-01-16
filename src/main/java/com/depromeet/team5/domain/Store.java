@@ -31,7 +31,7 @@ public class Store {
     private List<Image> image;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "menu_id")
+    @JoinColumn(name = "menu_id", nullable = true)
     private List<Menu> menu = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -52,9 +52,13 @@ public class Store {
         store.storeName = storeDto.getStoreName();
         store.category = storeDto.getCategory();
         store.image = imageList;
-        store.menu = storeDto.getMenu().stream().map(Menu::from).collect(Collectors.toList());
         store.deleteRequest = new ArrayList<>();
         store.user = user;
+        if (storeDto.getMenu() == null){
+            store.menu = new ArrayList<>();
+        } else {
+            store.menu = storeDto.getMenu().stream().map(Menu::from).collect(Collectors.toList());
+        }
         return store;
     }
 
