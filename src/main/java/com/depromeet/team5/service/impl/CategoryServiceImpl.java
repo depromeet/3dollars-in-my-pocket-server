@@ -25,8 +25,8 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setStoreList50(DistanceList(latitude, longitude, 0D, 0.05D, category.toString()));
         categoryDto.setStoreList100(DistanceList(latitude, longitude, 0.05D, 0.1D, category.toString()));
-        categoryDto.setStoreList100(DistanceList(latitude, longitude, 0.1D, 0.5D, category.toString()));
-        categoryDto.setStoreList100(DistanceList(latitude, longitude, 0.5D, 1D, category.toString()));
+        categoryDto.setStoreList500(DistanceList(latitude, longitude, 0.1D, 0.5D, category.toString()));
+        categoryDto.setStoreList1000(DistanceList(latitude, longitude, 0.5D, 1D, category.toString()));
         return categoryDto;
     }
 
@@ -36,8 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setStoreList50(ReviewList(latitude, longitude, 0D, 0.05D, category.toString()));
         categoryDto.setStoreList100(ReviewList(latitude, longitude, 0.05D, 0.1D, category.toString()));
-        categoryDto.setStoreList100(ReviewList(latitude, longitude, 0.1D, 0.5D, category.toString()));
-        categoryDto.setStoreList100(ReviewList(latitude, longitude, 0.5D, 1D, category.toString()));
+        categoryDto.setStoreList500(ReviewList(latitude, longitude, 0.1D, 0.5D, category.toString()));
+        categoryDto.setStoreList1000(ReviewList(latitude, longitude, 0.5D, 1D, category.toString()));
         return categoryDto;
     }
 

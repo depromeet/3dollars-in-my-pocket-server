@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class StoreDto {
+
     private Double latitude;
 
     private Double longitude;

@@ -10,8 +10,10 @@ import javax.persistence.Id;
 @Data
 @Entity
 public class DeleteRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long userId;
 }

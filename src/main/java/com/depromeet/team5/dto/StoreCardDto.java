@@ -7,11 +7,17 @@ import lombok.Data;
 
 @Data
 public class StoreCardDto {
+
     private Long id;
+
     private String storeName;
+
     private CategoryTypes category;
+
     private Integer distance;
+
     private Double latitude;
+
     private Double longitude;
 
     public static StoreCardDto from(Store store) {

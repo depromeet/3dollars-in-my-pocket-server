@@ -1,10 +1,6 @@
 package com.depromeet.team5.controller;
 
-import com.depromeet.team5.domain.Store;
-import com.depromeet.team5.dto.StoreCardDto;
-import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.StoreMyPageDto;
-import com.depromeet.team5.dto.StoreUpdateDto;
+import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
@@ -31,7 +27,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<Store> save(StoreDto storeDto,
+    public ResponseEntity<StoreDetailDto> save(StoreDto storeDto,
                                        @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                        @RequestParam Long userId) {
         if (image != null) storeDto.setImage(image);
@@ -59,7 +55,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/detail")
-    public ResponseEntity<Store> getDetail(@RequestParam Long storeId) {
+    public ResponseEntity<StoreDetailDto> getDetail(@RequestParam Long storeId) {
         return new ResponseEntity<>(storeService.getDetail(storeId), HttpStatus.OK);
     }
 

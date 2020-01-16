@@ -3,10 +3,7 @@ package com.depromeet.team5.service.impl;
 import com.depromeet.team5.domain.Image;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
-import com.depromeet.team5.dto.StoreCardDto;
-import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.StoreMyPageDto;
-import com.depromeet.team5.dto.StoreUpdateDto;
+import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserIdCheckException;
 import com.depromeet.team5.exception.UserNotFoundException;
@@ -37,12 +34,13 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Store saveStore(StoreDto storeDto, Long userId) {
+    public StoreDetailDto saveStore(StoreDto storeDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Image> image = convertImage(storeDto.getImage());
         Store store = Store.from(storeDto, image, user);
         storeRepository.save(store);
-        return store;
+
+        return StoreDetailDto.from(store);
     }
 
     @Override
@@ -71,8 +69,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Store getDetail(Long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+    public StoreDetailDto getDetail(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        return StoreDetailDto.from(store);
     }
 
     @Override
