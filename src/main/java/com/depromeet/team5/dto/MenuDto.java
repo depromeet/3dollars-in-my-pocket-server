@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class MenuDto {
     private String name;
-    private Long price;
+    private String price;
 }
