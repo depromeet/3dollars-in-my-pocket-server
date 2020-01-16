@@ -22,7 +22,7 @@ public class StoreDetailDto {
 
     private CategoryTypes category;
 
-    private List<String> image;
+    private List<ImageDto> image;
 
     private List<MenuDto> menu = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class StoreDetailDto {
         storeDetailDto.longitude = store.getLongitude();
         storeDetailDto.storeName = store.getStoreName();
         storeDetailDto.category = store.getCategory();
-        storeDetailDto.image = store.getImage().stream().map(Image::getUrl).collect(Collectors.toList());
+        storeDetailDto.image = store.getImage().stream().map(ImageDto::from).collect(Collectors.toList());
         storeDetailDto.menu = store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList());
         storeDetailDto.review = store.getReview().stream().map(ReviewDto::from).collect(Collectors.toList());
         return storeDetailDto;
