@@ -31,12 +31,11 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<String> save(StoreDto storeDto,
+    public ResponseEntity<Store> save(StoreDto storeDto,
                                        @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                        @RequestParam Long userId) {
         if (image != null) storeDto.setImage(image);
-        storeService.saveStore(storeDto, userId);
-        return new ResponseEntity<>("store save success", HttpStatus.OK);
+        return new ResponseEntity<>(storeService.saveStore(storeDto, userId), HttpStatus.OK);
     }
 
     @ApiOperation("모든 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
