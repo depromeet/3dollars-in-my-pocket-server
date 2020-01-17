@@ -14,8 +14,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(value = EnumType.STRING)
-    private CategoryTypes category;
+    private Long storeId;
 
     private String contents;
 
@@ -24,9 +23,9 @@ public class Review {
     @ManyToOne
     private User user;
 
-    public static Review from(ReviewDto reviewDto, User user) {
+    public static Review from(ReviewDto reviewDto, User user, Long storeId) {
         Review review = new Review();
-        review.category = reviewDto.getCategory();
+        review.storeId = storeId;
         review.contents = reviewDto.getContents();
         review.rating = reviewDto.getRating();
         review.user = user;

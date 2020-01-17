@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReviewService {
 
-    void saveReview(ReviewDto reviewDto, Long userId);
+    void saveReview(ReviewDto reviewDto, Long userId, Long storeId);
 
     List<ReviewDto> getAllByUser(Long userId);
 

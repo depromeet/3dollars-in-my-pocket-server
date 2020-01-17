@@ -1,7 +1,6 @@
 package com.depromeet.team5.dto;
 
 import com.depromeet.team5.domain.CategoryTypes;
-import com.depromeet.team5.domain.Image;
 import com.depromeet.team5.domain.Store;
 import lombok.Data;
 
@@ -28,6 +27,8 @@ public class StoreDetailDto {
 
     private List<ReviewDto> review = new ArrayList<>();
 
+    private Float rating;
+
     public static StoreDetailDto from(Store store) {
         StoreDetailDto storeDetailDto = new StoreDetailDto();
         storeDetailDto.id = store.getId();
@@ -38,6 +39,7 @@ public class StoreDetailDto {
         storeDetailDto.image = store.getImage().stream().map(ImageDto::from).collect(Collectors.toList());
         storeDetailDto.menu = store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList());
         storeDetailDto.review = store.getReview().stream().map(ReviewDto::from).collect(Collectors.toList());
+        storeDetailDto.rating = store.getRating();
         return storeDetailDto;
     }
 }

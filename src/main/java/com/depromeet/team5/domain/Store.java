@@ -38,6 +38,8 @@ public class Store {
     @JoinColumn(name = "review_id")
     private List<Review> review = new ArrayList<>();
 
+    private Float rating;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delete_id")
     private List<DeleteRequest> deleteRequest = new ArrayList<>();
@@ -52,6 +54,8 @@ public class Store {
         store.storeName = storeDto.getStoreName();
         store.category = storeDto.getCategory();
         store.image = imageList;
+        store.review = new ArrayList<>();
+        store.rating = 0F;
         store.deleteRequest = new ArrayList<>();
         store.user = user;
         if (storeDto.getMenu() != null){

@@ -20,6 +20,8 @@ public class StoreCardDto {
 
     private Double longitude;
 
+    private Float rating;
+
     public static StoreCardDto from(Store store) {
         StoreCardDto storeCardDto = new StoreCardDto();
         storeCardDto.id = store.getId();
@@ -28,6 +30,7 @@ public class StoreCardDto {
         storeCardDto.distance = 0;
         storeCardDto.latitude = store.getLatitude();
         storeCardDto.longitude = store.getLongitude();
+        storeCardDto.rating = store.getRating();
         return storeCardDto;
     }
 
