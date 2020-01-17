@@ -2,6 +2,7 @@ package com.depromeet.team5.dto;
 
 import com.depromeet.team5.domain.CategoryTypes;
 import com.depromeet.team5.domain.Store;
+import com.depromeet.team5.util.LocationDistance;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class StoreDetailDto {
 
     private Float rating;
 
+    private Integer distance;
+
     public static StoreDetailDto from(Store store) {
         StoreDetailDto storeDetailDto = new StoreDetailDto();
         storeDetailDto.id = store.getId();
@@ -41,5 +44,10 @@ public class StoreDetailDto {
         storeDetailDto.review = store.getReview().stream().map(ReviewDto::from).collect(Collectors.toList());
         storeDetailDto.rating = store.getRating();
         return storeDetailDto;
+    }
+
+    public static void calculationDistance(StoreDetailDto storeDetailDto, Double lat, Double lng) {
+        LocationDistance locationDistance = new LocationDistance();
+        storeDetailDto.distance = (int)locationDistance.distance(storeDetailDto.getLatitude(), storeDetailDto.getLongitude(), lat, lng, "meter");
     }
 }

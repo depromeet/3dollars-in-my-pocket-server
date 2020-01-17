@@ -27,7 +27,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreDetailDto> save(StoreDto storeDto,
+    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
                                        @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                        @RequestParam Long userId) {
         if (image != null) storeDto.setImage(image);
@@ -55,8 +55,10 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/detail")
-    public ResponseEntity<StoreDetailDto> getDetail(@RequestParam Long storeId) {
-        return new ResponseEntity<>(storeService.getDetail(storeId), HttpStatus.OK);
+    public ResponseEntity<StoreDetailDto> getDetail(@RequestParam Long storeId,
+                                                    @RequestParam Double latitude,
+                                                    @RequestParam Double longitude) {
+        return new ResponseEntity<>(storeService.getDetail(storeId, latitude, longitude), HttpStatus.OK);
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
