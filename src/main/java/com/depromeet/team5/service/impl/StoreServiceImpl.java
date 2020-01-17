@@ -39,7 +39,6 @@ public class StoreServiceImpl implements StoreService {
         List<Image> image = convertImage(storeDto.getImage());
         Store store = Store.from(storeDto, image, user);
         storeRepository.save(store);
-
         return StoreDetailDto.from(store);
     }
 

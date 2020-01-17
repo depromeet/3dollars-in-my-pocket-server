@@ -1,6 +1,5 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.Menu;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,5 +16,5 @@ public class StoreUpdateDto {
 
     private List<MultipartFile> image;
 
-    private List<Menu> menu;
+    private List<MenuDto> menu;
 }

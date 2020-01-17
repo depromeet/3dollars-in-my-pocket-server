@@ -3,7 +3,6 @@ package com.depromeet.team5.repository;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -11,7 +10,6 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    @Modifying
     @Query(value = "SELECT *, (" +
             "    3959 * acos (" +
             "      cos ( radians( :latitude ) )  " +
@@ -27,7 +25,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findAllByAddress(@Param("latitude") final Double latitude,
                                  @Param("longitude") final Double longitude);
 
-    @Modifying
     @Query(value = "SELECT *, (" +
             "    3959 * acos (" +
             "      cos ( radians( :latitude ) )  " +
@@ -48,7 +45,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                                   @Param("radiusEnd") final Double radiusEnd,
                                   @Param("category") final String category);
 
-    @Modifying
     @Query(value = "SELECT *, (" +
             "    3959 * acos (" +
             "      cos ( radians( :latitude ) )  " +

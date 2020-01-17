@@ -27,8 +27,8 @@ public class ReviewController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<String> save(ReviewDto reviewDto, @RequestParam Long userId) {
-        reviewService.saveReview(reviewDto, userId);
+    public ResponseEntity<String> save(@RequestBody ReviewDto reviewDto, @RequestParam Long userId, @RequestParam  Long storeId) {
+        reviewService.saveReview(reviewDto, userId, storeId);
         return new ResponseEntity<>("리뷰 등록에 성공했습니다.", HttpStatus.OK);
     }
 
@@ -44,7 +44,7 @@ public class ReviewController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
-    public ResponseEntity<String> update(ReviewUpdateDto reviewUpdateDto, @RequestParam Long reviewId) {
+    public ResponseEntity<String> update(@RequestBody ReviewUpdateDto reviewUpdateDto, @RequestParam Long reviewId) {
         reviewService.updateReview(reviewUpdateDto, reviewId);
         return new ResponseEntity<>("리뷰 수정에 성공했습니다.", HttpStatus.OK);
     }

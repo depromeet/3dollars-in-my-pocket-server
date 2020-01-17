@@ -38,6 +38,8 @@ public class Store {
     @JoinColumn(name = "review_id")
     private List<Review> review = new ArrayList<>();
 
+    private Float rating;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delete_id")
     private List<DeleteRequest> deleteRequest = new ArrayList<>();
@@ -52,12 +54,14 @@ public class Store {
         store.storeName = storeDto.getStoreName();
         store.category = storeDto.getCategory();
         store.image = imageList;
+        store.review = new ArrayList<>();
+        store.rating = 0F;
         store.deleteRequest = new ArrayList<>();
         store.user = user;
-        if (storeDto.getMenu() == null){
-            store.menu = new ArrayList<>();
-        } else {
+        if (storeDto.getMenu() != null){
             store.menu = storeDto.getMenu().stream().map(Menu::from).collect(Collectors.toList());
+        } else {
+            store.menu = new ArrayList<>();
         }
         return store;
     }
@@ -68,7 +72,9 @@ public class Store {
         storeName = storeUpdateDto.getStoreName();
         image.addAll(imageList);
         menu.clear();
-        menu.addAll(storeUpdateDto.getMenu());
+        if (storeUpdateDto.getMenu() != null){
+            menu.addAll(storeUpdateDto.getMenu().stream().map(Menu::from).collect(Collectors.toList()));
+        }
     }
 
     public void addDeleteId(Long userId) {
