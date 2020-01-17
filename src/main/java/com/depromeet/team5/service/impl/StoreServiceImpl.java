@@ -68,9 +68,11 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public StoreDetailDto getDetail(Long storeId) {
+    public StoreDetailDto getDetail(Long storeId, Double latitude, Double longitude) {
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
-        return StoreDetailDto.from(store);
+        StoreDetailDto storeDetailDto = StoreDetailDto.from(store);
+        StoreDetailDto.calculationDistance(storeDetailDto, latitude, longitude);
+        return storeDetailDto;
     }
 
     @Override
