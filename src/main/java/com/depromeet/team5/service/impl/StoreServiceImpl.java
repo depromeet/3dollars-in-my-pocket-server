@@ -34,12 +34,15 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public StoreDetailDto saveStore(StoreDto storeDto, Long userId) {
+    public StoreIdDto saveStore(StoreDto storeDto, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Image> image = convertImage(storeDto.getImage());
         Store store = Store.from(storeDto, image, user);
         storeRepository.save(store);
-        return StoreDetailDto.from(store);
+
+        StoreIdDto storeIdDto = new StoreIdDto();
+        storeIdDto.setStoreId(store.getId());
+        return storeIdDto;
     }
 
     @Override

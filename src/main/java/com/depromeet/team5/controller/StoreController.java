@@ -27,7 +27,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreDetailDto> save(StoreDto storeDto,
+    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
                                        @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                        @RequestParam Long userId) {
         if (image != null) storeDto.setImage(image);
