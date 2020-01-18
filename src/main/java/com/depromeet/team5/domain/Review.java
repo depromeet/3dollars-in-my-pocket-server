@@ -1,7 +1,6 @@
 package com.depromeet.team5.domain;
 
 import com.depromeet.team5.dto.ReviewDto;
-import com.depromeet.team5.dto.ReviewUpdateDto;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -35,10 +34,5 @@ public class Review {
         review.rating = reviewDto.getRating();
         review.user = user;
         return review;
-    }
-
-    public void setReview(ReviewUpdateDto reviewUpdateDto) {
-        contents = reviewUpdateDto.getContents();
-        rating = reviewUpdateDto.getRating();
     }
 }

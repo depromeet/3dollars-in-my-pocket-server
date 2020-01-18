@@ -1,18 +1,18 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.domain.Review;
 import com.depromeet.team5.dto.ReviewDto;
-import com.depromeet.team5.dto.ReviewUpdateDto;
 import com.depromeet.team5.service.ReviewService;
+import com.depromeet.team5.util.PageRequest;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Api(value = "Review")
 @CrossOrigin(origins = {"*"})
@@ -36,25 +36,7 @@ public class ReviewController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/user")
-    public ResponseEntity<List<ReviewDto>> getAllByUser(@RequestParam Long userId) {
-        return new ResponseEntity<>(reviewService.getAllByUser(userId), HttpStatus.OK);
-    }
-
-    @ApiOperation("리뷰를 수정합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
-    @PutMapping("/update")
-    public ResponseEntity<String> update(@RequestBody ReviewUpdateDto reviewUpdateDto, @RequestParam Long reviewId) {
-        reviewService.updateReview(reviewUpdateDto, reviewId);
-        return new ResponseEntity<>("리뷰 수정에 성공했습니다.", HttpStatus.OK);
-    }
-
-    @ApiOperation("리뷰를 삭제합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long reviewId) {
-        reviewService.deleteReview(reviewId);
-        return new ResponseEntity<>("리뷰 삭제에 성공했습니다.", HttpStatus.OK);
+    public ResponseEntity<Page<Review>> getAllByUser(@RequestParam Long userId, PageRequest pageRequest) {
+        return new ResponseEntity<>(reviewService.getAllByUser(userId, pageRequest.of()), HttpStatus.OK);
     }
 }
