@@ -4,17 +4,17 @@ import com.depromeet.team5.domain.CategoryTypes;
 import com.depromeet.team5.dto.CategoryDto;
 import com.depromeet.team5.service.CategoryService;
 import com.depromeet.team5.util.auth.Auth;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Api(value = "Category")
 @RestController
+@CrossOrigin(origins = {"*"})
 @RequestMapping("/api/v1/category")
 @RequiredArgsConstructor
 public class CategoryController {
