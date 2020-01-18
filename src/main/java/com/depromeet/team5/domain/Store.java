@@ -3,8 +3,11 @@ package com.depromeet.team5.domain;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.StoreUpdateDto;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +49,12 @@ public class Store {
 
     @ManyToOne
     private User user;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     public static Store from(StoreDto storeDto, List<Image> imageList, User user) {
         Store store = new Store();
