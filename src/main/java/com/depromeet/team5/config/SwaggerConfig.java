@@ -6,13 +6,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -33,7 +29,7 @@ public class SwaggerConfig {
                         newArrayList(new ResponseMessageBuilder()
                                         .code(500)
                                         .message("Internal Server Error")
-                                        .responseModel(new ModelRef("Error"))
+                                        .responseModel(new ModelRef("string"))
                                         .build(),
                                 new ResponseMessageBuilder()
                                         .code(400)
