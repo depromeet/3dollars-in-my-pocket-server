@@ -2,13 +2,15 @@ package com.depromeet.team5.repository;
 
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface StoreRepository extends JpaRepository<Store, Long> {
+public interface StoreRepository extends PagingAndSortingRepository<Store, Long> {
 
     @Query(value = "SELECT *, (" +
             "    3959 * acos (" +
@@ -65,5 +67,5 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                                 @Param("radiusEnd") final Double radiusEnd,
                                 @Param("category") final String category);
 
-    List<Store> findAllByUser(User user);
+    Page<Store> findAllByUser(User user, Pageable pageable);
 }

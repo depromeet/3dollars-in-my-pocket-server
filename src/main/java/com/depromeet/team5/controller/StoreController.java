@@ -1,5 +1,6 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
 import com.depromeet.team5.util.auth.Auth;
@@ -7,6 +8,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,8 +52,10 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/user")
-    public ResponseEntity<List<StoreMyPageDto>> getAllByUser(@RequestParam Long userId) {
-        return new ResponseEntity<>(storeService.getAllByUser(userId), HttpStatus.OK);
+    public ResponseEntity<Page<Store>> getAllByUser(@RequestParam Long userId,
+                                                    @RequestParam Integer page) {
+        Pageable pageable = PageRequest.of(page-1, 10, Sort.by("createdAt").descending());
+        return new ResponseEntity<>(storeService.getAllByUser(userId, pageable), HttpStatus.OK);
     }
 
     @ApiOperation("특정 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")

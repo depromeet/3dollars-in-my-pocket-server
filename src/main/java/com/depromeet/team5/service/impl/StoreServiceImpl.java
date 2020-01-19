@@ -14,6 +14,8 @@ import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,12 +63,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<StoreMyPageDto> getAllByUser(Long userId) {
+    public Page<Store> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return storeRepository.findAllByUser(user)
-                .stream()
-                .map(StoreMyPageDto::from)
-                .collect(Collectors.toList());
+        return storeRepository.findAllByUser(user, pageable);
     }
 
     @Override
