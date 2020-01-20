@@ -34,11 +34,11 @@ public class Store {
     private List<Image> image;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "menu_id", nullable = true)
+    @JoinColumn(name = "menu_id")
     private List<Menu> menu = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "storeId")
     private List<Review> review = new ArrayList<>();
 
     private Float rating;
