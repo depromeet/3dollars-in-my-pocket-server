@@ -1,7 +1,8 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.CategoryTypes;
-import com.depromeet.team5.dto.CategoryDto;
+import com.depromeet.team5.dto.CategoryDistanceDto;
+import com.depromeet.team5.dto.CategoryReviewDto;
 import com.depromeet.team5.service.CategoryService;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
@@ -25,9 +26,9 @@ public class CategoryController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/distance")
-    public ResponseEntity<CategoryDto> getDistanceAll(@RequestParam Double latitude,
-                                                      @RequestParam Double longitude,
-                                                      @RequestParam CategoryTypes category) {
+    public ResponseEntity<CategoryDistanceDto> getDistanceAll(@RequestParam Double latitude,
+                                                              @RequestParam Double longitude,
+                                                              @RequestParam CategoryTypes category) {
         return new ResponseEntity<>(categoryService.getDistanceList(latitude, longitude, category), HttpStatus.OK);
     }
 
@@ -35,9 +36,9 @@ public class CategoryController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/review")
-    public ResponseEntity<CategoryDto> getReviewAll(@RequestParam Double latitude,
-                                                     @RequestParam Double longitude,
-                                                     @RequestParam CategoryTypes category) {
+    public ResponseEntity<CategoryReviewDto> getReviewAll(@RequestParam Double latitude,
+                                                          @RequestParam Double longitude,
+                                                          @RequestParam CategoryTypes category) {
         return new ResponseEntity<>(categoryService.getReviewList(latitude, longitude, category), HttpStatus.OK);
     }
 }
