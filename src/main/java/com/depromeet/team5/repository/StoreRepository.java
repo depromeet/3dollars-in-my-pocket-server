@@ -57,15 +57,15 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "    )" +
             "  ) AS distance" +
             "  FROM store" +
-            "  WHERE category LIKE :category" +
+            "  WHERE category LIKE :category AND rating >= :ratingStart AND rating < :ratingEnd" +
             "  GROUP BY id" +
-            "  HAVING distance >= :radiusStart AND distance <= :radiusEnd" +
-            "  ORDER BY review DESC", nativeQuery = true)
+            "  HAVING distance <= 1000" +
+            "  ORDER BY distance", nativeQuery = true)
     List<Store> findAllByReview(@Param("latitude") final Double latitude,
                                 @Param("longitude") final Double longitude,
-                                @Param("radiusStart") final Double radiusStart,
-                                @Param("radiusEnd") final Double radiusEnd,
-                                @Param("category") final String category);
+                                @Param("category") final String category,
+                                @Param("ratingStart") final Float ratingStart,
+                                @Param("ratingEnd") final Float ratingEnd);
 
     Page<Store> findAllByUser(User user, Pageable pageable);
 }
