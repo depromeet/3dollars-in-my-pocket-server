@@ -17,7 +17,10 @@ public class Review {
 
     private Long storeId;
 
-    private CategoryTypes categoryTypes;
+    private String storeName;
+
+    @Enumerated(value = EnumType.STRING)
+    private CategoryTypes category;
 
     private String contents;
 
@@ -29,10 +32,11 @@ public class Review {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    public static Review from(ReviewDto reviewDto, User user, Long storeId) {
+    public static Review from(ReviewDto reviewDto, User user, Store store) {
         Review review = new Review();
-        review.categoryTypes = reviewDto.getCategoryTypes();
-        review.storeId = storeId;
+        review.storeId = store.getId();
+        review.category = store.getCategory();
+        review.storeName = store.getStoreName();
         review.contents = reviewDto.getContents();
         review.rating = reviewDto.getRating();
         review.user = user;
