@@ -31,11 +31,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void saveReview(ReviewDto reviewDto, Long userId, Long storeId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Review review = Review.from(reviewDto, user, storeId);
+        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        Review review = Review.from(reviewDto, user, store);
         reviewRepository.save(review);
 
         Float rating = reviewRepository.findByRatingAvg(storeId);
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
         store.setRating(rating);
         storeRepository.save(store);
     }

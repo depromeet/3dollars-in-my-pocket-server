@@ -7,15 +7,12 @@ import lombok.Data;
 @Data
 public class ReviewDto {
 
-    private CategoryTypes categoryTypes;
-
     private String contents;
 
     private Integer rating;
 
     public static ReviewDto from(Review review) {
         ReviewDto reviewDto = new ReviewDto();
-        reviewDto.categoryTypes = review.getCategoryTypes();
         reviewDto.contents = review.getContents();
         reviewDto.rating = review.getRating();
         return reviewDto;
