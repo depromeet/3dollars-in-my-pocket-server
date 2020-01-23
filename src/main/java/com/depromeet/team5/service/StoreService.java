@@ -1,5 +1,6 @@
 package com.depromeet.team5.service;
 
+import com.depromeet.team5.domain.DeleteReasonType;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.dto.*;
 import org.springframework.data.domain.Page;
@@ -13,5 +14,5 @@ public interface StoreService {
     Page<Store> getAllByUser(Long userId, Pageable pageable);
     StoreDetailDto getDetail(Long storeId, Double latitude, Double longitude);
     void updateStore(StoreUpdateDto storeUpdateDto, Long storeId);
-    void deleteStore(Long storeId, Long userId);
+    void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType);
 }

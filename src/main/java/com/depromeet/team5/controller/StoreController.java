@@ -1,5 +1,6 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.domain.DeleteReasonType;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
@@ -85,8 +86,9 @@ public class StoreController {
     @Auth
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam Long storeId,
-                                         @RequestParam Long userId) {
-        storeService.deleteStore(storeId, userId);
+                                         @RequestParam Long userId,
+                                         @RequestParam DeleteReasonType deleteReasonType) {
+        storeService.deleteStore(storeId, userId, deleteReasonType);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
     }
 }
