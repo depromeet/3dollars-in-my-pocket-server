@@ -1,8 +1,6 @@
 package com.depromeet.team5.service.impl;
 
-import com.depromeet.team5.domain.Image;
-import com.depromeet.team5.domain.Store;
-import com.depromeet.team5.domain.User;
+import com.depromeet.team5.domain.*;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserIdCheckException;
@@ -85,19 +83,19 @@ public class StoreServiceImpl implements StoreService {
         store.setStore(storeUpdateDto, image);
         storeRepository.save(store);
     }
-    
+
     @Override
     @Transactional
-    public void deleteStore(Long storeId, Long userId) {
+    public void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType) {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
 
-        if (deleteRepository.findByUserIdLike(userId).isPresent()) {
+        if (deleteRepository.findByUserIdAndStoreId(userId, storeId).isPresent()) {
             throw new UserIdCheckException();
-        } else if (store.getDeleteRequest().size() == 4) {
+        } else if (deleteRepository.findAllByStoreIdAndReason(storeId, deleteReasonType).size() == 2) {
             storeRepository.delete(store);
         } else {
-            store.addDeleteId(userId);
+            store.addDeleteId(storeId, userId, deleteReasonType);
         }
     }
 

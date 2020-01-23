@@ -86,9 +86,11 @@ public class Store {
         }
     }
 
-    public void addDeleteId(Long userId) {
+    public void addDeleteId(Long storeId, Long userId, DeleteReasonType deleteReasonType) {
         DeleteRequest deleteRequestId = new DeleteRequest();
+        deleteRequestId.setStoreId(storeId);
         deleteRequestId.setUserId(userId);
+        deleteRequestId.setReason(deleteReasonType);
         deleteRequest.add(deleteRequestId);
     }
 }
