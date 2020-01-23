@@ -59,7 +59,7 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "  FROM store" +
             "  WHERE category LIKE :category AND rating >= :ratingStart AND rating < :ratingEnd" +
             "  GROUP BY id" +
-            "  HAVING distance <= 1000" +
+            "  HAVING distance <= 1" +
             "  ORDER BY distance", nativeQuery = true)
     List<Store> findAllByReview(@Param("latitude") final Double latitude,
                                 @Param("longitude") final Double longitude,
