@@ -13,7 +13,7 @@ import java.util.List;
 public interface StoreRepository extends PagingAndSortingRepository<Store, Long> {
 
     @Query(value = "SELECT *, (" +
-            "    3959 * acos (" +
+            "    6371 * acos (" +
             "      cos ( radians( :latitude ) )  " +
             "      * cos( radians( latitude ) )" +
             "      * cos( radians( longitude ) - radians( :longitude ) )" +
@@ -28,7 +28,7 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
                                  @Param("longitude") final Double longitude);
 
     @Query(value = "SELECT *, (" +
-            "    3959 * acos (" +
+            "    6371 * acos (" +
             "      cos ( radians( :latitude ) )  " +
             "      * cos( radians( latitude ) )" +
             "      * cos( radians( longitude ) - radians( :longitude ) )" +
@@ -48,7 +48,7 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
                                   @Param("category") final String category);
 
     @Query(value = "SELECT *, (" +
-            "    3959 * acos (" +
+            "    6371 * acos (" +
             "      cos ( radians( :latitude ) )  " +
             "      * cos( radians( latitude ) )" +
             "      * cos( radians( longitude ) - radians( :longitude ) )" +
