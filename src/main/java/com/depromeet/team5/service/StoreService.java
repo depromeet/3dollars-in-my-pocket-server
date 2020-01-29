@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface StoreService {
     StoreIdDto saveStore(StoreDto storeDto, Long userId);
-    List<StoreCardDto> getAll(Double latitude, Double longitude);
+    List<StoreCardDto> getAll(Double latitude, Double longitude, Pageable pageable);
     Page<Store> getAllByUser(Long userId, Pageable pageable);
     StoreDetailDto getDetail(Long storeId, Double latitude, Double longitude);
     void updateStore(StoreUpdateDto storeUpdateDto, Long storeId);

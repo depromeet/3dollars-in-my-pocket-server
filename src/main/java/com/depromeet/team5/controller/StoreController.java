@@ -45,8 +45,10 @@ public class StoreController {
     @Auth
     @GetMapping("/get")
     public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
-                                                     @RequestParam Double longitude) {
-        return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
+                                                     @RequestParam Double longitude,
+                                                     @RequestParam Integer page) {
+        Pageable pageable = PageRequest.of(page-1, 5, Sort.by("createdAt").descending());
+        return new ResponseEntity<>(storeService.getAll(latitude, longitude, pageable), HttpStatus.OK);
     }
 
     @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
