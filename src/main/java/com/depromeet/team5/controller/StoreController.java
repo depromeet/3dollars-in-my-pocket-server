@@ -55,9 +55,9 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/user")
-    public ResponseEntity<Page<Store>> getAllByUser(@RequestParam Long userId,
+    public ResponseEntity<List<StoreMyPageDto>> getAllByUser(@RequestParam Long userId,
                                                     @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page-1, 10, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page-1, 5, Sort.by("createdAt").descending());
         return new ResponseEntity<>(storeService.getAllByUser(userId, pageable), HttpStatus.OK);
     }
 

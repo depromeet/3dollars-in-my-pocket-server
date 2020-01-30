@@ -62,9 +62,13 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Page<Store> getAllByUser(Long userId, Pageable pageable) {
+    public List<StoreMyPageDto> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return storeRepository.findAllByUser(user, pageable);
+        return storeRepository.findAllByUser(user, pageable)
+                .getContent()
+                .stream()
+                .map(StoreMyPageDto::from)
+                .collect(Collectors.toList());
     }
 
     @Override
