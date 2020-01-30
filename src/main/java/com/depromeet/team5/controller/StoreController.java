@@ -45,7 +45,7 @@ public class StoreController {
     public ResponseEntity<StoreCardPomDto> getAll(@RequestParam Double latitude,
                                                      @RequestParam Double longitude,
                                                      @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page-1, 5, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page-1, 5);
         return new ResponseEntity<>(storeService.getAll(latitude, longitude, pageable), HttpStatus.OK);
     }
 
