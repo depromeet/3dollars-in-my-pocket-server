@@ -12,12 +12,11 @@ import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,12 +41,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewDto> getAllByUser(Long userId, Pageable pageable) {
+    public Page<Review> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return reviewRepository.findByUser(user, pageable)
-                .getContent()
-                .stream()
-                .map(ReviewDto::from)
-                .collect(Collectors.toList());
+        return reviewRepository.findByUser(user, pageable);
     }
 }
