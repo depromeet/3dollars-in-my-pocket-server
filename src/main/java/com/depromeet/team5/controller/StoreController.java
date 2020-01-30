@@ -1,7 +1,6 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.DeleteReasonType;
-import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
 import com.depromeet.team5.util.auth.Auth;
@@ -9,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
