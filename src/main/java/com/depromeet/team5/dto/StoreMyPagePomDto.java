@@ -1,7 +1,10 @@
 package com.depromeet.team5.dto;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class StoreMyPagePomDto {
     private List<StoreMyPageDto> content;
 

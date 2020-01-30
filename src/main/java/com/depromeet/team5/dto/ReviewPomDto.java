@@ -1,9 +1,11 @@
 package com.depromeet.team5.dto;
 
 import com.depromeet.team5.domain.Review;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class ReviewPomDto {
 
     private List<Review> content;
