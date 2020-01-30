@@ -4,6 +4,7 @@ import com.depromeet.team5.domain.Review;
 import com.depromeet.team5.domain.Store;
 import com.depromeet.team5.domain.User;
 import com.depromeet.team5.dto.ReviewDto;
+import com.depromeet.team5.dto.ReviewPomDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.ReviewRepository;
@@ -41,8 +42,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<Review> getAllByUser(Long userId, Pageable pageable) {
+    public ReviewPomDto getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return reviewRepository.findByUser(user, pageable);
+        Page<Review> reviewList = reviewRepository.findByUser(user, pageable);
+        return ReviewPomDto.from(reviewList.getContent(), reviewList.getTotalElements(), reviewList.getTotalPages());
     }
 }
