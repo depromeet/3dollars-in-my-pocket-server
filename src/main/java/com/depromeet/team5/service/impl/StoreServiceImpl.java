@@ -12,6 +12,7 @@ import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,28 +47,33 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<StoreCardDto> getAll(Double latitude, Double longitude, Pageable pageable) {
-        List<StoreCardDto> storeList = storeRepository.findAllByAddress(latitude, longitude, pageable)
+    public StoreCardPomDto getAll(Double latitude, Double longitude, Pageable pageable) {
+        Page<Store> storeList = storeRepository.findAllByAddress(latitude, longitude, pageable);
+        List<StoreCardDto> storeCardList = storeList
                 .getContent()
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
 
-        for (StoreCardDto storeCardDto : storeList) {
+        for (StoreCardDto storeCardDto : storeCardList) {
             StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
         }
-        return storeList;
+
+        return StoreCardPomDto.from(storeCardList, storeList.getTotalElements(), storeList.getTotalPages());
     }
 
     @Override
     @Transactional
-    public List<StoreMyPageDto> getAllByUser(Long userId, Pageable pageable) {
+    public StoreMyPagePomDto getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        return storeRepository.findAllByUser(user, pageable)
+        Page<Store> storeList = storeRepository.findAllByUser(user, pageable);
+        List<StoreMyPageDto> storeMyPageList = storeList
                 .getContent()
                 .stream()
                 .map(StoreMyPageDto::from)
                 .collect(Collectors.toList());
+
+        return StoreMyPagePomDto.from(storeMyPageList, storeList.getTotalElements(), storeList.getTotalPages());
     }
 
     @Override
