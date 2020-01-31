@@ -25,19 +25,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3FileUploadService {
 
-    @Value("${cloud.aws.credentials.accessKey}")
+    @Value("${aws.configure.accessKey}")
     private String accessKey;
 
-    @Value("${cloud.aws.credentials.secretKey}")
+    @Value("${aws.configure.secretKey}")
     private String secretKey;
 
-    @Value("${cloud.aws.region.static}")
+    @Value("${aws.configure.region}")
     private String region;
 
-    @Value("${cloud.aws.s3.bucket.name}")
+    @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
-    @Value("${cloud.aws.s3.bucket.url}")
+    @Value("${aws.s3.bucket.url}")
     private String defaultUrl;
 
     @PostConstruct
