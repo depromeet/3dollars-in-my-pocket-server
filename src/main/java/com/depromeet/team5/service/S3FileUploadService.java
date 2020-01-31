@@ -49,7 +49,8 @@ public class S3FileUploadService {
                 .build();
     }
 
-    public String upload(MultipartFile multipartFile) throws IOException { String savedFileName = getSavedFileName(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+    public String upload(MultipartFile multipartFile) throws IOException {
+        String savedFileName = getSavedFileName(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         try {
             File file = convertMultiPartToFile(multipartFile);
             uploadFileToS3(savedFileName, file);
@@ -57,7 +58,7 @@ public class S3FileUploadService {
         } catch (StringIndexOutOfBoundsException e) {
             return null;
         }
-        return defaultUrl + savedFileName;
+        return defaultUrl + savedFileName.replaceAll("/", "");
     }
 
     private static String getUuid() {
