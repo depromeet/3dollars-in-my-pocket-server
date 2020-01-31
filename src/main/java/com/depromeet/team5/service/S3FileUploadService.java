@@ -1,7 +1,9 @@
 package com.depromeet.team5.service;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -23,18 +25,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3FileUploadService {
 
-    @Value("${s3.bucket.name}")
+    @Value("${aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${aws.credentials.secretKey}")
+    private String secretKey;
+
+    @Value("${aws.credentials.region}")
+    private String region;
+
+    @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
-    @Value("${s3.bucket.url}")
+    @Value("${aws.s3.bucket.url}")
     private String defaultUrl;
 
     @PostConstruct
     private AmazonS3 initiateS3Client() {
-        InstanceProfileCredentialsProvider provider
-                = new InstanceProfileCredentialsProvider(true);
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonS3ClientBuilder.standard()
-                .withCredentials(provider)
+                .withRegion(Regions.fromName(region))
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
 
