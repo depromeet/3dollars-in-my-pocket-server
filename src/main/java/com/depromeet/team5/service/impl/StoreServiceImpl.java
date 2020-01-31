@@ -45,21 +45,35 @@ public class StoreServiceImpl implements StoreService {
         return storeIdDto;
     }
 
+//    @Override
+//    @Transactional
+//    public StoreCardPomDto getAll(Double latitude, Double longitude, Pageable pageable) {
+//        Page<Store> storeList = storeRepository.findAllByAddress(latitude, longitude, pageable);
+//        List<StoreCardDto> storeCardList = storeList
+//                .getContent()
+//                .stream()
+//                .map(StoreCardDto::from)
+//                .collect(Collectors.toList());
+//
+//        for (StoreCardDto storeCardDto : storeCardList) {
+//            StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
+//        }
+//
+//        return StoreCardPomDto.from(storeCardList, storeList.getTotalElements(), storeList.getTotalPages());
+//    }
+
     @Override
     @Transactional
-    public StoreCardPomDto getAll(Double latitude, Double longitude, Pageable pageable) {
-        Page<Store> storeList = storeRepository.findAllByAddress(latitude, longitude, pageable);
-        List<StoreCardDto> storeCardList = storeList
-                .getContent()
+    public List<StoreCardDto> getAll(Double latitude, Double longitude) {
+        List<StoreCardDto> storeList = storeRepository.findAllByAddress(latitude, longitude)
                 .stream()
                 .map(StoreCardDto::from)
                 .collect(Collectors.toList());
 
-        for (StoreCardDto storeCardDto : storeCardList) {
+        for (StoreCardDto storeCardDto : storeList) {
             StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
         }
-
-        return StoreCardPomDto.from(storeCardList, storeList.getTotalElements(), storeList.getTotalPages());
+        return storeList;
     }
 
     @Override
