@@ -22,8 +22,7 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "    )" +
             "  ) AS distance" +
             "  FROM store" +
-            "  ORDER BY distance" +
-            "  LIMIT 0 , 5", nativeQuery = true)
+            "  ORDER BY distance", nativeQuery = true)
     Page<Store> findAllByAddress(@Param("latitude") final Double latitude,
                                  @Param("longitude") final Double longitude,
                                  Pageable pageable);

@@ -42,10 +42,10 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/get")
-    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
+    public ResponseEntity<StoreCardPomDto> getAll(@RequestParam Double latitude,
                                                      @RequestParam Double longitude,
                                                      @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page-1, 5, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page-1, 5);
         return new ResponseEntity<>(storeService.getAll(latitude, longitude, pageable), HttpStatus.OK);
     }
 
@@ -53,7 +53,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/user")
-    public ResponseEntity<List<StoreMyPageDto>> getAllByUser(@RequestParam Long userId,
+    public ResponseEntity<StoreMyPagePomDto> getAllByUser(@RequestParam Long userId,
                                                     @RequestParam Integer page) {
         Pageable pageable = PageRequest.of(page-1, 5, Sort.by("createdAt").descending());
         return new ResponseEntity<>(storeService.getAllByUser(userId, pageable), HttpStatus.OK);
