@@ -42,11 +42,10 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/get")
-    public ResponseEntity<StoreCardPomDto> getAll(@RequestParam Double latitude,
-                                                     @RequestParam Double longitude,
-                                                     @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page-1, 5);
-        return new ResponseEntity<>(storeService.getAll(latitude, longitude, pageable), HttpStatus.OK);
+    public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
+                                                     @RequestParam Double longitude) {
+//        Pageable pageable = PageRequest.of(page-1, 5);
+        return new ResponseEntity<>(storeService.getAll(latitude, longitude), HttpStatus.OK);
     }
 
     @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
