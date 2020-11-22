@@ -40,10 +40,12 @@ public class S3FileUploadService {
     @Value("${aws.s3.bucket.url}")
     private String defaultUrl;
 
+    private AmazonS3 amazonS3Client;
+
     @PostConstruct
-    private AmazonS3 initiateS3Client() {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-        return AmazonS3ClientBuilder.standard()
+    private void init() {
+       BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+       amazonS3Client = AmazonS3ClientBuilder.standard()
                 .withRegion(Regions.fromName(region))
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
@@ -79,9 +81,8 @@ public class S3FileUploadService {
 
     private void uploadFileToS3(final String fileName, final File file) {
         try {
-            AmazonS3 s3Client = initiateS3Client();
-            s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
-        }catch(AmazonServiceException e) {
+            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
+        } catch(AmazonServiceException e) {
             log.error(e.getMessage());
         }
     }
