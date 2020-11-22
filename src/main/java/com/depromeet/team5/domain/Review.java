@@ -3,6 +3,7 @@ package com.depromeet.team5.domain;
 import com.depromeet.team5.dto.ReviewDto;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -33,6 +34,9 @@ public class Review {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     public static Review from(ReviewDto reviewDto, User user, Store store) {
         Review review = new Review();
