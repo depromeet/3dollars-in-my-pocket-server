@@ -24,4 +24,10 @@ public class Image {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public static Image from(String url) {
+        Image image = new Image();
+        image.setUrl(url);
+        return image;
+    }
 }
