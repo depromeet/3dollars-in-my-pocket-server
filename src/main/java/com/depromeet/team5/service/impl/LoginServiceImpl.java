@@ -1,8 +1,10 @@
 package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.User;
+import com.depromeet.team5.domain.UserStatusType;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
+import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.exception.NickNameCheckException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.UserRepository;
@@ -40,18 +42,38 @@ public class LoginServiceImpl implements LoginService {
     @Override
     @Transactional
     public User userInfo(Long userId) {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        if (user.getStatus() == UserStatusType.INACTIVE)
+            throw new WithdrawalUserException(userId);
+        return user;
     }
 
     @Override
     @Transactional
     public void setNickname(Long userId, String nickName) {
-        if(userRepository.findByNameLike(nickName).isPresent()){
+        if (userRepository.findByNameLike(nickName).isPresent()) {
             throw new NickNameCheckException();
         }
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         user.setName(nickName);
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void signOutUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        if (user.getStatus() == UserStatusType.ACTIVE) {
+            boolean change = false;
+            while (!change) {
+                String changeName = user.getName() + " " + (int) (Math.random() * 100);
+                if (!userRepository.findByNameLike(changeName).isPresent()) {
+                    user.setName(changeName);
+                    user.setStatus(UserStatusType.INACTIVE);
+                    change = true;
+                }
+            }
+        }
     }
 
     private User createUser(UserDto userDto) {

@@ -1,6 +1,7 @@
 package com.depromeet.team5.util.auth;
 
 import com.depromeet.team5.domain.User;
+import com.depromeet.team5.domain.UserStatusType;
 import com.depromeet.team5.model.DefaultRes;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
@@ -12,7 +13,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -31,12 +31,10 @@ public class AuthAspect {
 
     private final HttpServletRequest httpServletRequest;
 
-    private final UserRepository userRepository;
-
     private final JwtService jwtService;
 
+    private final UserRepository userRepository;
 
-    @Transactional
     @Around("@annotation(com.depromeet.team5.util.auth.Auth)")
     public Object around(final ProceedingJoinPoint pjp) throws Throwable {
         final String jwt = httpServletRequest.getHeader(AUTHORIZATION);
@@ -48,7 +46,7 @@ public class AuthAspect {
         if (token == null) {
             return RES_RESPONSE_ENTITY;
         } else {
-            final Optional<User> user = userRepository.findById(token.getUser_idx());
+            Optional<User> user = userRepository.findByIdAndStatus(token.getUser_idx(), UserStatusType.ACTIVE);
 
             if (!user.isPresent()) return RES_RESPONSE_ENTITY;
             return pjp.proceed(pjp.getArgs());

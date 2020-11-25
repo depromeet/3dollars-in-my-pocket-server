@@ -44,4 +44,13 @@ public class UserController {
         loginService.setNickname(userId, nickName);
         return new ResponseEntity<>("nickname update success", HttpStatus.OK);
     }
+
+    @ApiOperation("사용자를 탈퇴시킵니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @PostMapping("/signout")
+    public ResponseEntity<String> signOutUser(@RequestParam Long userId) {
+        loginService.signOutUser(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
