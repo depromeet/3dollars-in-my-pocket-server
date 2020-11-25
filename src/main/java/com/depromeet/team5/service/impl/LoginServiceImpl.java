@@ -63,10 +63,17 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     public void signOutUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
-        double randomNum = Math.random();
-        user.setName(user.getName() + " " + randomNum);
-        user.setStatus(UserStatusType.INACTIVE);
+        if (user.getStatus() == UserStatusType.ACTIVE) {
+            boolean change = false;
+            while (!change) {
+                String changeName = user.getName() + " " + (int) (Math.random() * 100);
+                if (!userRepository.findByNameLike(changeName).isPresent()) {
+                    user.setName(changeName);
+                    user.setStatus(UserStatusType.INACTIVE);
+                    change = true;
+                }
+            }
+        }
     }
 
     private User createUser(UserDto userDto) {
