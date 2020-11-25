@@ -6,6 +6,10 @@ import com.depromeet.team5.dto.UserDto;
 
 public interface LoginService {
     LoginDto login(UserDto userDto);
+
     User userInfo(Long userId);
+
     void setNickname(Long userId, String nickName);
+
+    void signOutUser(Long userId);
 }

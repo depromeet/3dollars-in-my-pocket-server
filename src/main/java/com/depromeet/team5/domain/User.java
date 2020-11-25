@@ -22,12 +22,16 @@ public class User {
 
     private Boolean state;
 
+    @Enumerated(value = EnumType.STRING)
+    private UserStatusType status;
+
     public static User from(UserDto userDto) {
         User user = new User();
         user.socialType = userDto.getSocialType();
         user.socialId = userDto.getSocialId();
         user.name = userDto.getName();
         user.state = false;
+        user.status = UserStatusType.ACTIVE;
         return user;
     }
 
