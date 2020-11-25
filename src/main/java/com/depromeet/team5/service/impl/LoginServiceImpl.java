@@ -4,7 +4,7 @@ import com.depromeet.team5.domain.User;
 import com.depromeet.team5.domain.UserStatusType;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
-import com.depromeet.team5.exception.DeleteUserException;
+import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.exception.NickNameCheckException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.UserRepository;
@@ -44,7 +44,7 @@ public class LoginServiceImpl implements LoginService {
     public User userInfo(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         if (user.getStatus() == UserStatusType.INACTIVE)
-            throw new DeleteUserException();
+            throw new WithdrawalUserException(userId);
         return user;
     }
 
@@ -63,7 +63,9 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     public void signOutUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        user.setName("사라진 제보자");
+
+        double randomNum = Math.random();
+        user.setName(user.getName() + " " + randomNum);
         user.setStatus(UserStatusType.INACTIVE);
     }
 

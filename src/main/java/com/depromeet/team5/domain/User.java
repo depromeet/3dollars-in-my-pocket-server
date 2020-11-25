@@ -40,4 +40,11 @@ public class User {
         state = true;
     }
 
+    public String getName() {
+        if (status == UserStatusType.INACTIVE)
+            return "사라진 제보자";
+        else
+            return name;
+    }
+
 }
