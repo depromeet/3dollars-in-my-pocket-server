@@ -124,19 +124,10 @@ public class StoreServiceImpl implements StoreService {
     }
 
     private List<Image> convertImage(List<MultipartFile> multipartFileList) {
-        List<Image> image = new ArrayList<>();
-        try {
-            if (multipartFileList != null) {
-                for (MultipartFile multipartFile : multipartFileList) {
-                    Image image1 = new Image();
-                    image1.setUrl(s3FileUploadService.upload(multipartFile));
-                    image.add(image1);
-                }
-            }
-
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-        return image;
+        return multipartFileList.stream()
+                .filter(Objects::nonNull)
+                .map(s3FileUploadService::upload)
+                .map(Image::from)
+                .collect(Collectors.toList());
     }
 }
