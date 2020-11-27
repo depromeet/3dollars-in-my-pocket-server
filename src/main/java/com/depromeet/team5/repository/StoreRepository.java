@@ -1,7 +1,7 @@
 package com.depromeet.team5.repository;
 
 import com.depromeet.team5.domain.Store;
-import com.depromeet.team5.domain.User;
+import com.depromeet.team5.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,7 @@
 package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.*;
+import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserIdCheckException;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 

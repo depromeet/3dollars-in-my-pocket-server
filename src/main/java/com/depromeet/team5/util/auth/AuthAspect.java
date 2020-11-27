@@ -1,7 +1,7 @@
 package com.depromeet.team5.util.auth;
 
-import com.depromeet.team5.domain.User;
-import com.depromeet.team5.domain.UserStatusType;
+import com.depromeet.team5.domain.user.User;
+import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.model.DefaultRes;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
@@ -46,7 +46,7 @@ public class AuthAspect {
         if (token == null) {
             return RES_RESPONSE_ENTITY;
         } else {
-            Optional<User> user = userRepository.findByIdAndStatus(token.getUser_idx(), UserStatusType.ACTIVE);
+            Optional<User> user = userRepository.findByIdAndStatus(token.getUserId(), UserStatusType.ACTIVE);
 
             if (!user.isPresent()) return RES_RESPONSE_ENTITY;
             return pjp.proceed(pjp.getArgs());

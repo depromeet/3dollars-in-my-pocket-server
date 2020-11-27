@@ -47,17 +47,17 @@ public class JwtService {
     }
 
     public static class Token {
-        private long user_idx = -1;
+        private long userId = -1;
 
         public Token() {
         }
 
-        public Token(final long user_idx) {
-            this.user_idx = user_idx;
+        public Token(final long userId) {
+            this.userId = userId;
         }
 
-        public long getUser_idx() {
-            return user_idx;
+        public long getUserId() {
+            return userId;
         }
     }
 
