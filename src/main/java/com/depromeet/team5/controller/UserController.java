@@ -1,9 +1,10 @@
 package com.depromeet.team5.controller;
 
-import com.depromeet.team5.domain.User;
+import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.service.LoginService;
+import com.depromeet.team5.service.UserService;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "User")
 @RestController
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final LoginService loginService;
+    private final UserService userService;
 
     @ApiOperation("로그인을 하여 토큰을 발급받습니다.")
     @PostMapping("/login")
@@ -49,8 +52,8 @@ public class UserController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/signout")
-    public ResponseEntity<String> signOutUser(@RequestParam Long userId) {
-        loginService.signOutUser(userId);
+    public ResponseEntity<String> signOutUser(@ModelAttribute @ApiIgnore Long userId) {
+        userService.signout(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain;
 
+import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.ReviewDto;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

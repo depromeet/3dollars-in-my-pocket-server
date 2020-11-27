@@ -1,6 +1,8 @@
-package com.depromeet.team5.domain;
+package com.depromeet.team5.domain.user;
 
+import com.depromeet.team5.domain.SocialTypes;
 import com.depromeet.team5.dto.UserDto;
+import com.depromeet.team5.repository.UserRepository;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -46,6 +48,16 @@ public class User {
         return user;
     }
 
+    public static User from(WithdrawalUser withdrawalUser) {
+        User user = new User();
+        user.id = withdrawalUser.getUserId();
+        user.socialType = withdrawalUser.getSocialType();
+        user.socialId = withdrawalUser.getSocialId();
+        user.state = false;
+        user.status = UserStatusType.ACTIVE;
+        return user;
+    }
+
     public void setName(String nickName) {
         name = nickName;
         state = true;
@@ -58,4 +70,17 @@ public class User {
             return name;
     }
 
+    public User signout(UserRepository userRepository) {
+        boolean changed = false;
+        while (!changed) {
+            String changedName = this.getName() + " " + (int) (Math.random() * 100);
+            if (!userRepository.findByNameLike(changedName).isPresent()) {
+                this.setName(changedName);
+                this.setState(false);
+                this.setStatus(UserStatusType.INACTIVE);
+                changed = true;
+            }
+        }
+        return this;
+    }
 }

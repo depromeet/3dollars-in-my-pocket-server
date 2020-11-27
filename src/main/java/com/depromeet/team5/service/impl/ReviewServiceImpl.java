@@ -2,7 +2,7 @@ package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.Review;
 import com.depromeet.team5.domain.Store;
-import com.depromeet.team5.domain.User;
+import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.ReviewDto;
 import com.depromeet.team5.dto.ReviewPomDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
