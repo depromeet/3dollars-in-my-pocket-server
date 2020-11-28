@@ -62,15 +62,21 @@ public class FaqController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/{faqId}")
-    public ResponseEntity update(@PathVariable Long faqId, @RequestBody FaqUpdateRequestDto faqUpdateRequestDto) {
-        faqService.update(
-                faqId,
-                FaqContentVo.of(
-                        faqUpdateRequestDto.getQuestion(),
-                        faqUpdateRequestDto.getAnswer()
+    public ResponseEntity<FaqResponseDto> update(
+            @PathVariable Long faqId,
+            @RequestBody FaqUpdateRequestDto faqUpdateRequestDto
+    ) {
+        return ResponseEntity.ok(
+                FaqResponseDto.from(
+                        faqService.update(
+                                faqId,
+                                FaqContentVo.of(
+                                        faqUpdateRequestDto.getQuestion(),
+                                        faqUpdateRequestDto.getAnswer()
+                                )
+                        )
                 )
         );
-        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation("FAQ 를 삭제합니다. 인증이 필요한 요청입니다.")

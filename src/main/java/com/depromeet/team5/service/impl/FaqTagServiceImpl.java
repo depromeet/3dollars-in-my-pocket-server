@@ -1,6 +1,8 @@
 package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.faq.FaqTag;
+import com.depromeet.team5.exception.FaqTagNotFoundException;
+import com.depromeet.team5.exception.FaqTagRenameFailedException;
 import com.depromeet.team5.repository.FaqTagRepository;
 import com.depromeet.team5.service.FaqTagService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +21,17 @@ public class FaqTagServiceImpl implements FaqTagService {
     @Override
     public List<FaqTag> getFaqTags() {
         return faqTagRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public FaqTag rename(Long faqTagId, String name) {
+        if (faqTagRepository.existsByName(name)) {
+            throw new FaqTagRenameFailedException(faqTagId, name);
+        }
+        return faqTagRepository.findById(faqTagId)
+                .map(it -> it.rename(name))
+                .orElseThrow(() -> new FaqTagNotFoundException(faqTagId));
+
     }
 }
