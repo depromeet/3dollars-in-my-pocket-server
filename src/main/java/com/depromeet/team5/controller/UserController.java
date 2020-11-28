@@ -61,9 +61,9 @@ public class UserController {
     @ApiImplicitParam(name = "Authorization", value = "KakaoAK", required = true, paramType = "header")
     @GetMapping("/deregister")
     public ResponseEntity<String> kakaoDeregister(@RequestHeader("Authorization") String header,
-                                                  @RequestParam String user_id,
-                                                  @RequestParam String referrer_type) {
-        userService.kakaoDeregister(header, user_id, referrer_type);
+                                                  @RequestParam("user_id") String userId,
+                                                  @RequestParam("referrer_type") String referrerType) {
+        userService.kakaoDeregister(header, userId, referrerType);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
