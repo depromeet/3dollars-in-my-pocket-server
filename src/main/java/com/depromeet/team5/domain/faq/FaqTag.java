@@ -29,4 +29,9 @@ public class FaqTag {
         faqTag.setDisplayOrder(displayOrder);
         return faqTag;
     }
+
+    public FaqTag rename(String name) {
+        this.name = name;
+        return this;
+    }
 }

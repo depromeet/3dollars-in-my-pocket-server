@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,4 +31,15 @@ public class FaqTagController {
         );
     }
 
+    @ApiOperation("FAQ 태그 이름을 수정합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @PostMapping("/{faqTagId}/rename")
+    public ResponseEntity<FaqTagResponseDto> rename(@PathVariable Long faqTagId, @RequestParam String name) {
+        return ResponseEntity.ok(
+                FaqTagResponseDto.from(
+                        faqTagService.rename(faqTagId, name)
+                )
+        );
+    }
 }

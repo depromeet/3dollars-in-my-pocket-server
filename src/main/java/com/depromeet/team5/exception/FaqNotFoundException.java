@@ -1,6 +1,6 @@
 package com.depromeet.team5.exception;
 
-public class FaqNotFoundException extends RuntimeException {
+public class FaqNotFoundException extends NotFoundException {
     private final Long faqId;
 
     public FaqNotFoundException(Long faqId) {

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FaqTagService {
     List<FaqTag> getFaqTags();
+
+    FaqTag rename(Long faqTagId, String name);
 }

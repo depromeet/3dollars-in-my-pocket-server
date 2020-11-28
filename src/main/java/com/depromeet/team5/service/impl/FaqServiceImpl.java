@@ -1,9 +1,6 @@
 package com.depromeet.team5.service.impl;
 
-import com.depromeet.team5.domain.faq.Faq;
-import com.depromeet.team5.domain.faq.FaqTag;
-import com.depromeet.team5.domain.faq.FaqTagMap;
-import com.depromeet.team5.domain.faq.FaqTagMapId;
+import com.depromeet.team5.domain.faq.*;
 import com.depromeet.team5.exception.FaqNotFoundException;
 import com.depromeet.team5.repository.FaqRepository;
 import com.depromeet.team5.repository.FaqTagMapRepository;
@@ -86,6 +83,25 @@ public class FaqServiceImpl implements FaqService {
         }
         this.removeTag(faq, faqTagOptional.get());
         return faq;
+    }
+
+    @Override
+    @Transactional
+    public Faq update(Long faqId, FaqContentVo faqContentVo) {
+        return faqRepository.findById(faqId)
+                .map(it -> it.update(faqContentVo))
+                .orElseThrow(() -> new FaqNotFoundException(faqId));
+    }
+
+    @Override
+    @Transactional
+    public void removeFaq(Long faqId) {
+        faqRepository.findById(faqId)
+                .ifPresent(faq -> {
+                    List<FaqTagMap> faqTagMaps = faqTagMapRepository.findByFaq(faq);
+                    faqTagMapRepository.deleteAll(faqTagMaps);
+                    faqRepository.delete(faq);
+                });
     }
 
     private Faq getFaqWithException(Long faqId) {

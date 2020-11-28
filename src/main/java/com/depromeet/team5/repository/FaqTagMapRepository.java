@@ -1,5 +1,6 @@
 package com.depromeet.team5.repository;
 
+import com.depromeet.team5.domain.faq.Faq;
 import com.depromeet.team5.domain.faq.FaqTagMap;
 import com.depromeet.team5.domain.faq.FaqTagMapId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,5 @@ public interface FaqTagMapRepository extends JpaRepository<FaqTagMap, FaqTagMapI
 
     Optional<FaqTagMap> findByFaqTagMapId(FaqTagMapId faqTagMapId);
 
-
+    List<FaqTagMap> findByFaq(Faq faq);
 }
