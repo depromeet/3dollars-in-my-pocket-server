@@ -7,11 +7,13 @@ import lombok.Data;
 public class FaqTagResponseDto {
     private Long id;
     private String name;
+    private Long displayOrder;
 
     public static FaqTagResponseDto from(FaqTag faqTag) {
         FaqTagResponseDto faqTagResponseDto = new FaqTagResponseDto();
         faqTagResponseDto.setId(faqTag.getFaqTagId());
         faqTagResponseDto.setName(faqTag.getName());
+        faqTagResponseDto.setDisplayOrder(faqTag.getDisplayOrder());
         return faqTagResponseDto;
     }
 }
