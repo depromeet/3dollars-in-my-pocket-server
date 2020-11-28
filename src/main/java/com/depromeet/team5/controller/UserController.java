@@ -56,4 +56,15 @@ public class UserController {
         userService.signout(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @ApiOperation("카카오 연결 끊기 알림을 받아 탈퇴시킵니다.")
+    @ApiImplicitParam(name = "Authorization", value = "KakaoAK", required = true, paramType = "header")
+    @GetMapping("/deregister")
+    public ResponseEntity<String> kakaoDeregister(@RequestHeader("Authorization") String header,
+                                                  @RequestParam("user_id") String userId,
+                                                  @RequestParam("referrer_type") String referrerType) {
+        userService.kakaoDeregister(header, userId, referrerType);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
