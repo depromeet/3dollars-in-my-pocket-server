@@ -55,8 +55,9 @@ public class FaqServiceImpl implements FaqService {
     @Transactional
     public Faq addTag(Long faqId, String tagName) {
         Faq faq = this.getFaqWithException(faqId);
+        long numberOfFaqTags = faqTagRepository.count();
         FaqTag faqTag = faqTagRepository.findByName(tagName)
-                                        .orElseGet(() -> faqTagRepository.save(FaqTag.from(tagName)));
+                                        .orElseGet(() -> faqTagRepository.save(FaqTag.from(tagName, numberOfFaqTags)));
         FaqTagMap faqTagMap = faqTagMapRepository.findById(FaqTagMapId.of(faq, faqTag))
                                                  .orElseGet(() -> faqTagMapRepository.save(FaqTagMap.of(faq, faqTag)));
         faq.addFaqTagMap(faqTagMap);
