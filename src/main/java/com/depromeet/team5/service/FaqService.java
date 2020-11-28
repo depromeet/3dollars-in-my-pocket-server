@@ -18,4 +18,6 @@ public interface FaqService {
     Faq removeTagByTagName(Long faqId, String tagName);
 
     Faq removeTagByTagId(Long faqId, Long faqTagId);
+
+    void removeFaq(Long faqId);
 }

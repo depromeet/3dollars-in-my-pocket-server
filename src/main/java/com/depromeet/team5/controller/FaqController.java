@@ -60,6 +60,15 @@ public class FaqController {
                              .body(FaqResponseDto.from(faq));
     }
 
+    @ApiOperation("FAQ 를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @DeleteMapping("/{faqId}")
+    public ResponseEntity remove(@PathVariable Long faqId) {
+        faqService.removeFaq(faqId);
+        return ResponseEntity.noContent().build();
+    }
+
     @ApiOperation("FAQ 에 태그를 추가합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth

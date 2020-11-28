@@ -88,6 +88,17 @@ public class FaqServiceImpl implements FaqService {
         return faq;
     }
 
+    @Override
+    @Transactional
+    public void removeFaq(Long faqId) {
+        faqRepository.findById(faqId)
+                .ifPresent(faq -> {
+                    List<FaqTagMap> faqTagMaps = faqTagMapRepository.findByFaq(faq);
+                    faqTagMapRepository.deleteAll(faqTagMaps);
+                    faqRepository.delete(faq);
+                });
+    }
+
     private Faq getFaqWithException(Long faqId) {
         return faqRepository.findById(faqId)
                             .orElseThrow(() -> new FaqNotFoundException(faqId));
