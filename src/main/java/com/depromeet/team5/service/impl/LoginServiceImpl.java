@@ -66,10 +66,6 @@ public class LoginServiceImpl implements LoginService {
         String socialId = userDto.getSocialId();
         SocialTypes socialType = userDto.getSocialType();
 
-        Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        }
         Optional<WithdrawalUser> withdrawalUserOptional =
                 withdrawalUserRepository.findBySocialIdAndSocialType(socialId, socialType);
         if (withdrawalUserOptional.isPresent()) {
@@ -80,7 +76,8 @@ public class LoginServiceImpl implements LoginService {
             withdrawalUserRepository.delete(withdrawalUser);
             return user;
         }
-        return createUser(userDto);
+        return userRepository.findBySocialIdAndSocialType(socialId, socialType)
+                .orElseGet(() -> createUser(userDto));
     }
 
     private User createUser(UserDto userDto) {

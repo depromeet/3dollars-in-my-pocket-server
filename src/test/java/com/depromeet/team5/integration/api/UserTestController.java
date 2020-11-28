@@ -24,10 +24,16 @@ public class UserTestController {
                 .content(objectMapper.writeValueAsBytes(userDto));
         return objectMapper.readValue(
                 mockMvc.perform(builder)
-                       .andReturn()
-                       .getResponse()
-                       .getContentAsString(),
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
                 LoginDto.class
         );
+    }
+
+    public void signout(String token) throws Exception {
+        mockMvc.perform(post("/api/v1/user/signout")
+                .header("Authorization", token)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }
