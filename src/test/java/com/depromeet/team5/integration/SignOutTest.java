@@ -59,10 +59,10 @@ class SignOutTest {
         assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
                 .filter(it -> it.getStatus() == UserStatusType.INACTIVE)).isPresent();
         // when
-        this.login("kakao1", SocialTypes.KAKAO);
+        LoginDto loginDto = this.login("kakao1", SocialTypes.KAKAO);
         // then
-        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
-                .filter(it -> it.getStatus() == UserStatusType.ACTIVE)).isPresent();
+        assertThat(loginDto.getUserId()).isEqualTo(firstSignUpResult.getUserId());
+        assertThat(loginDto.getState()).isFalse();
     }
 
     private LoginDto login(String socialId, SocialTypes socialType) throws Exception {
