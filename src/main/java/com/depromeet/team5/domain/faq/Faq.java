@@ -1,9 +1,6 @@
 package com.depromeet.team5.domain.faq;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -19,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Setter(AccessLevel.PRIVATE)
 public class Faq {
     @Id
     @GeneratedValue
@@ -47,5 +46,13 @@ public class Faq {
 
     public boolean removeFaqTagMap(FaqTagMap faqTagMap) {
         return faqTagMaps.remove(faqTagMap);
+    }
+
+    public Faq update(FaqContentVo faqContentVo) {
+        Optional.ofNullable(faqContentVo.getQuestion())
+                .ifPresent(this::setQuestion);
+        Optional.ofNullable(faqContentVo.getAnswer())
+                .ifPresent(this::setAnswer);
+        return this;
     }
 }

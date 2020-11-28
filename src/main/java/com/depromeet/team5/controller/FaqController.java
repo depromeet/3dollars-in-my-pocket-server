@@ -1,10 +1,8 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.domain.faq.Faq;
-import com.depromeet.team5.dto.FaqAddTagRequestDto;
-import com.depromeet.team5.dto.FaqRequestDto;
-import com.depromeet.team5.dto.FaqResponseDto;
-import com.depromeet.team5.dto.FaqRemoveTagRequestDto;
+import com.depromeet.team5.domain.faq.FaqContentVo;
+import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.FaqNotFoundException;
 import com.depromeet.team5.service.FaqService;
 import com.depromeet.team5.util.auth.Auth;
@@ -32,9 +30,9 @@ public class FaqController {
     public ResponseEntity<List<FaqResponseDto>> getFaqList(@RequestParam(required = false) List<Long> tagIds) {
         return ResponseEntity.ok(
                 faqService.getFaqList(tagIds)
-                          .stream()
-                          .map(FaqResponseDto::from)
-                          .collect(Collectors.toList())
+                        .stream()
+                        .map(FaqResponseDto::from)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -44,9 +42,9 @@ public class FaqController {
     @GetMapping("/{faqId}")
     public ResponseEntity<FaqResponseDto> getFaq(@PathVariable Long faqId) {
         return faqService.getFaq(faqId)
-                         .map(FaqResponseDto::from)
-                         .map(ResponseEntity::ok)
-                         .orElseThrow(() -> new FaqNotFoundException(faqId));
+                .map(FaqResponseDto::from)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new FaqNotFoundException(faqId));
     }
 
     @ApiOperation("FAQ 를 생성합니다. 인증이 필요한 요청입니다.")
@@ -56,8 +54,23 @@ public class FaqController {
     public ResponseEntity<FaqResponseDto> create(@RequestBody @Valid FaqRequestDto faqRequestDto) {
         Faq faq = faqService.createFaq(faqRequestDto.getQuestion(), faqRequestDto.getAnswer());
         return ResponseEntity.created(URI.create("/api/v1/faqs/" + faq.getFaqId()
-                                                                     .toString()))
-                             .body(FaqResponseDto.from(faq));
+                .toString()))
+                .body(FaqResponseDto.from(faq));
+    }
+
+    @ApiOperation("FAQ 를 수정합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @PutMapping("/{faqId}")
+    public ResponseEntity update(@PathVariable Long faqId, @RequestBody FaqUpdateRequestDto faqUpdateRequestDto) {
+        faqService.update(
+                faqId,
+                FaqContentVo.of(
+                        faqUpdateRequestDto.getQuestion(),
+                        faqUpdateRequestDto.getAnswer()
+                )
+        );
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation("FAQ 를 삭제합니다. 인증이 필요한 요청입니다.")

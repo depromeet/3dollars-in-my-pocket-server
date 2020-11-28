@@ -1,6 +1,7 @@
 package com.depromeet.team5.service;
 
 import com.depromeet.team5.domain.faq.Faq;
+import com.depromeet.team5.domain.faq.FaqContentVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,5 +20,8 @@ public interface FaqService {
 
     Faq removeTagByTagId(Long faqId, Long faqTagId);
 
+    Faq update(Long faqId, FaqContentVo faqContentVo);
+
     void removeFaq(Long faqId);
+
 }
