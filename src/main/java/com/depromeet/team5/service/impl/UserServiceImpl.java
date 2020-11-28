@@ -1,7 +1,10 @@
 package com.depromeet.team5.service.impl;
 
+import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.domain.user.WithdrawalUser;
+import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.repository.WithdrawalUserRepository;
 import com.depromeet.team5.service.UserService;
@@ -19,12 +22,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signout(Long userId) {
         userRepository.findById(userId)
-                      .filter(it -> it.getStatus() == UserStatusType.ACTIVE)
-                      .ifPresent(user -> {
-                          withdrawalUserRepository.findById(user.getId())
-                                                  .map(it -> it.update(user))
-                                                  .orElseGet(() -> withdrawalUserRepository.save(WithdrawalUser.from(user)));
-                          user.signout(userRepository);
-                      });
+                .filter(it -> it.getStatus() == UserStatusType.ACTIVE)
+                .ifPresent(user -> {
+                    withdrawalUserRepository.findById(user.getId())
+                            .map(it -> it.update(user))
+                            .orElseGet(() -> withdrawalUserRepository.save(WithdrawalUser.from(user)));
+                    user.signout(userRepository);
+                });
+    }
+
+    @Transactional
+    @Override
+    public void kakaoDeregister(String header, String userId, String referrerType) {
+        User user = userRepository.findBySocialIdAndSocialType(userId, SocialTypes.KAKAO).orElseThrow(UserNotFoundException::new);
+        signout(user.getId());
     }
 }
