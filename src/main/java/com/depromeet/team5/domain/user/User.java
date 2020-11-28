@@ -48,16 +48,6 @@ public class User {
         return user;
     }
 
-    public static User from(WithdrawalUser withdrawalUser) {
-        User user = new User();
-        user.id = withdrawalUser.getUserId();
-        user.socialType = withdrawalUser.getSocialType();
-        user.socialId = withdrawalUser.getSocialId();
-        user.state = false;
-        user.status = UserStatusType.ACTIVE;
-        return user;
-    }
-
     public void setName(String nickName) {
         name = nickName;
         state = true;
@@ -68,6 +58,12 @@ public class User {
             return "사라진 제보자";
         else
             return name;
+    }
+
+    public User resignin(WithdrawalUser withdrawalUser) {
+        setName(withdrawalUser.getName());
+        setStatus(UserStatusType.ACTIVE);
+        return this;
     }
 
     public User signout(UserRepository userRepository) {

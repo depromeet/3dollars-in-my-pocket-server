@@ -74,7 +74,9 @@ public class LoginServiceImpl implements LoginService {
                 withdrawalUserRepository.findBySocialIdAndSocialType(socialId, socialType);
         if (withdrawalUserOptional.isPresent()) {
             WithdrawalUser withdrawalUser = withdrawalUserOptional.get();
-            User user = userRepository.save(User.from(withdrawalUser));
+            User user = userRepository.findById(withdrawalUser.getUserId())
+                    .map(it -> it.resignin(withdrawalUser))
+                    .orElseThrow(UserNotFoundException::new);
             withdrawalUserRepository.delete(withdrawalUser);
             return user;
         }
