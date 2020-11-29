@@ -6,6 +6,7 @@ plugins {
 }
 
 group = 'com.depromeet.team5'
+version = '1.2.0.RELEASE'
 sourceCompatibility = '1.8'
 
 configurations {
@@ -16,4 +17,12 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+bootJar {
+    enabled = false;
+}
+
+jar {
+    enabled = true;
 }

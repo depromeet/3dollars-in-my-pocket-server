@@ -4,7 +4,6 @@ import com.depromeet.team5.domain.store.DeleteReasonType;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.store.StoreCreateValue;
 import com.depromeet.team5.domain.store.StoreUpdateValue;
-import com.depromeet.team5.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +12,6 @@ import java.util.List;
 
 public interface StoreService {
     Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<MultipartFile> multipartFiles);
-//    StoreCardPomDto getAll(Double latitude, Double longitude, Pageable pageable);
     List<Store> getAll(Double latitude, Double longitude);
     Page<Store> getAllByUser(Long userId, Pageable pageable);
     Store getDetail(Long storeId, Double latitude, Double longitude);

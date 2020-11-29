@@ -1,4 +1,4 @@
-package com.depromeet.team5.batch;
+package com.depromeet.team5;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

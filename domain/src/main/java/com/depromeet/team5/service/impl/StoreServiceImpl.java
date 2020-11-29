@@ -2,7 +2,6 @@ package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.StoreDeleteRequestDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;

@@ -4,9 +4,6 @@ plugins {
     id 'java'
 }
 
-group = 'com.depromeet.team5'
-version = '1.2.0.RELEASE'
-
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
