@@ -1,10 +1,10 @@
 HELP.md
 .gradle
 build/
-interfaces/src/main/resources/application.yml
-interfaces/src/main/resources/application-local.yml
-interfaces/src/main/resources/application-dev.yml
-interfaces/src/main/resources/application-prod.yml
+/interfaces/src/main/resources/application.yml
+/interfaces/src/main/resources/application-local.yml
+/interfaces/src/main/resources/application-dev.yml
+/interfaces/src/main/resources/application-prod.yml
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
