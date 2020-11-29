@@ -1,8 +1,10 @@
 package com.depromeet.team5.util;
 
-public class LocationDistance {
+public class LocationDistanceUtils {
+    private LocationDistanceUtils() {
+    }
 
-//    // 미터(Meter) 단위
+    //    // 미터(Meter) 단위
 //    double distanceMeter =
 //            distance(37.504198, 127.047967, 37.501025, 127.037701, "meter");
 //
@@ -21,7 +23,7 @@ public class LocationDistance {
      * @param unit 거리 표출단위
      * @return
      */
-    public double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+    public static double getDistance(double lat1, double lon1, double lat2, double lon2, String unit) {
 
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));

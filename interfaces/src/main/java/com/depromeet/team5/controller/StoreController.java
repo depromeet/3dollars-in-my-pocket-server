@@ -60,14 +60,12 @@ public class StoreController {
     @GetMapping("/get")
     public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
                                                      @RequestParam Double longitude) {
-        List<StoreCardDto> storeCardDtoList = storeService.getAll(latitude, longitude)
-                .stream()
-                .map(StoreCardDto::from)
-                .collect(Collectors.toList());
-        for (StoreCardDto storeCardDto : storeCardDtoList) {
-            StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
-        }
-        return ResponseEntity.ok(storeCardDtoList);
+        return ResponseEntity.ok(
+                storeService.getAll(latitude, longitude)
+                        .stream()
+                        .map(store -> StoreCardDto.of(store, latitude, longitude))
+                        .collect(Collectors.toList())
+        );
     }
 
     @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
@@ -100,9 +98,9 @@ public class StoreController {
                                                     @RequestParam Double latitude,
                                                     @RequestParam Double longitude) {
         Store store = storeService.getDetail(storeId, latitude, longitude);
-        StoreDetailDto storeDetailDto = StoreDetailDto.from(store);
-        StoreDetailDto.calculationDistance(storeDetailDto, latitude, longitude);
-        return new ResponseEntity<>(storeDetailDto, HttpStatus.OK);
+        return ResponseEntity.ok(
+                StoreDetailDto.of(store, latitude, longitude)
+        );
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")

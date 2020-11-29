@@ -4,7 +4,7 @@ import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.Review;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.util.LocationDistance;
+import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class StoreDetailDto {
 
     private User user;
 
-    public static StoreDetailDto from(Store store) {
+    public static StoreDetailDto of(Store store, Double latitude, Double longitude) {
         StoreDetailDto storeDetailDto = new StoreDetailDto();
         storeDetailDto.id = store.getId();
         storeDetailDto.latitude = store.getLatitude();
@@ -47,12 +47,8 @@ public class StoreDetailDto {
         storeDetailDto.menu = store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList());
         storeDetailDto.review = store.getReview();
         storeDetailDto.rating = store.getRating();
+        storeDetailDto.distance = (int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter");
         storeDetailDto.user = store.getUser();
         return storeDetailDto;
-    }
-
-    public static void calculationDistance(StoreDetailDto storeDetailDto, Double lat, Double lng) {
-        LocationDistance locationDistance = new LocationDistance();
-        storeDetailDto.distance = (int)locationDistance.distance(storeDetailDto.getLatitude(), storeDetailDto.getLongitude(), lat, lng, "meter");
     }
 }
