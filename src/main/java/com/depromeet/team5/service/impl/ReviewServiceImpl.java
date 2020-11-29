@@ -31,8 +31,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void saveReview(ReviewDto reviewDto, Long userId, Long storeId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
         Review review = Review.from(reviewDto, user, store);
         reviewRepository.save(review);
 
@@ -43,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewPomDto getAllByUser(Long userId, Pageable pageable) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Page<Review> reviewList = reviewRepository.findByUser(user, pageable);
         return ReviewPomDto.from(reviewList.getContent(), reviewList.getTotalElements(), reviewList.getTotalPages());
     }

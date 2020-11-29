@@ -6,7 +6,7 @@ import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.domain.user.WithdrawalUser;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
-import com.depromeet.team5.exception.NickNameCheckException;
+import com.depromeet.team5.exception.NickNameDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
@@ -45,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     @Transactional
     public User userInfo(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         if (user.getStatus() == UserStatusType.INACTIVE)
             throw new WithdrawalUserException(userId);
         return user;
@@ -55,9 +55,9 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     public void setNickname(Long userId, String nickName) {
         if (userRepository.findByNameLike(nickName).isPresent()) {
-            throw new NickNameCheckException();
+            throw new NickNameDuplicatedException(userId, nickName);
         }
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         user.setName(nickName);
         userRepository.save(user);
     }
@@ -72,7 +72,7 @@ public class LoginServiceImpl implements LoginService {
             WithdrawalUser withdrawalUser = withdrawalUserOptional.get();
             User user = userRepository.findById(withdrawalUser.getUserId())
                     .map(it -> it.resignin(withdrawalUser))
-                    .orElseThrow(UserNotFoundException::new);
+                    .orElseThrow(() -> new UserNotFoundException(withdrawalUser.getUserId()));
             withdrawalUserRepository.delete(withdrawalUser);
             return user;
         }
