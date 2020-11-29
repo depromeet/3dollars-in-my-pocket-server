@@ -40,7 +40,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ApiResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.info("Invalid request", e);
         return new FailureResponse<>(
                 ResultCode.BAD_REQUEST,
@@ -51,7 +51,7 @@ public class ApiControllerAdvice {
     }
 
     @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<ApiResponse<Object>> handleApplicationException(ApplicationException e) {
+    public ResponseEntity<ApiResponse> handleApplicationException(ApplicationException e) {
         log.info("application Exception", e);
         return ResponseEntity.status(e.getHttpStatus())
                 .body(new FailureResponse<>(
@@ -62,7 +62,7 @@ public class ApiControllerAdvice {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ApiResponse<Object> handleException(Exception e) {
+    public ApiResponse handleException(Exception e) {
         log.error("Unhandled Exception", e);
         return new FailureResponse<>(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
