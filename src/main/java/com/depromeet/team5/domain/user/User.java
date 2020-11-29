@@ -80,4 +80,8 @@ public class User {
         }
         return this;
     }
+
+    public boolean isWithdrawal() {
+        return status != UserStatusType.ACTIVE;
+    }
 }

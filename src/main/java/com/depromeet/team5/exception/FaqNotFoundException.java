@@ -1,14 +1,16 @@
 package com.depromeet.team5.exception;
 
-public class FaqNotFoundException extends NotFoundException {
-    private final Long faqId;
+import com.depromeet.team5.domain.ResultCode;
 
+import java.util.Optional;
+
+public class FaqNotFoundException extends NotFoundException {
     public FaqNotFoundException(Long faqId) {
-        this.faqId = faqId;
+        super("FAQ 를 찾을 수 없습니다. faqId:" + faqId);
     }
 
     @Override
-    public String getMessage() {
-        return "FAQ 를 찾을 수 없습니다. faqId:" + faqId;
+    public Optional<ResultCode> getResultCode() {
+        return Optional.of(ResultCode.FAQ_NOT_FOUND);
     }
 }
