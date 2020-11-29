@@ -4,7 +4,7 @@ import com.depromeet.team5.domain.*;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.StoreNotFoundException;
-import com.depromeet.team5.exception.UserIdCheckException;
+import com.depromeet.team5.exception.StoreDeleteRequestDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.DeleteRepository;
 import com.depromeet.team5.repository.StoreRepository;
@@ -35,7 +35,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public StoreIdDto saveStore(StoreDto storeDto, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         List<Image> image = convertImage(storeDto.getImage());
         Store store = Store.from(storeDto, image, user);
         storeRepository.save(store);
@@ -79,7 +79,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public StoreMyPagePomDto getAllByUser(Long userId, Pageable pageable) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Page<Store> storeList = storeRepository.findAllByUser(user, pageable);
         List<StoreMyPageDto> storeMyPageList = storeList
                 .getContent()
@@ -93,7 +93,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public StoreDetailDto getDetail(Long storeId, Double latitude, Double longitude) {
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
         StoreDetailDto storeDetailDto = StoreDetailDto.from(store);
         StoreDetailDto.calculationDistance(storeDetailDto, latitude, longitude);
         return storeDetailDto;
@@ -102,7 +102,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public void updateStore(StoreUpdateDto storeUpdateDto, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
         List<Image> image = convertImage(storeUpdateDto.getImage());
         store.setStore(storeUpdateDto, image);
         storeRepository.save(store);
@@ -111,11 +111,11 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType) {
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Store store = storeRepository.findById(storeId).orElseThrow(StoreNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
 
         if (deleteRepository.findByUserIdAndStoreId(userId, storeId).isPresent()) {
-            throw new UserIdCheckException();
+            throw new StoreDeleteRequestDuplicatedException(userId, storeId);
         } else if (deleteRepository.findAllByStoreIdAndReason(storeId, deleteReasonType).size() == 2) {
             storeRepository.delete(store);
         } else {

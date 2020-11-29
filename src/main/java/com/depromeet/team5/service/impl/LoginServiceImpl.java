@@ -6,7 +6,7 @@ import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.domain.user.WithdrawalUser;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
-import com.depromeet.team5.exception.NickNameCheckException;
+import com.depromeet.team5.exception.NickNameDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -45,7 +47,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     @Transactional
     public User userInfo(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         if (user.getStatus() == UserStatusType.INACTIVE)
             throw new WithdrawalUserException(userId);
         return user;
@@ -53,13 +55,16 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @Transactional
-    public void setNickname(Long userId, String nickName) {
-        if (userRepository.findByNameLike(nickName).isPresent()) {
-            throw new NickNameCheckException();
+    public void setNickname(Long userId, String nickname) {
+        Assert.notNull(userId, "'userId' must not be null");
+        Assert.hasText(nickname, "'nickname' must not be null, empty and blank");
+
+        String trimmedNickname = StringUtils.trimWhitespace(nickname);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        if (!trimmedNickname.equals(user.getName()) && userRepository.findByNameLike(trimmedNickname).isPresent()) {
+            throw new NickNameDuplicatedException(userId, nickname);
         }
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        user.setName(nickName);
-        userRepository.save(user);
+        user.setName(nickname);
     }
 
     private User getOrCreateUser(UserDto userDto) {
@@ -72,7 +77,7 @@ public class LoginServiceImpl implements LoginService {
             WithdrawalUser withdrawalUser = withdrawalUserOptional.get();
             User user = userRepository.findById(withdrawalUser.getUserId())
                     .map(it -> it.resignin(withdrawalUser))
-                    .orElseThrow(UserNotFoundException::new);
+                    .orElseThrow(() -> new UserNotFoundException(withdrawalUser.getUserId()));
             withdrawalUserRepository.delete(withdrawalUser);
             return user;
         }

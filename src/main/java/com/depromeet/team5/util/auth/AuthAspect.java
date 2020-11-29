@@ -1,8 +1,9 @@
 package com.depromeet.team5.util.auth;
 
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.domain.user.UserStatusType;
-import com.depromeet.team5.model.DefaultRes;
+import com.depromeet.team5.exception.InvalidAccessTokenException;
+import com.depromeet.team5.exception.UserNotFoundException;
+import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -23,11 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthAspect {
 
-    private final static String AUTHORIZATION = "Authorization";
-
-    private final static DefaultRes DEFAULT_RES = DefaultRes.builder().message("인증 실패").build();
-
-    private final static ResponseEntity<DefaultRes> RES_RESPONSE_ENTITY = new ResponseEntity<>(DEFAULT_RES, HttpStatus.UNAUTHORIZED);
+    private static final String AUTHORIZATION = "Authorization";
 
     private final HttpServletRequest httpServletRequest;
 
@@ -39,16 +34,20 @@ public class AuthAspect {
     public Object around(final ProceedingJoinPoint pjp) throws Throwable {
         final String jwt = httpServletRequest.getHeader(AUTHORIZATION);
 
-        if (jwt == null) return RES_RESPONSE_ENTITY;
+        if (jwt == null) {
+            throw new InvalidAccessTokenException();
+        }
 
         final JwtService.Token token = jwtService.decode(jwt);
 
         if (token == null) {
-            return RES_RESPONSE_ENTITY;
+            return new InvalidAccessTokenException();
         } else {
-            Optional<User> user = userRepository.findByIdAndStatus(token.getUserId(), UserStatusType.ACTIVE);
-
-            if (!user.isPresent()) return RES_RESPONSE_ENTITY;
+            Long userId = token.getUserId();
+            User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId, HttpStatus.UNAUTHORIZED));
+            if (user.isWithdrawal()) {
+                throw new WithdrawalUserException(userId);
+            }
             return pjp.proceed(pjp.getArgs());
         }
     }
