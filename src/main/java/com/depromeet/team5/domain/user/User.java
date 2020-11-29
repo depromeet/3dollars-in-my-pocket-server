@@ -63,6 +63,7 @@ public class User {
     public User resignin(WithdrawalUser withdrawalUser) {
         setName(withdrawalUser.getName());
         setStatus(UserStatusType.ACTIVE);
+        setState(false);
         return this;
     }
 
