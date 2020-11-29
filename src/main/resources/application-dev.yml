@@ -1,0 +1,4 @@
+server:
+  tomcat:
+    accesslog:
+      pattern: %{X-Forwarded-For}i %l %u %t "%r" %s %b
