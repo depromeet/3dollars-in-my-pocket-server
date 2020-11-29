@@ -2,10 +2,10 @@ plugins {
     id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id 'java-library'
 }
 
-group = 'com.depromeet'
-version = '1.2.0.RELEASE'
+group = 'com.depromeet.team5'
 sourceCompatibility = '1.8'
 
 configurations {
@@ -16,25 +16,4 @@ configurations {
 
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'mysql:mysql-connector-java'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testRuntimeOnly'com.h2database:h2'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-
-    compile group: 'com.auth0', name: 'java-jwt', version: '3.7.0'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.714'
-    compile "io.springfox:springfox-swagger2:2.9.2"
-    compile "io.springfox:springfox-swagger-ui:2.9.2"
-}
-
-test {
-    useJUnitPlatform()
 }
