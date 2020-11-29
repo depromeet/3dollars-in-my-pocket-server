@@ -1,6 +1,6 @@
 package com.depromeet.team5.service.impl;
 
-import com.depromeet.team5.domain.*;
+import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.exception.StoreNotFoundException;
@@ -34,77 +34,38 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public StoreIdDto saveStore(StoreDto storeDto, Long userId) {
+    public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<MultipartFile> multipartFiles) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        List<Image> image = convertImage(storeDto.getImage());
-        Store store = Store.from(storeDto, image, user);
-        storeRepository.save(store);
-
-        StoreIdDto storeIdDto = new StoreIdDto();
-        storeIdDto.setStoreId(store.getId());
-        return storeIdDto;
-    }
-
-//    @Override
-//    @Transactional
-//    public StoreCardPomDto getAll(Double latitude, Double longitude, Pageable pageable) {
-//        Page<Store> storeList = storeRepository.findAllByAddress(latitude, longitude, pageable);
-//        List<StoreCardDto> storeCardList = storeList
-//                .getContent()
-//                .stream()
-//                .map(StoreCardDto::from)
-//                .collect(Collectors.toList());
-//
-//        for (StoreCardDto storeCardDto : storeCardList) {
-//            StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
-//        }
-//
-//        return StoreCardPomDto.from(storeCardList, storeList.getTotalElements(), storeList.getTotalPages());
-//    }
-
-    @Override
-    @Transactional
-    public List<StoreCardDto> getAll(Double latitude, Double longitude) {
-        List<StoreCardDto> storeList = storeRepository.findAllByAddress(latitude, longitude)
-                .stream()
-                .map(StoreCardDto::from)
-                .collect(Collectors.toList());
-
-        for (StoreCardDto storeCardDto : storeList) {
-            StoreCardDto.calculationDistance(storeCardDto, latitude, longitude);
-        }
-        return storeList;
+        List<Image> image = convertImage(multipartFiles);
+        Store store = Store.from(storeCreateValue, image, user);
+        return storeRepository.save(store);
     }
 
     @Override
     @Transactional
-    public StoreMyPagePomDto getAllByUser(Long userId, Pageable pageable) {
+    public List<Store> getAll(Double latitude, Double longitude) {
+        return storeRepository.findAllByAddress(latitude, longitude);
+    }
+
+    @Override
+    @Transactional
+    public Page<Store> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        Page<Store> storeList = storeRepository.findAllByUser(user, pageable);
-        List<StoreMyPageDto> storeMyPageList = storeList
-                .getContent()
-                .stream()
-                .map(StoreMyPageDto::from)
-                .collect(Collectors.toList());
+        return storeRepository.findAllByUser(user, pageable);
+    }
 
-        return StoreMyPagePomDto.from(storeMyPageList, storeList.getTotalElements(), storeList.getTotalPages());
+    @Override
+    @Transactional(readOnly = true)
+    public Store getDetail(Long storeId, Double latitude, Double longitude) {
+        return storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
     }
 
     @Override
     @Transactional
-    public StoreDetailDto getDetail(Long storeId, Double latitude, Double longitude) {
+    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<MultipartFile> multipartFiles) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        StoreDetailDto storeDetailDto = StoreDetailDto.from(store);
-        StoreDetailDto.calculationDistance(storeDetailDto, latitude, longitude);
-        return storeDetailDto;
-    }
-
-    @Override
-    @Transactional
-    public void updateStore(StoreUpdateDto storeUpdateDto, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> image = convertImage(storeUpdateDto.getImage());
-        store.setStore(storeUpdateDto, image);
+        List<Image> image = convertImage(multipartFiles);
+        store.setStore(storeUpdateValue, image);
         storeRepository.save(store);
     }
 

@@ -1,6 +1,6 @@
 package com.depromeet.team5.repository;
 
-import com.depromeet.team5.domain.Review;
+import com.depromeet.team5.domain.store.Review;
 import com.depromeet.team5.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

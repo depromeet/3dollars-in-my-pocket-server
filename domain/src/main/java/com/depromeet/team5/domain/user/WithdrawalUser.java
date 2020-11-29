@@ -1,6 +1,5 @@
 package com.depromeet.team5.domain.user;
 
-import com.depromeet.team5.domain.SocialTypes;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

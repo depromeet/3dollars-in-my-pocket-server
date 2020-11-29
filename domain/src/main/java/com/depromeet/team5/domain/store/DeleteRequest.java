@@ -1,6 +1,5 @@
-package com.depromeet.team5.domain;
+package com.depromeet.team5.domain.store;
 
-import com.depromeet.team5.dto.MenuDto;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,26 +11,22 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Menu {
+public class DeleteRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private Long storeId;
 
-    private String price;
+    private Long userId;
+
+    @Enumerated(value = EnumType.STRING)
+    private DeleteReasonType reason;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    public static Menu from(MenuDto menuDto) {
-        Menu menu = new Menu();
-        menu.setName(menuDto.getName());
-        menu.setPrice(menuDto.getPrice());
-        return menu;
-    }
 }

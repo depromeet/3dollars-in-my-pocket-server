@@ -1,6 +1,6 @@
 package com.depromeet.team5.integration;
 
-import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;

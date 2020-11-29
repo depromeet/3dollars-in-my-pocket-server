@@ -1,4 +1,4 @@
-package com.depromeet.team5.domain;
+package com.depromeet.team5.domain.store;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,13 +11,15 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Image {
+public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String url;
+    private String name;
+
+    private String price;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -25,9 +27,10 @@ public class Image {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Image from(String url) {
-        Image image = new Image();
-        image.setUrl(url);
-        return image;
+    public static Menu from(MenuCreateValue menuCreateValue) {
+        Menu menu = new Menu();
+        menu.setName(menuCreateValue.getName());
+        menu.setPrice(menuCreateValue.getPrice());
+        return menu;
     }
 }

@@ -1,6 +1,7 @@
 package com.depromeet.team5.controller;
 
-import com.depromeet.team5.domain.Review;
+import com.depromeet.team5.domain.store.Review;
+import com.depromeet.team5.domain.store.ReviewCreateValue;
 import com.depromeet.team5.dto.ReviewDto;
 import com.depromeet.team5.dto.ReviewPomDto;
 import com.depromeet.team5.service.ReviewService;
@@ -31,7 +32,7 @@ public class ReviewController {
     @Auth
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody ReviewDto reviewDto, @RequestParam Long userId, @RequestParam Long storeId) {
-        reviewService.saveReview(reviewDto, userId, storeId);
+        reviewService.saveReview(ReviewCreateValue.of(reviewDto.getContents(), reviewDto.getRating()), userId, storeId);
         return new ResponseEntity<>("리뷰 등록에 성공했습니다.", HttpStatus.OK);
     }
 
@@ -40,7 +41,14 @@ public class ReviewController {
     @Auth
     @GetMapping("/user")
     public ResponseEntity<ReviewPomDto> getAllByUser(@RequestParam Long userId, @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page-1, 3, Sort.by("createdAt").descending());
-        return new ResponseEntity<>(reviewService.getAllByUser(userId, pageable), HttpStatus.OK);
+        Pageable pageable = PageRequest.of(page - 1, 3, Sort.by("createdAt").descending());
+        Page<Review> reviewPage = reviewService.getAllByUser(userId, pageable);
+        return ResponseEntity.ok(
+                ReviewPomDto.from(
+                        reviewPage.getContent(),
+                        reviewPage.getTotalElements(),
+                        reviewPage.getTotalPages()
+                )
+        );
     }
 }

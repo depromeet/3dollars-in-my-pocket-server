@@ -1,10 +1,9 @@
 package com.depromeet.team5.service.impl;
 
-import com.depromeet.team5.domain.Review;
-import com.depromeet.team5.domain.Store;
+import com.depromeet.team5.domain.store.Review;
+import com.depromeet.team5.domain.store.Store;
+import com.depromeet.team5.domain.store.ReviewCreateValue;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.ReviewDto;
-import com.depromeet.team5.dto.ReviewPomDto;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.ReviewRepository;
@@ -30,10 +29,10 @@ public class ReviewServiceImpl implements ReviewService {
     private final StoreRepository storeRepository;
 
     @Override
-    public void saveReview(ReviewDto reviewDto, Long userId, Long storeId) {
+    public void saveReview(ReviewCreateValue reviewCreateValue, Long userId, Long storeId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        Review review = Review.from(reviewDto, user, store);
+        Review review = Review.from(reviewCreateValue, user, store);
         reviewRepository.save(review);
 
         Float rating = reviewRepository.findByRatingAvg(storeId);
@@ -42,9 +41,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewPomDto getAllByUser(Long userId, Pageable pageable) {
+    public Page<Review> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        Page<Review> reviewList = reviewRepository.findByUser(user, pageable);
-        return ReviewPomDto.from(reviewList.getContent(), reviewList.getTotalElements(), reviewList.getTotalPages());
+        return reviewRepository.findByUser(user, pageable);
     }
 }

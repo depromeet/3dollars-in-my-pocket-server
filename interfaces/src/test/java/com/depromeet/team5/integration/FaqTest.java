@@ -1,14 +1,11 @@
 package com.depromeet.team5.integration;
 
-import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.integration.api.FaqTestController;
 import com.depromeet.team5.integration.api.UserTestController;
-import com.depromeet.team5.repository.FaqRepository;
 import com.depromeet.team5.service.FaqService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package com.depromeet.team5.domain;
+package com.depromeet.team5.domain.store;
 
 import lombok.RequiredArgsConstructor;
 

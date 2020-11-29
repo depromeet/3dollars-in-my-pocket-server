@@ -1,6 +1,6 @@
 package com.depromeet.team5.integration;
 
-import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

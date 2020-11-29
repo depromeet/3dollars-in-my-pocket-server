@@ -1,7 +1,6 @@
-package com.depromeet.team5.domain;
+package com.depromeet.team5.domain.store;
 
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.ReviewDto;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -39,13 +38,13 @@ public class Review {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Review from(ReviewDto reviewDto, User user, Store store) {
+    public static Review from(ReviewCreateValue reviewCreateValue, User user, Store store) {
         Review review = new Review();
         review.storeId = store.getId();
         review.category = store.getCategory();
         review.storeName = store.getStoreName();
-        review.contents = reviewDto.getContents();
-        review.rating = reviewDto.getRating();
+        review.contents = reviewCreateValue.getContents();
+        review.rating = reviewCreateValue.getRating();
         review.user = user;
         return review;
     }

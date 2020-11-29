@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryTypes;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 

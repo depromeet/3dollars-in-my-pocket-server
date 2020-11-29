@@ -1,8 +1,6 @@
-package com.depromeet.team5.domain;
+package com.depromeet.team5.domain.store;
 
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.StoreUpdateDto;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -59,33 +57,33 @@ public class Store {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Store from(StoreDto storeDto, List<Image> imageList, User user) {
+    public static Store from(StoreCreateValue storeCreateValue, List<Image> imageList, User user) {
         Store store = new Store();
-        store.latitude = storeDto.getLatitude();
-        store.longitude = storeDto.getLongitude();
-        store.storeName = storeDto.getStoreName();
-        store.category = storeDto.getCategory();
+        store.latitude = storeCreateValue.getLatitude();
+        store.longitude = storeCreateValue.getLongitude();
+        store.storeName = storeCreateValue.getStoreName();
+        store.category = storeCreateValue.getCategory();
         store.image = imageList;
         store.review = new ArrayList<>();
         store.rating = 0F;
         store.deleteRequest = new ArrayList<>();
         store.user = user;
-        if (storeDto.getMenu() != null){
-            store.menu = storeDto.getMenu().stream().map(Menu::from).collect(Collectors.toList());
+        if (storeCreateValue.getMenus() != null){
+            store.menu = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
         } else {
             store.menu = new ArrayList<>();
         }
         return store;
     }
 
-    public void setStore(StoreUpdateDto storeUpdateDto, List<Image> imageList) {
-        latitude = storeUpdateDto.getLatitude();
-        longitude = storeUpdateDto.getLongitude();
-        storeName = storeUpdateDto.getStoreName();
+    public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
+        latitude = storeUpdateValue.getLatitude();
+        longitude = storeUpdateValue.getLongitude();
+        storeName = storeUpdateValue.getStoreName();
         image.addAll(imageList);
         menu.clear();
-        if (storeUpdateDto.getMenu() != null){
-            menu.addAll(storeUpdateDto.getMenu().stream().map(Menu::from).collect(Collectors.toList()));
+        if (storeUpdateValue.getMenus() != null){
+            menu.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
     }
 

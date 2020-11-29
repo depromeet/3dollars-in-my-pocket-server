@@ -1,8 +1,8 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.CategoryTypes;
-import com.depromeet.team5.domain.Review;
-import com.depromeet.team5.domain.Store;
+import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.Review;
+import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.util.LocationDistance;
 import lombok.Data;

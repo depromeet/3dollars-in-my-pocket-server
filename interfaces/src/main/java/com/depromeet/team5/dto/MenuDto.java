@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.Menu;
+import com.depromeet.team5.domain.store.Menu;
 import lombok.Data;
 
 @Data

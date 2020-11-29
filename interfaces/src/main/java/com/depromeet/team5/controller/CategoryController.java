@@ -1,6 +1,6 @@
 package com.depromeet.team5.controller;
 
-import com.depromeet.team5.domain.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.dto.CategoryDistanceDto;
 import com.depromeet.team5.dto.CategoryReviewDto;
 import com.depromeet.team5.service.CategoryService;
