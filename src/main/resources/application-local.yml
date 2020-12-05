@@ -1,11 +1,8 @@
-spring:
-  profiles:
-    active: prod
 aws:
   credentials:
+    region: ap-northeast-2
     accessKey:
     secretKey:
-    region: 'ap-northeast-2'
   s3:
     bucket:
       name:
