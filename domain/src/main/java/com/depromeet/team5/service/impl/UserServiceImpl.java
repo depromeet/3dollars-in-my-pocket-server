@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public long countUserByCreatedDateEqualTo(LocalDate localDate) {
         LocalDateTime startOfDay = localDate.atStartOfDay();
-        return userRepository.countByCreatedAtGreaterThanOrEqualToAndCreatedAtLessThan(startOfDay, startOfDay.plusDays(1L));
+        return userRepository.countByCreatedAtBetween(startOfDay, startOfDay.plusDays(1L).minusNanos(1L));
     }
 
     @Transactional(readOnly = true)
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public long countByUpdatedDateEqualToAndStatus(LocalDate localDate, UserStatusType userStatusType) {
         LocalDateTime startOfDay = localDate.atStartOfDay();
-        return userRepository.countByUpdatedAtGreaterThanOrEqualToAndUpdatedAtLessThenAndStatus(
-                startOfDay, startOfDay.plusDays(1L), userStatusType);
+        return userRepository.countByUpdatedAtBetweenAndStatus(
+                startOfDay, startOfDay.plusDays(1L).minusNanos(1L), userStatusType);
     }
 }
