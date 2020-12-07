@@ -1,8 +1,9 @@
 package com.depromeet.team5.util.auth;
 
 import com.depromeet.team5.domain.user.User;
+import com.depromeet.team5.exception.ForbiddenException;
 import com.depromeet.team5.exception.InvalidAccessTokenException;
-import com.depromeet.team5.exception.UserNotFoundException;
+import com.depromeet.team5.exception.UnauthorizedException;
 import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +44,9 @@ public class AuthAspect {
             return new InvalidAccessTokenException();
         } else {
             Long userId = token.getUserId();
-            User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId, HttpStatus.UNAUTHORIZED));
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new ForbiddenException("탈퇴한 회원입니다. userId:" + userId) {
+            });
             if (user.isWithdrawal()) {
                 throw new WithdrawalUserException(userId);
             }

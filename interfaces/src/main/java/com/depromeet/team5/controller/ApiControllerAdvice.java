@@ -4,6 +4,8 @@ import com.depromeet.team5.domain.ResultCode;
 import com.depromeet.team5.dto.ApiResponse;
 import com.depromeet.team5.dto.FailureResponse;
 import com.depromeet.team5.exception.ApplicationException;
+import com.depromeet.team5.exception.ForbiddenException;
+import com.depromeet.team5.exception.UnauthorizedException;
 import com.depromeet.team5.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,14 +52,30 @@ public class ApiControllerAdvice {
         );
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    public ApiResponse handleUnauthorizedException(UnauthorizedException e) {
+        return new FailureResponse<>(
+                e.getResultCode().orElse(ResultCode.INVALID_TOKEN),
+                e.getMessage()
+        );
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenException.class)
+    public ApiResponse handleForbiddenException(ForbiddenException e) {
+        return new FailureResponse<>(
+                e.getResultCode().orElse(ResultCode.FORBIDDEN),
+                e.getMessage()
+        );
+    }
+
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ApiResponse> handleApplicationException(ApplicationException e) {
         log.info("application Exception", e);
-        return ResponseEntity.status(e.getHttpStatus())
-                .body(new FailureResponse<>(
-                        e.getResultCode().orElse(ResultCode.INTERNAL_SERVER_ERROR),
-                        e.getMessage()
-                ));
+        ResultCode resultCode = e.getResultCode().orElse(ResultCode.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(resolveStatusCode(resultCode))
+                .body(new FailureResponse<>(resultCode, e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -65,5 +83,29 @@ public class ApiControllerAdvice {
     public ApiResponse handleException(Exception e) {
         log.error("Unhandled Exception", e);
         return new FailureResponse<>(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
+    private HttpStatus resolveStatusCode(ResultCode resultCode) {
+        switch (resultCode) {
+            case SUCCESS:
+                return HttpStatus.OK;
+            case NOT_FOUND:
+            case FAQ_NOT_FOUND:
+            case USER_NOT_FOUND:
+            case STORE_NOT_FOUND:
+            case REVIEW_NOT_FOUND:
+            case FAQ_TAG_NOT_FOUND:
+                return HttpStatus.NOT_FOUND;
+            case BAD_REQUEST:
+            case FAQ_TAG_NAME_DUPLICATED:
+            case USER_NICKNAME_DUPLICATED:
+            case STORE_DELETE_REQUEST_DUPLICATED:
+                return HttpStatus.BAD_REQUEST;
+            case USER_INVALID_STATUS_WITHDRAWAL:
+                return HttpStatus.FORBIDDEN;
+            case INTERNAL_SERVER_ERROR:
+            default:
+                return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
     }
 }

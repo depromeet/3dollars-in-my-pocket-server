@@ -1,5 +1,6 @@
 package com.depromeet.team5.integration;
 
+import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.repository.UserRepository;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class LoginTest {

@@ -1,5 +1,6 @@
 package com.depromeet.team5.integration;
 
+import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.dto.LoginDto;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class SignOutTest {

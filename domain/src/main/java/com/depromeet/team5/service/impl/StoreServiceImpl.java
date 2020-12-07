@@ -1,5 +1,6 @@
 package com.depromeet.team5.service.impl;
 
+import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.exception.StoreNotFoundException;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,9 +33,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<MultipartFile> multipartFiles) {
+    public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        List<Image> image = convertImage(multipartFiles);
+        List<Image> image = convertImage(imageUploadValues);
         Store store = Store.from(storeCreateValue, image, user);
         return storeRepository.save(store);
     }
@@ -61,9 +61,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<MultipartFile> multipartFiles) {
+    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> image = convertImage(multipartFiles);
+        List<Image> image = convertImage(imageUploadValues);
         store.setStore(storeUpdateValue, image);
         storeRepository.save(store);
     }
@@ -83,8 +83,8 @@ public class StoreServiceImpl implements StoreService {
         }
     }
 
-    private List<Image> convertImage(List<MultipartFile> multipartFileList) {
-        return multipartFileList.stream()
+    private List<Image> convertImage(List<ImageUploadValue> imageUploadValues) {
+        return imageUploadValues.stream()
                 .filter(Objects::nonNull)
                 .map(s3FileUploadService::upload)
                 .map(Image::from)

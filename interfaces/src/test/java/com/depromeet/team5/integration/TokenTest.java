@@ -1,5 +1,6 @@
 package com.depromeet.team5.integration;
 
+import com.depromeet.team5.Team5InterfacesApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
-@SpringBootTest
+@SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class TokenTest {

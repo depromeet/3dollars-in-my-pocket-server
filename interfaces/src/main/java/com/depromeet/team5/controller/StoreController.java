@@ -1,5 +1,6 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
@@ -8,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Api(value = "Store")
 @RestController
 @CrossOrigin(origins = {"*"})
@@ -47,7 +52,7 @@ public class StoreController {
                                 .collect(Collectors.toList())
                 ),
                 userId,
-                image
+                image.stream().map(this::toImageUploadValue).collect(Collectors.toList())
         );
         StoreIdDto storeIdDto = new StoreIdDto();
         storeIdDto.setStoreId(store.getId());
@@ -120,7 +125,7 @@ public class StoreController {
                                 .collect(Collectors.toList())
                 ),
                 storeId,
-                image
+                image.stream().map(this::toImageUploadValue).collect(Collectors.toList())
         );
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }
@@ -134,5 +139,14 @@ public class StoreController {
                                          @RequestParam DeleteReasonType deleteReasonType) {
         storeService.deleteStore(storeId, userId, deleteReasonType);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
+    }
+
+    private ImageUploadValue toImageUploadValue(MultipartFile multipartFile) {
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            return ImageUploadValue.of(inputStream, multipartFile.getOriginalFilename(), multipartFile.getContentType());
+        } catch (IOException e) {
+            log.error("Failed to read multipart File.", e);
+            return null;
+        }
     }
 }

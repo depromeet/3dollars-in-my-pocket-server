@@ -1,23 +1,18 @@
 package com.depromeet.team5.service;
 
-import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.depromeet.team5.domain.ImageUploadValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -44,24 +39,18 @@ public class S3FileUploadService {
 
     @PostConstruct
     private void init() {
-       BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-       amazonS3Client = AmazonS3ClientBuilder.standard()
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        amazonS3Client = AmazonS3ClientBuilder.standard()
                 .withRegion(Regions.fromName(region))
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
 
-    public String upload(MultipartFile multipartFile) {
-        String savedFileName = getSavedFileName(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        MediaType mediaType = MediaType.parseMediaType(multipartFile.getContentType());
+    public String upload(ImageUploadValue imageUploadValue) {
+        String savedFileName = getSavedFileName(imageUploadValue.getFilename());
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType(mediaType.toString());
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3Client.putObject(bucketName, savedFileName, inputStream, metadata);
-        } catch (IOException | StringIndexOutOfBoundsException | SdkClientException e) {
-            log.error("Failed to upload file", e);
-            return null;
-        }
+        metadata.setContentType(imageUploadValue.getContentType());
+        amazonS3Client.putObject(bucketName, savedFileName, imageUploadValue.getInputStream(), metadata);
         return defaultUrl + savedFileName.replaceAll("/", "");
     }
 
