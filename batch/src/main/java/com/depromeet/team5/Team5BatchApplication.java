@@ -6,6 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Team5BatchApplication {
     public static void main(String[] args) {
-        System.exit(SpringApplication.exit(SpringApplication.run(Team5BatchApplication.class, args)));
+        SpringApplication.run(Team5BatchApplication.class, args);
     }
 }

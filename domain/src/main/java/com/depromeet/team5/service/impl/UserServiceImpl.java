@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -37,5 +39,26 @@ public class UserServiceImpl implements UserService {
     public void kakaoDeregister(String header, String userId, String referrerType) {
         Optional<User> user = userRepository.findBySocialIdAndSocialType(userId, SocialTypes.KAKAO);
         user.ifPresent(it -> signout(it.getId()));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long countUserByCreatedDateEqualTo(LocalDate localDate) {
+        LocalDateTime startOfDay = localDate.atStartOfDay();
+        return userRepository.countByCreatedAtGreaterThanOrEqualToAndCreatedAtLessThan(startOfDay, startOfDay.plusDays(1L));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long countByCreatedAtLessThan(LocalDateTime localDateTime) {
+        return userRepository.countByCreatedAtLessThan(localDateTime);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long countByUpdatedDateEqualToAndStatus(LocalDate localDate, UserStatusType userStatusType) {
+        LocalDateTime startOfDay = localDate.atStartOfDay();
+        return userRepository.countByUpdatedAtGreaterThanOrEqualToAndUpdatedAtLessThenAndStatus(
+                startOfDay, startOfDay.plusDays(1L), userStatusType);
     }
 }
