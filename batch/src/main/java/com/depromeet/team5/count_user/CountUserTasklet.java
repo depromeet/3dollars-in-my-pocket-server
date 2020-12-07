@@ -6,6 +6,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.util.StringUtils;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
@@ -15,6 +16,8 @@ import java.util.Optional;
 
 @Slf4j
 public class CountUserTasklet implements Tasklet {
+    private static final DateTimeFormatter FORMATTER_yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     private final UserService userService;
 
     public CountUserTasklet(UserService userService) {
@@ -33,9 +36,10 @@ public class CountUserTasklet implements Tasklet {
 
     private CountUserStrategy resolve(Map<String, Object> jobParameters) {
         String name = (String) jobParameters.get("strategy");
-        LocalDate targetDate = Optional.ofNullable(jobParameters.get("targetDate"))
+        LocalDate targetDate = Optional.ofNullable(jobParameters.getOrDefault("targetDate", ""))
                 .map(it -> (String) it)
-                .map(it -> LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                .filter(StringUtils::hasText)
+                .map(it -> LocalDate.parse(it, FORMATTER_yyyyMMdd))
                 .orElseGet(() -> LocalDate.now().minusDays(1L));
         switch (CountUserStrategyType.from(name)) {
             case DAILY:
