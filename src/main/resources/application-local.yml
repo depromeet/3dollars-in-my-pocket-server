@@ -1,9 +1,0 @@
-aws:
-  credentials:
-    region: ap-northeast-2
-    accessKey:
-    secretKey:
-  s3:
-    bucket:
-      name:
-      url:

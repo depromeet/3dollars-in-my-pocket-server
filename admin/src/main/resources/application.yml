@@ -1,0 +1,12 @@
+aws:
+  credentials:
+    region: ap-northeast-2
+    accessKey: accessKey
+    secretKey: secretKey
+  s3:
+    bucket:
+      name: s3BucketName
+      url: s3BucketUrl
+
+server:
+  port: 9010

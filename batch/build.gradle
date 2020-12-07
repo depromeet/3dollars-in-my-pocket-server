@@ -17,7 +17,7 @@ repositories {
 dependencies {
     implementation project(':domain')
     implementation 'org.springframework.boot:spring-boot-starter-batch'
-    compileOnly 'org.springframework.boot:spring-boot-starter-devtools'
+    compileOnly 'org.springframework.boot:spring-boot-devtools'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly'com.h2database:h2'
@@ -25,7 +25,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation 'org.springramework.batch:spring-batch-test'
+    testImplementation 'org.springframework.batch:spring-batch-test'
 }
 
 test {

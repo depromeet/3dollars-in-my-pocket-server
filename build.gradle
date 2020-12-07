@@ -5,9 +5,11 @@ plugins {
     id 'java-library'
 }
 
-group = 'com.depromeet.team5'
-version = '1.2.0.RELEASE'
-sourceCompatibility = '1.8'
+allprojects {
+    group = 'com.depromeet.team5'
+    version = '1.2.0.RELEASE'
+    sourceCompatibility = '1.8'
+}
 
 configurations {
     compileOnly {
