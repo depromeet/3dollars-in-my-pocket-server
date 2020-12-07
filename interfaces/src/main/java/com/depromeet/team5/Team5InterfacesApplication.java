@@ -1,13 +1,14 @@
 package com.depromeet.team5;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
-@SpringBootApplication()
+@SpringBootApplication
 public class Team5InterfacesApplication {
-
     public static void main(String[] args) {
-        SpringApplication.run(Team5InterfacesApplication.class, args);
+        new SpringApplicationBuilder()
+                .parent(Team5DomainApplication.class)
+                .child(Team5InterfacesApplication.class)
+                .run(args);
     }
-
 }
