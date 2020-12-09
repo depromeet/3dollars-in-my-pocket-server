@@ -61,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
 
         String trimmedNickname = StringUtils.trimWhitespace(nickname);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        if (!trimmedNickname.equals(user.getName()) && userRepository.findByNameLike(trimmedNickname).isPresent()) {
+        if (!trimmedNickname.equals(user.getName()) && userRepository.existsByNameLike(trimmedNickname)) {
             throw new NickNameDuplicatedException(userId, nickname);
         }
         user.setName(nickname);
