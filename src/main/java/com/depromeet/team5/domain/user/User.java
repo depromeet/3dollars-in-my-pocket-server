@@ -71,7 +71,7 @@ public class User {
         boolean changed = false;
         while (!changed) {
             String changedName = this.getName() + " " + (int) (Math.random() * 100);
-            if (!userRepository.findByNameLike(changedName).isPresent()) {
+            if (userRepository.existsByNameLike(changedName)) {
                 this.setName(changedName);
                 this.setState(false);
                 this.setStatus(UserStatusType.INACTIVE);
