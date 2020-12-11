@@ -65,7 +65,7 @@ public class LoginServiceImpl implements LoginService {
         if (Objects.equals(trimmedNickname, user.getName())) {
             return;
         }
-        if (!userRepository.findByNameAndStatus(trimmedNickname, UserStatusType.ACTIVE).isEmpty()) {
+        if (userRepository.findFirst1ByNameAndStatus(trimmedNickname, UserStatusType.ACTIVE).isPresent()) {
             throw new NickNameDuplicatedException(userId, nickname);
         }
         user.setName(nickname);
