@@ -70,7 +70,7 @@ public class User {
 
     private String findAvailableName(UserRepository userRepository, WithdrawalUser withdrawalUser) {
         for (int i = 1; i <= 100; i++) {
-            if (userRepository.findByNameAndStatus(withdrawalUser.getName() + i, UserStatusType.ACTIVE).isEmpty()) {
+            if (!userRepository.findFirst1ByNameAndStatus(withdrawalUser.getName(), UserStatusType.ACTIVE).isPresent()) {
                 return withdrawalUser.getName() + i;
             }
         }
