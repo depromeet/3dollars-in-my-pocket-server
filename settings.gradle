@@ -1,1 +1,5 @@
 rootProject.name = 'team5'
+include 'domain'
+include 'interfaces'
+include 'batch'
+include 'admin'
