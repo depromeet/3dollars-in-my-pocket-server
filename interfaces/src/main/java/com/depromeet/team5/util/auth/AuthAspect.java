@@ -7,6 +7,7 @@ import com.depromeet.team5.exception.UnauthorizedException;
 import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
+import com.depromeet.team5.util.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -32,13 +33,11 @@ public class AuthAspect {
 
     @Around("@annotation(com.depromeet.team5.util.auth.Auth)")
     public Object around(final ProceedingJoinPoint pjp) throws Throwable {
-        final String jwt = httpServletRequest.getHeader(AUTHORIZATION);
+        final String accessToken = RequestUtils.getHttpServletRequest()
+                .map(it -> it.getHeader(AUTHORIZATION))
+                .orElseThrow(InvalidAccessTokenException::new);
 
-        if (jwt == null) {
-            throw new InvalidAccessTokenException();
-        }
-
-        final JwtService.Token token = jwtService.decode(jwt);
+        final JwtService.Token token = jwtService.decode(accessToken);
 
         if (token == null) {
             return new InvalidAccessTokenException();

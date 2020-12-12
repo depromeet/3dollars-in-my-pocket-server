@@ -5,6 +5,7 @@ import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
+import com.depromeet.team5.dto.UserResponse;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +16,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
@@ -32,6 +35,19 @@ class UserTest {
     @BeforeEach
     void setUp() {
         userTestController = new UserTestController(mockMvc, objectMapper);
+    }
+
+    @Test
+    void getMe() throws Exception {
+        // given
+        LoginDto loginDto = userTestController.createTestUser();
+        String accessToken = loginDto.getToken();
+        userTestController.setNickname(accessToken, loginDto.getUserId(), "nickname");
+        // when
+        UserResponse userResponse = userTestController.getMe(accessToken);
+        // then
+        assertThat(userResponse.getUserId()).isEqualTo(loginDto.getUserId());
+        assertThat(userResponse.getName()).isEqualTo("nickname");
     }
 
     @Test
