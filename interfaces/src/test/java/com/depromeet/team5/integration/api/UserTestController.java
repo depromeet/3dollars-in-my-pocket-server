@@ -1,13 +1,16 @@
 package com.depromeet.team5.integration.api;
 
+import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 public class UserTestController {
     private final MockMvc mockMvc;
@@ -29,6 +32,31 @@ public class UserTestController {
                         .getContentAsString(),
                 LoginDto.class
         );
+    }
+
+    public LoginDto createTestUser() throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setSocialId("socialId");
+        userDto.setSocialType(SocialTypes.KAKAO);
+        return login(userDto);
+    }
+
+    public User userInfo(String accessToken, Long userId) throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/user/info")
+                .header("Authorization", accessToken)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("userId", userId.toString()))
+                .andReturn();
+        return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), User.class);
+    }
+
+    public void setNickname(String accessToken, Long userId, String nickname) throws Exception {
+        mockMvc.perform(put("/api/v1/user/nickname")
+                .header("Authorization", accessToken)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("userId", userId.toString())
+                .param("nickName", nickname))
+                .andReturn();
     }
 
     public void signout(String token) throws Exception {

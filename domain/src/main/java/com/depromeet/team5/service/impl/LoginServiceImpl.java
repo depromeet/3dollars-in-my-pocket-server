@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -50,7 +51,10 @@ public class LoginServiceImpl implements LoginService {
 
         String trimmedNickname = StringUtils.trimWhitespace(nickname);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        if (!trimmedNickname.equals(user.getName()) && userRepository.findByNameLike(trimmedNickname).isPresent()) {
+        if (Objects.equals(trimmedNickname, user.getName())) {
+            return;
+        }
+        if (userRepository.findFirst1ByNameAndStatus(trimmedNickname, UserStatusType.ACTIVE).isPresent()) {
             throw new NickNameDuplicatedException(userId, nickname);
         }
         user.setName(nickname);
@@ -63,7 +67,7 @@ public class LoginServiceImpl implements LoginService {
         if (withdrawalUserOptional.isPresent()) {
             WithdrawalUser withdrawalUser = withdrawalUserOptional.get();
             User user = userRepository.findById(withdrawalUser.getUserId())
-                    .map(it -> it.resignin(withdrawalUser))
+                    .map(it -> it.resignin(userRepository, withdrawalUser))
                     .orElseThrow(() -> new UserNotFoundException(withdrawalUser.getUserId()));
             withdrawalUserRepository.delete(withdrawalUser);
             return user;

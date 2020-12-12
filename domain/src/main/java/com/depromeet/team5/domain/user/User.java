@@ -1,5 +1,7 @@
 package com.depromeet.team5.domain.user;
 
+import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.exception.NickNameDuplicatedException;
 import com.depromeet.team5.repository.UserRepository;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -57,24 +59,25 @@ public class User {
             return name;
     }
 
-    public User resignin(WithdrawalUser withdrawalUser) {
-        setName(withdrawalUser.getName());
+    public User resignin(UserRepository userRepository, WithdrawalUser withdrawalUser) {
+        setName(findAvailableName(userRepository, withdrawalUser));
         setStatus(UserStatusType.ACTIVE);
         setState(false);
         return this;
     }
 
-    public User signout(UserRepository userRepository) {
-        boolean changed = false;
-        while (!changed) {
-            String changedName = this.getName() + " " + (int) (Math.random() * 100);
-            if (!userRepository.findByNameLike(changedName).isPresent()) {
-                this.setName(changedName);
-                this.setState(false);
-                this.setStatus(UserStatusType.INACTIVE);
-                changed = true;
+    private String findAvailableName(UserRepository userRepository, WithdrawalUser withdrawalUser) {
+        for (int i = 1; i <= 100; i++) {
+            if (!userRepository.findFirst1ByNameAndStatus(withdrawalUser.getName(), UserStatusType.ACTIVE).isPresent()) {
+                return withdrawalUser.getName() + i;
             }
         }
+        throw new NickNameDuplicatedException(withdrawalUser.getUserId(), withdrawalUser.getName());
+    }
+
+    public User signout() {
+        this.setState(false);
+        this.setStatus(UserStatusType.INACTIVE);
         return this;
     }
 

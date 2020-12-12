@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
                     withdrawalUserRepository.findById(user.getId())
                             .map(it -> it.update(user))
                             .orElseGet(() -> withdrawalUserRepository.save(WithdrawalUser.from(user)));
-                    user.signout(userRepository);
+                    user.signout();
                 });
     }
 
