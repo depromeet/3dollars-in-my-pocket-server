@@ -4,6 +4,7 @@ import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
+import com.depromeet.team5.dto.UserResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,6 +40,13 @@ public class UserTestController {
         userDto.setSocialId("socialId");
         userDto.setSocialType(SocialTypes.KAKAO);
         return login(userDto);
+    }
+
+    public UserResponse getMe(String accessToken) throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/user/me")
+                .header("Authorization", accessToken))
+                .andReturn();
+        return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), UserResponse.class);
     }
 
     public User userInfo(String accessToken, Long userId) throws Exception {

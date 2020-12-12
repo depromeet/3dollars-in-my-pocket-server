@@ -29,7 +29,7 @@ public class ApiControllerAdvice {
     @Value("${key.admin}")
     private String key;
 
-    @ModelAttribute
+    @ModelAttribute("userId")
     public Long getUserId(@RequestHeader(required = false) String authorization) {
         if (authorization == null) {
             return null;

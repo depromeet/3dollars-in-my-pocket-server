@@ -1,16 +1,16 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.application.user.UserApplicationService;
 import com.depromeet.team5.domain.user.SocialVo;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
+import com.depromeet.team5.dto.UserResponse;
 import com.depromeet.team5.service.JwtService;
 import com.depromeet.team5.service.LoginService;
 import com.depromeet.team5.service.UserService;
 import com.depromeet.team5.util.auth.Auth;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +27,7 @@ public class UserController {
     private final LoginService loginService;
     private final UserService userService;
     private final JwtService jwtService;
+    private final UserApplicationService userApplicationService;
 
     @ApiOperation("로그인을 하여 토큰을 발급받습니다.")
     @PostMapping("/login")
@@ -40,6 +41,29 @@ public class UserController {
         return new ResponseEntity<>(loginDto, HttpStatus.OK);
     }
 
+    @ApiOperation("내 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Access token is not valid"),
+            @ApiResponse(code = 404, message = "User does not exist"),
+            @ApiResponse(code = 500, message = "Server error"),
+            @ApiResponse(code = 503, message = "Service Unavailable"),
+    })
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getMe(@ApiIgnore @ModelAttribute("userId") Long userId) {
+        return ResponseEntity.ok(userApplicationService.getMe(userId));
+    }
+
+    /**
+     * @deprecated
+     * user id 만 알면 다른 사용자의 정보도 수정가능한 구조라서,
+     * userId 를 직접 지정하는 api 는 사용하지 않습니다.
+     * accessToken 에서 userId 파싱해서 사용하도록 개선합니다.
+     * @see #getMe(Long)
+     */
+    @Deprecated
     @ApiOperation("사용자의 정보를 조회합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
@@ -61,7 +85,7 @@ public class UserController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/signout")
-    public ResponseEntity<String> signOutUser(@ModelAttribute @ApiIgnore Long userId) {
+    public ResponseEntity<String> signOutUser(@ModelAttribute("userId") @ApiIgnore Long userId) {
         userService.signout(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
