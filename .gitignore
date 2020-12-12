@@ -3,8 +3,10 @@ HELP.md
 build/
 /interfaces/src/main/resources/application.yml
 /interfaces/src/main/resources/application-local.yml
-/interfaces/src/main/resources/application-dev.yml
-/interfaces/src/main/resources/application-prod.yml
+/admin/src/main/resources/application.yml
+/admin/src/main/resources/application-local.yml
+/batch/src/main/resources/application.yml
+/batch/src/main/resources/application-local.yml
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
