@@ -1,6 +1,5 @@
 package com.depromeet.team5.domain.user;
 
-import com.depromeet.team5.domain.SocialTypes;
 import com.depromeet.team5.exception.NickNameDuplicatedException;
 import com.depromeet.team5.repository.UserRepository;
 import lombok.Data;
