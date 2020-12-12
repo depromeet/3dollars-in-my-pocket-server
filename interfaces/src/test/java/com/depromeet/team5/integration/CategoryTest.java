@@ -1,5 +1,6 @@
 package com.depromeet.team5.integration;
 
+import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.dto.CategoryDistanceDto;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.integration.api.CategoryTestController;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class CategoryTest {

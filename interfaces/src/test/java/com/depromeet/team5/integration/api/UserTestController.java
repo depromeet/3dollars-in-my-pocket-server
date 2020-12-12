@@ -1,6 +1,6 @@
 package com.depromeet.team5.integration.api;
 
-import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;

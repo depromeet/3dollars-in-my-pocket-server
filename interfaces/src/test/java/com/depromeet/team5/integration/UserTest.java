@@ -1,11 +1,11 @@
 package com.depromeet.team5.integration;
 
-import com.depromeet.team5.domain.SocialTypes;
+import com.depromeet.team5.Team5InterfacesApplication;
+import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.integration.api.UserTestController;
-import com.depromeet.team5.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class UserTest {
