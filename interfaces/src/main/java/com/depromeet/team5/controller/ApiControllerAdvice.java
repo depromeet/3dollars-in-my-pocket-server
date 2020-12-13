@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ApiControllerAdvice {
     private final JwtService jwtService;
 
-    @Value("${key.admin}")
+    @Value("${kakao.key.admin}")
     private String key;
 
     @ModelAttribute("userId")
