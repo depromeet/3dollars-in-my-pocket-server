@@ -4,10 +4,13 @@ import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.domain.user.WithdrawalUser;
+import com.depromeet.team5.exception.UserNotFoundException;
+import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.repository.WithdrawalUserRepository;
 import com.depromeet.team5.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,17 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final WithdrawalUserRepository withdrawalUserRepository;
+
+    @NonNull
+    @Override
+    @Transactional(readOnly = true)
+    public User getActiveUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        if (user.isWithdrawal()) {
+            throw new WithdrawalUserException(userId);
+        }
+        return user;
+    }
 
     @Transactional
     @Override

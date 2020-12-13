@@ -1,9 +1,13 @@
 package com.depromeet.team5.controller;
 
-import com.depromeet.team5.domain.store.Review;
-import com.depromeet.team5.domain.store.ReviewCreateValue;
+import com.depromeet.team5.application.review.ReviewApplicationService;
+import com.depromeet.team5.domain.review.Review;
+import com.depromeet.team5.domain.review.ReviewCreateValue;
+import com.depromeet.team5.domain.review.ReviewUpdateValue;
 import com.depromeet.team5.dto.ReviewDto;
 import com.depromeet.team5.dto.ReviewPomDto;
+import com.depromeet.team5.dto.ReviewResponse;
+import com.depromeet.team5.dto.ReviewUpdateRequest;
 import com.depromeet.team5.service.ReviewService;
 import com.depromeet.team5.util.auth.Auth;
 import io.swagger.annotations.Api;
@@ -17,6 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.Valid;
 
 @Api(value = "Review")
 @CrossOrigin(origins = {"*"})
@@ -26,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ReviewApplicationService reviewApplicationService;
 
     @ApiOperation("리뷰를 등록합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
@@ -50,5 +58,38 @@ public class ReviewController {
                         reviewPage.getTotalPages()
                 )
         );
+    }
+
+    @ApiOperation("사용자가 작성한 리뷰를 수정합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<ReviewResponse> update(
+            @ModelAttribute("userId") @ApiIgnore Long userId,
+            @PathVariable Long reviewId,
+            @RequestBody @Valid ReviewUpdateRequest reviewUpdateRequest
+    ) {
+        return ResponseEntity.ok(
+                reviewApplicationService.updateReview(
+                        userId,
+                        reviewId,
+                        ReviewUpdateValue.of(
+                                reviewUpdateRequest.getContent(),
+                                reviewUpdateRequest.getRating()
+                        )
+                )
+        );
+    }
+
+    @ApiOperation("사용자가 작성한 리뷰를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Object> delete(
+            @ModelAttribute("userId") @ApiIgnore Long userId,
+            @PathVariable Long reviewId
+    ) {
+        reviewApplicationService.deleteReview(userId, reviewId);
+        return ResponseEntity.noContent().build();
     }
 }

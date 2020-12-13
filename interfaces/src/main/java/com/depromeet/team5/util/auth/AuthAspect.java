@@ -3,6 +3,8 @@ package com.depromeet.team5.util.auth;
 import com.depromeet.team5.domain.ResultCode;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.exception.*;
+import com.depromeet.team5.exception.InvalidAccessTokenException;
+import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
 import com.depromeet.team5.service.JwtService;
 import com.depromeet.team5.util.RequestUtils;
