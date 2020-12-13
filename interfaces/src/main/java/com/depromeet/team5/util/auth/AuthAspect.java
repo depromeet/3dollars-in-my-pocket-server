@@ -25,8 +25,6 @@ public class AuthAspect {
 
     private static final String AUTHORIZATION = "Authorization";
 
-    private final HttpServletRequest httpServletRequest;
-
     private final JwtService jwtService;
 
     private final UserRepository userRepository;

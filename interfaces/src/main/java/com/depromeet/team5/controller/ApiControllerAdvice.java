@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @ControllerAdvice
 @RequiredArgsConstructor
-@PropertySource("classpath:key.properties")
 public class ApiControllerAdvice {
     private final JwtService jwtService;
 
