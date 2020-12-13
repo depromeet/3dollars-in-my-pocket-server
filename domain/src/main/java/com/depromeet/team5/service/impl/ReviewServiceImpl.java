@@ -73,11 +73,12 @@ public class ReviewServiceImpl implements ReviewService {
         Assert.notNull(reviewId, "'reviewId' must not be null");
 
         User user = userService.getActiveUser(userId);
-        Review review = reviewRepository.findById(reviewId)
-                .map(it -> it.delete(user))
-                .orElseThrow(() -> new ReviewNotFoundException(reviewId));
-        this.calculateRating(review.getStoreId());
-        reviewRepository.save(review);
+        reviewRepository.findById(reviewId)
+                .ifPresent(review -> {
+                    review.delete(user);
+                    this.calculateRating(review.getStoreId());
+                    reviewRepository.save(review);
+                });
     }
 
     // TODO: migration 끝나면 삭제된 리뷰 제외하고 계산하도록 쿼리 수정해야함.
