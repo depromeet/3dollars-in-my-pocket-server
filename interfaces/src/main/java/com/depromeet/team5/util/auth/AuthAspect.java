@@ -15,8 +15,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 @Component
 @Aspect
@@ -24,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthAspect {
 
     private static final String AUTHORIZATION = "Authorization";
-
-    private final HttpServletRequest httpServletRequest;
 
     private final JwtService jwtService;
 
