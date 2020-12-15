@@ -64,7 +64,6 @@ class ReviewTest {
         assertThat(reviewPomDto.getContent().get(0).getStoreId()).isEqualTo(storeId);
     }
 
-    @Ignore
     @Test
     void update() throws Exception {
         // given
@@ -81,7 +80,6 @@ class ReviewTest {
         assertThat(reviewResponse.getRating()).isZero();
     }
 
-    @Ignore
     @Test
     void delete() throws Exception {
         // given

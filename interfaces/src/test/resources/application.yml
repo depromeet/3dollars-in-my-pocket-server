@@ -1,8 +1,3 @@
-# for query (avg rating of reviews)
-# TODO: Apply QueryDSL and remove this config
-spring:
-  datasource:
-    url: "jdbc:h2:mem:testdb;MODE=MYSQL"
 aws:
   credentials:
     region: ap-northeast-2

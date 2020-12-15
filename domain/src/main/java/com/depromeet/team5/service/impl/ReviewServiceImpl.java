@@ -85,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
     // TODO: migration 끝나면 삭제된 리뷰 제외하고 계산하도록 쿼리 수정해야함.
     // TODO: event publish - subscribe 방식으로 변경.
     private void calculateRating(Store store) {
-        Float rating = reviewRepository.roundAvgRatingByStoreIdAndStatus(store.getId(), ReviewStatus.POSTED);
+        Float rating = reviewRepository.roundAvgRatingByStoreId(store.getId());
         store.setRating(rating);
         storeRepository.save(store);
     }
