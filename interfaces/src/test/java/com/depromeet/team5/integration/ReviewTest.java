@@ -97,6 +97,6 @@ class ReviewTest {
         reviewTestController.delete(accessToken, reviewId);
         // then
         ReviewPomDto reviewPomDtoAfterDeleted = reviewTestController.getAllByUser(accessToken, userId, 1);
-        assertThat(reviewPomDtoAfterDeleted.getContent().get(0).getStatus()).isEqualTo(ReviewStatus.DELETED);
+        assertThat(reviewPomDtoAfterDeleted.getContent()).isEmpty();
     }
 }
