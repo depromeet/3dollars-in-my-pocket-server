@@ -2,6 +2,7 @@ package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.review.ReviewCreateValue;
+import com.depromeet.team5.domain.review.ReviewStatus;
 import com.depromeet.team5.domain.review.ReviewUpdateValue;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.user.User;
@@ -49,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
         Assert.notNull(pageable, "'pageable' must not be null");
 
         User user = userService.getActiveUser(userId);
-        return reviewRepository.findByUser(user, pageable);
+        return reviewRepository.findByUserAndStatus(user, ReviewStatus.POSTED, pageable);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
         Assert.notNull(reviewUpdateValue, "'reviewUpdateValue' must not be null");
 
         User user = userService.getActiveUser(userId);
-        Review review = reviewRepository.findById(reviewId)
+        Review review = reviewRepository.findByIdAndStatus(reviewId, ReviewStatus.POSTED)
                 .map(it -> it.update(user, reviewUpdateValue))
                 .orElseThrow(() -> new ReviewNotFoundException(reviewId));
         this.calculateRating(review.getStoreId());
@@ -84,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
     // TODO: migration 끝나면 삭제된 리뷰 제외하고 계산하도록 쿼리 수정해야함.
     // TODO: event publish - subscribe 방식으로 변경.
     private void calculateRating(Store store) {
-        Float rating = reviewRepository.findByRatingAvg(store.getId());
+        Float rating = reviewRepository.roundAvgRatingByStoreIdAndStatus(store.getId(), ReviewStatus.POSTED);
         store.setRating(rating);
         storeRepository.save(store);
     }
