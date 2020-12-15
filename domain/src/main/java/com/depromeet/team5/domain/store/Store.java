@@ -1,7 +1,8 @@
 package com.depromeet.team5.domain.store;
 
 import com.depromeet.team5.domain.user.User;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,8 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
 @Entity
+@Getter
+@EqualsAndHashCode(of = {"id", "latitude", "longitude", "storeName", "category", "status", "image", "createdAt"})
 @EntityListeners(AuditingEntityListener.class)
 public class Store {
 
@@ -30,6 +32,11 @@ public class Store {
     @Enumerated(value = EnumType.STRING)
     private CategoryTypes category;
 
+    private Float rating;
+
+    @Enumerated(EnumType.STRING)
+    private StoreStatus status;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_id")
     private List<Image> image;
@@ -41,8 +48,6 @@ public class Store {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "storeId")
     private List<Review> review = new ArrayList<>();
-
-    private Float rating;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delete_id")
@@ -63,9 +68,10 @@ public class Store {
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.category = storeCreateValue.getCategory();
+        store.rating = 0F;
+        store.status = StoreStatus.POSTED;
         store.image = imageList;
         store.review = new ArrayList<>();
-        store.rating = 0F;
         store.deleteRequest = new ArrayList<>();
         store.user = user;
         if (storeCreateValue.getMenus() != null){

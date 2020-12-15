@@ -41,13 +41,13 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Store> getAll(Double latitude, Double longitude) {
         return storeRepository.findAllByAddress(latitude, longitude);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<Store> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         return storeRepository.findAllByUser(user, pageable);
