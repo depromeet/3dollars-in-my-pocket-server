@@ -89,7 +89,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional(readOnly = true)
-    public Store getDetail(Long storeId, Double latitude, Double longitude) {
+    public Store getStore(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
     }
 

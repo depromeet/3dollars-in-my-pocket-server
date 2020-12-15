@@ -17,7 +17,7 @@ public interface StoreService {
 
     Page<Store> getAllByUser(Long userId, Pageable pageable);
 
-    Store getDetail(Long storeId, Double latitude, Double longitude);
+    Store getStore(Long storeId);
 
     void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues);
 
