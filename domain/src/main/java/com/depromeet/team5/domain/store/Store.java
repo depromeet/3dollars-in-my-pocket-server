@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain.store;
 
+import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.user.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
