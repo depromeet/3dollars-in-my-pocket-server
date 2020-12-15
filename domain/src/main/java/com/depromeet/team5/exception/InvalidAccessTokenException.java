@@ -5,5 +5,7 @@ public class InvalidAccessTokenException extends UnauthorizedException {
         super("AccessToken 이 유효하지 않습니다. ");
     }
 
-
+    public InvalidAccessTokenException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

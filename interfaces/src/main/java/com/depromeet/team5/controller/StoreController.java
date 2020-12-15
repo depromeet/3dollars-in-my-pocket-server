@@ -1,5 +1,6 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.application.store.StoreApplicationService;
 import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.dto.*;
@@ -21,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +36,7 @@ import java.util.stream.Collectors;
 public class StoreController {
 
     private final StoreService storeService;
+    private final StoreApplicationService storeApplicationService;
 
     @ApiOperation("가게 정보를 저장합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
@@ -47,12 +51,18 @@ public class StoreController {
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
                         storeDto.getCategory(),
-                        storeDto.getMenu().stream()
-                                .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
-                                .collect(Collectors.toList())
+                        Optional.ofNullable(storeDto.getMenu())
+                                .map(menu -> menu.stream()
+                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .collect(Collectors.toList())
+                                ).orElse(Collections.emptyList())
                 ),
                 userId,
-                image.stream().map(this::toImageUploadValue).collect(Collectors.toList())
+                Optional.ofNullable(image)
+                        .map(images -> images.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList())
+                        ).orElse(Collections.emptyList())
         );
         StoreIdDto storeIdDto = new StoreIdDto();
         storeIdDto.setStoreId(store.getId());
@@ -102,10 +112,7 @@ public class StoreController {
     public ResponseEntity<StoreDetailDto> getDetail(@RequestParam Long storeId,
                                                     @RequestParam Double latitude,
                                                     @RequestParam Double longitude) {
-        Store store = storeService.getDetail(storeId, latitude, longitude);
-        return ResponseEntity.ok(
-                StoreDetailDto.of(store, latitude, longitude)
-        );
+        return ResponseEntity.ok(storeApplicationService.getStoreDetail(storeId, latitude, longitude));
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
@@ -120,12 +127,18 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
-                        storeUpdateDto.getMenu().stream()
-                                .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
-                                .collect(Collectors.toList())
+                        Optional.ofNullable(storeUpdateDto.getMenu())
+                                .map(menu -> menu.stream()
+                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .collect(Collectors.toList()))
+                                .orElse(Collections.emptyList())
                 ),
                 storeId,
-                image.stream().map(this::toImageUploadValue).collect(Collectors.toList())
+                Optional.ofNullable(image)
+                        .map(it -> it.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList()))
+                        .orElse(Collections.emptyList())
         );
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }

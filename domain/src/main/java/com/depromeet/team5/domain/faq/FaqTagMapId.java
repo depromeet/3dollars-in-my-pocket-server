@@ -9,6 +9,8 @@ import java.io.Serializable;
 @Embeddable
 @EqualsAndHashCode
 public class FaqTagMapId implements Serializable {
+    private static final long serialVersionUID = -4723610823865308884L;
+
     @Column
     private Long faqId;
 

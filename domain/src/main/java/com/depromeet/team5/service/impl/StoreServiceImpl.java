@@ -6,9 +6,7 @@ import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.StoreDeleteRequestDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;
-import com.depromeet.team5.repository.DeleteRepository;
-import com.depromeet.team5.repository.StoreRepository;
-import com.depromeet.team5.repository.UserRepository;
+import com.depromeet.team5.repository.*;
 import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,8 @@ public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
     private final DeleteRepository deleteRepository;
     private final S3FileUploadService s3FileUploadService;
+    private final MenuCategoryRepository menuCategoryRepository;
+    private final StoreMenuCategoryRepository storeMenuCategoryRepository;
 
     @Override
     @Transactional
@@ -37,17 +37,51 @@ public class StoreServiceImpl implements StoreService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         List<Image> image = convertImage(imageUploadValues);
         Store store = Store.from(storeCreateValue, image, user);
-        return storeRepository.save(store);
+        storeRepository.save(store);
+        this.addStoreMenuCategory(store.getId());
+        return store;
+    }
+
+    /**
+     * Preparation work to support multiple categories in a store.
+     * dual-write > migration > read > delete old codes > delete old schema
+     */
+    private void addStoreMenuCategory(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElse(null);
+        if (store == null) {
+            log.error("Failed to add menuCategory to store. storeId: {}", storeId);
+            return;
+        }
+        if (store.getCategory() == null) {
+            log.error("Failed to add menuCategory to store. 'category' must not be null. storeId: {}", storeId);
+            return;
+        }
+        String categoryName = store.getCategory().name();
+        try {
+            MenuCategory menuCategory = menuCategoryRepository.findByEnumName(categoryName).orElse(null);
+            if (menuCategory == null) {
+                log.error("Failed to add menuCategory to store. menuCategory does not exist. storeId: {}, categoryName: {}",
+                        storeId, categoryName);
+                return;
+            }
+            StoreMenuCategory storeMenuCategory = storeMenuCategoryRepository.findById(StoreMenuCategoryId.of(store, menuCategory))
+                    .orElseGet(() -> storeMenuCategoryRepository.save(StoreMenuCategory.of(store, menuCategory)));
+            store.addStoreMenuCategory(storeMenuCategory);
+            storeRepository.save(store);
+        } catch (Exception e) {
+            log.error("Failed to add menuCategory to store. storeId: {}, categoryName: {}",
+                    store.getId(), store.getCategory().name());
+        }
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Store> getAll(Double latitude, Double longitude) {
         return storeRepository.findAllByAddress(latitude, longitude);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<Store> getAllByUser(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         return storeRepository.findAllByUser(user, pageable);
@@ -55,7 +89,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional(readOnly = true)
-    public Store getDetail(Long storeId, Double latitude, Double longitude) {
+    public Store getStore(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
     }
 

@@ -1,9 +1,9 @@
-package com.depromeet.team5.domain.store;
+package com.depromeet.team5.domain.review;
 
 import lombok.Value;
 
 @Value(staticConstructor = "of")
 public class ReviewCreateValue {
-    String contents;
+    String content;
     Integer rating;
 }

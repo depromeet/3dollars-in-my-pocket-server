@@ -1,7 +1,10 @@
 package com.depromeet.team5.domain.store;
 
+import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.user.User;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
 @Entity
+@Getter
+@EqualsAndHashCode(of = {"id", "latitude", "longitude", "storeName", "category", "createdAt"})
 @EntityListeners(AuditingEntityListener.class)
 public class Store {
 
@@ -50,6 +54,9 @@ public class Store {
 
     @ManyToOne
     private User user;
+
+    @OneToMany(mappedBy = "store")
+    private final List<StoreMenuCategory> storeMenuCategories = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -93,5 +100,13 @@ public class Store {
         deleteRequestId.setUserId(userId);
         deleteRequestId.setReason(deleteReasonType);
         deleteRequest.add(deleteRequestId);
+    }
+
+    public boolean addStoreMenuCategory(StoreMenuCategory storeMenuCategory) {
+        return storeMenuCategories.add(storeMenuCategory);
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
     }
 }

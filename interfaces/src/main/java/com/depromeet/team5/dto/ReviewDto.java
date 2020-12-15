@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.Review;
+import com.depromeet.team5.domain.review.Review;
 import lombok.Data;
 
 @Data

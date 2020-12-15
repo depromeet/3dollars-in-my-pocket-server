@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserApplicationService {
     private final LoginService loginService;
-    private final UserResponseAssembler userResponseAssembler;
+    private final UserAssembler userAssembler;
 
     public UserResponse getMe(Long userId) {
         User user = loginService.userInfo(userId);
-        return userResponseAssembler.toUserResponse(user);
+        return userAssembler.toUserResponse(user);
     }
 }

@@ -7,15 +7,15 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class FailureResponse<T> extends ApiResponse {
-    String errorMessage;
+    String message;
 
     public FailureResponse(ResultCode resultCode) {
         super(resultCode);
-        this.errorMessage = resultCode.getDefaultMessage();
+        this.message = resultCode.getDefaultMessage();
     }
 
-    public FailureResponse(ResultCode resultCode, String errorMessage) {
+    public FailureResponse(ResultCode resultCode, String message) {
         super(resultCode);
-        this.errorMessage = errorMessage;
+        this.message = message;
     }
 }
