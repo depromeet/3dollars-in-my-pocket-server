@@ -21,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,12 +49,18 @@ public class StoreController {
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
                         storeDto.getCategory(),
-                        storeDto.getMenu().stream()
-                                .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
-                                .collect(Collectors.toList())
+                        Optional.ofNullable(storeDto.getMenu())
+                                .map(menu -> menu.stream()
+                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .collect(Collectors.toList())
+                                ).orElse(Collections.emptyList())
                 ),
                 userId,
-                image.stream().map(this::toImageUploadValue).collect(Collectors.toList())
+                Optional.ofNullable(image)
+                        .map(images -> images.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList())
+                        ).orElse(Collections.emptyList())
         );
         StoreIdDto storeIdDto = new StoreIdDto();
         storeIdDto.setStoreId(store.getId());
