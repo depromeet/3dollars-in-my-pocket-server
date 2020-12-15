@@ -99,10 +99,15 @@ public class ApiControllerAdvice {
             case USER_NICKNAME_DUPLICATED:
             case STORE_DELETE_REQUEST_DUPLICATED:
                 return HttpStatus.BAD_REQUEST;
+            case INVALID_TOKEN:
+            case UNAUTHORIZED_USER_NOT_FOUND:
             case USER_INVALID_STATUS_WITHDRAWAL:
+                return HttpStatus.UNAUTHORIZED;
+            case FORBIDDEN:
                 return HttpStatus.FORBIDDEN;
             case INTERNAL_SERVER_ERROR:
             default:
+                log.error("Failed to map result code to HttpStatus. resultCode: {}", resultCode);
                 return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
