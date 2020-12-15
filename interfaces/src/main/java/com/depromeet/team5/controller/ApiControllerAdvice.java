@@ -22,11 +22,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @ControllerAdvice
 @RequiredArgsConstructor
-@PropertySource("classpath:key.properties")
 public class ApiControllerAdvice {
     private final JwtService jwtService;
 
-    @Value("${key.admin}")
+    @Value("${kakao.key.admin}")
     private String key;
 
     @ModelAttribute("userId")
