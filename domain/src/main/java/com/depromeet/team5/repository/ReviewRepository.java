@@ -17,6 +17,6 @@ public interface ReviewRepository extends PagingAndSortingRepository<Review, Lon
 
     Optional<Review> findByIdAndStatus(Long reviewId, ReviewStatus status);
 
-    @Query(value = "SELECT ROUND(AVG(rating), 1) FROM review WHERE store_id = :storeId AND status = :status", nativeQuery = true)
-    Float roundAvgRatingByStoreIdAndStatus(@Param("storeId") Long storeId, @Param("status") ReviewStatus status);
+    @Query(value = "SELECT ROUND(AVG(rating), 1) FROM review WHERE store_id = :storeId", nativeQuery = true)
+    Float roundAvgRatingByStoreId(@Param("storeId") Long storeId);
 }

@@ -5,7 +5,7 @@ import com.depromeet.team5.dto.UserResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserResponseAssembler {
+public class UserAssembler {
     public UserResponse toUserResponse(User user) {
         if (user == null) {
             return null;

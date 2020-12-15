@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
+@Transactional
 @SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)

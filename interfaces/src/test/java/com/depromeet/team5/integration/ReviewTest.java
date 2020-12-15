@@ -1,13 +1,13 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.review.ReviewStatus;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.integration.api.ReviewTestController;
 import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.depromeet.team5.repository.ReviewRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +32,6 @@ class ReviewTest {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    private UserTestController userTestController;
-    private StoreTestController storeTestController;
     private ReviewTestController reviewTestController;
 
     private String accessToken;
@@ -42,14 +40,12 @@ class ReviewTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userTestController = new UserTestController(mockMvc, objectMapper);
-        storeTestController = new StoreTestController(mockMvc, objectMapper);
         reviewTestController = new ReviewTestController(mockMvc, objectMapper);
 
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginDto loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
         this.accessToken = loginDto.getToken();
         this.userId = loginDto.getUserId();
-        StoreIdDto storeIdDto = storeTestController.createStore(accessToken, loginDto.getUserId());
+        StoreIdDto storeIdDto = new StoreTestController(mockMvc, objectMapper).createStore(accessToken, loginDto.getUserId());
         this.storeId = storeIdDto.getStoreId();
     }
 

@@ -1,5 +1,6 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.application.store.StoreApplicationService;
 import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.dto.*;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 public class StoreController {
 
     private final StoreService storeService;
+    private final StoreApplicationService storeApplicationService;
 
     @ApiOperation("가게 정보를 저장합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
@@ -110,10 +112,7 @@ public class StoreController {
     public ResponseEntity<StoreDetailDto> getDetail(@RequestParam Long storeId,
                                                     @RequestParam Double latitude,
                                                     @RequestParam Double longitude) {
-        Store store = storeService.getDetail(storeId, latitude, longitude);
-        return ResponseEntity.ok(
-                StoreDetailDto.of(store, latitude, longitude)
-        );
+        return ResponseEntity.ok(storeApplicationService.getStoreDetail(storeId, latitude, longitude));
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
