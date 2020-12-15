@@ -22,15 +22,21 @@ public class ReviewTestController {
         this.objectMapper = objectMapper;
     }
 
-    public String save(String accessToken, Long userId, Long storeId, ReviewDto reviewDto) throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/api/v1/review")
+    public void save(String accessToken, Long userId, Long storeId, ReviewDto reviewDto) throws Exception {
+        mockMvc.perform(post("/api/v1/review/save")
                 .header("Authorization", accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .queryParam("userId", userId.toString())
                 .queryParam("storeId", storeId.toString())
                 .content(objectMapper.writeValueAsBytes(reviewDto)))
                 .andReturn();
-        return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), String.class);
+    }
+    
+    public void createReview(String accessToken, Long userId, Long storeId) throws Exception {
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setContents("reviewContent");
+        reviewDto.setRating(5);
+        save(accessToken, userId, storeId, reviewDto);
     }
 
     public ReviewPomDto getAllByUser(String accessToken, Long userId, Integer page) throws Exception {
