@@ -127,12 +127,18 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
-                        storeUpdateDto.getMenu().stream()
-                                .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
-                                .collect(Collectors.toList())
+                        Optional.ofNullable(storeUpdateDto.getMenu())
+                                .map(menu -> menu.stream()
+                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .collect(Collectors.toList()))
+                                .orElse(Collections.emptyList())
                 ),
                 storeId,
-                image.stream().map(this::toImageUploadValue).collect(Collectors.toList())
+                Optional.ofNullable(image)
+                        .map(it -> it.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList()))
+                        .orElse(Collections.emptyList())
         );
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }
