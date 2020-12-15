@@ -10,9 +10,7 @@ import com.depromeet.team5.dto.ReviewResponse;
 import com.depromeet.team5.dto.ReviewUpdateRequest;
 import com.depromeet.team5.service.ReviewService;
 import com.depromeet.team5.util.auth.Auth;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,6 +59,13 @@ public class ReviewController {
     }
 
     @ApiOperation("사용자가 작성한 리뷰를 수정합니다. 인증이 필요한 요청입니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Access token is not valid"),
+            @ApiResponse(code = 403, message = "User is not author of review"),
+            @ApiResponse(code = 404, message = "Review does not exist"),
+            @ApiResponse(code = 500, message = "Server error"),
+    })
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/{reviewId}")
@@ -82,6 +87,12 @@ public class ReviewController {
     }
 
     @ApiOperation("사용자가 작성한 리뷰를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Success"),
+            @ApiResponse(code = 401, message = "Access token is not valid"),
+            @ApiResponse(code = 403, message = "User is not author of review"),
+            @ApiResponse(code = 500, message = "Server error"),
+    })
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @DeleteMapping("/{reviewId}")
