@@ -7,10 +7,13 @@ import com.depromeet.team5.dto.MenuDto;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StoreAssembler {
@@ -22,7 +25,7 @@ public class StoreAssembler {
         }
         StoreDetailDto storeDetailDto = new StoreDetailDto();
         storeDetailDto.setId(store.getId());
-        storeDetailDto.setLongitude(store.getLatitude());
+        storeDetailDto.setLatitude(store.getLatitude());
         storeDetailDto.setLongitude(store.getLongitude());
         storeDetailDto.setStoreName(store.getStoreName());
         storeDetailDto.setCategory(store.getCategory());
@@ -31,7 +34,10 @@ public class StoreAssembler {
         storeDetailDto.setReviewDetailResponses(store.getReview().stream()
                 .map(reviewAssembler::toReviewDetailResponse)
                 .collect(Collectors.toList()));
-        storeDetailDto.setRating(store.getRating());
+        storeDetailDto.setRating(Optional.ofNullable(store.getRating()).orElseGet(() -> {
+           log.error("'rating' must not be null. storeId: {}", store.getId());
+           return 0f;
+        }));
         storeDetailDto.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter"));
         storeDetailDto.setUser(store.getUser());
         return storeDetailDto;
