@@ -7,3 +7,6 @@ aws:
     bucket:
       name: s3BucketName
       url: s3BucketUrl
+kakao:
+  key:
+    admin: adminKeyKakao

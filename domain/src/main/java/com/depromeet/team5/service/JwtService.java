@@ -4,10 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.depromeet.team5.config.JwtConfig;
+import com.depromeet.team5.exception.InvalidAccessTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,29 +20,20 @@ public class JwtService {
     private final JwtConfig.JwtSettings jwtSettings;
 
     public String create(final long user_idx) {
-        try {
-            JWTCreator.Builder builder = JWT.create();
-            builder.withIssuer(jwtSettings.getIssuer());
-            builder.withClaim("ID", user_idx);
-            return builder.sign(Algorithm.HMAC256(jwtSettings.getSecret()));
-        } catch (JWTCreationException e) {
-            log.error("Failed to create jwt", e);
-        }
-        return null;
+        JWTCreator.Builder builder = JWT.create();
+        builder.withIssuer(jwtSettings.getIssuer());
+        builder.withClaim("ID", user_idx);
+        return builder.sign(Algorithm.HMAC256(jwtSettings.getSecret()));
     }
-
 
     public Token decode(final String token) {
         try {
             final JWTVerifier jwtVerifier = require(Algorithm.HMAC256(jwtSettings.getSecret())).withIssuer(jwtSettings.getIssuer()).build();
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
             return new Token(decodedJWT.getClaim("ID").asLong());
-        } catch (JWTVerificationException jve) {
-            log.error(jve.getMessage());
         } catch (Exception e) {
-            log.error(e.getMessage());
+            throw new InvalidAccessTokenException("Failed to decode accessToken. token: " + token, e);
         }
-        return null;
     }
 
     public static class Token {

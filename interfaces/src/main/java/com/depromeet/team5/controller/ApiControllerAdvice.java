@@ -10,7 +10,6 @@ import com.depromeet.team5.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 @RequiredArgsConstructor
 public class ApiControllerAdvice {
     private final JwtService jwtService;
@@ -100,10 +99,15 @@ public class ApiControllerAdvice {
             case USER_NICKNAME_DUPLICATED:
             case STORE_DELETE_REQUEST_DUPLICATED:
                 return HttpStatus.BAD_REQUEST;
+            case INVALID_TOKEN:
+            case UNAUTHORIZED_USER_NOT_FOUND:
             case USER_INVALID_STATUS_WITHDRAWAL:
+                return HttpStatus.UNAUTHORIZED;
+            case FORBIDDEN:
                 return HttpStatus.FORBIDDEN;
             case INTERNAL_SERVER_ERROR:
             default:
+                log.error("Failed to map result code to HttpStatus. resultCode: {}", resultCode);
                 return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
