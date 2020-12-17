@@ -7,12 +7,15 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.depromeet.team5.domain.ImageUploadValue;
+import com.depromeet.team5.exception.FailedToUploadImageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Slf4j
@@ -50,7 +53,12 @@ public class S3FileUploadService {
         String savedFileName = getSavedFileName(imageUploadValue.getFilename());
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(imageUploadValue.getContentType());
-        amazonS3Client.putObject(bucketName, savedFileName, imageUploadValue.getInputStream(), metadata);
+        try (InputStream inputStream = imageUploadValue.getInputStream()) {
+            amazonS3Client.putObject(bucketName, savedFileName, inputStream, metadata);
+        } catch (IOException e) {
+            log.error("Failed to upload image", e);
+            throw new FailedToUploadImageException();
+        }
         return defaultUrl + savedFileName.replaceAll("/", "");
     }
 
