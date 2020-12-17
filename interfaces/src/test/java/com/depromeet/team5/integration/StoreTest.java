@@ -21,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @Transactional
 @SpringBootTest(classes = Team5InterfacesApplication.class)
@@ -63,5 +66,16 @@ class StoreTest {
         assertThat(storeDetailDto).isNotNull();
         assertThat(storeDetailDto.getId()).isEqualTo(storeIdDto.getStoreId());
         assertThat(storeDetailDto.getStoreName()).isEqualTo("storeName");
+    }
+
+    @Test
+    void get_given_invalid_latitude_should_return_400_bad_request() throws Exception{
+        //given
+        LoginDto loginDto = userTestController.createTestUser();
+        //when
+        mockMvc.perform(get("/api/v1/store/get?latitude=37.1%26longitude=127.1")
+                .header("Authorization", loginDto.getToken()))
+                //then
+                .andExpect(status().isBadRequest());
     }
 }
