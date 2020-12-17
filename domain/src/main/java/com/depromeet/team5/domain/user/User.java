@@ -67,7 +67,7 @@ public class User {
 
     private String findAvailableName(UserRepository userRepository, WithdrawalUser withdrawalUser) {
         for (int i = 1; i <= 100; i++) {
-            if (!userRepository.findFirst1ByNameAndStatus(withdrawalUser.getName(), UserStatusType.ACTIVE).isPresent()) {
+            if (!userRepository.findFirst1ByNameAndStatus(withdrawalUser.getName() + i, UserStatusType.ACTIVE).isPresent()) {
                 return withdrawalUser.getName() + i;
             }
         }
