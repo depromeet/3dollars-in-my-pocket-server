@@ -155,8 +155,8 @@ public class StoreController {
     }
 
     private ImageUploadValue toImageUploadValue(MultipartFile multipartFile) {
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            return ImageUploadValue.of(inputStream, multipartFile.getOriginalFilename(), multipartFile.getContentType());
+        try {
+            return ImageUploadValue.of(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), multipartFile.getContentType());
         } catch (IOException e) {
             log.error("Failed to read multipart File.", e);
             return null;
