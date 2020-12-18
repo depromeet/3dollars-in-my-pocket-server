@@ -84,8 +84,8 @@ public class Store {
     }
 
     public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
-        latitude = storeUpdateValue.getLatitude();
-        longitude = storeUpdateValue.getLongitude();
+        // latitude = storeUpdateValue.getLatitude();
+        // longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
         image.addAll(imageList);
         menu.clear();
