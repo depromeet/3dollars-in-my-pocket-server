@@ -4,12 +4,14 @@ import com.depromeet.team5.application.review.ReviewAssembler;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.ImageDto;
 import com.depromeet.team5.dto.MenuDto;
+import com.depromeet.team5.dto.ReviewDetailResponse;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,7 @@ public class StoreAssembler {
         storeDetailDto.setMenu(store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList()));
         storeDetailDto.setReviewDetailResponses(store.getReview().stream()
                 .map(reviewAssembler::toReviewDetailResponse)
+                .sorted(Comparator.comparing(ReviewDetailResponse::getCreatedAt).reversed())
                 .collect(Collectors.toList()));
         storeDetailDto.setRating(Optional.ofNullable(store.getRating()).orElseGet(() -> {
            log.error("'rating' must not be null. storeId: {}", store.getId());
