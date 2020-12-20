@@ -3,7 +3,6 @@ package com.depromeet.team5.application.store;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.Store;
-import com.depromeet.team5.domain.store.StoresByCategoryAndDistance;
 import com.depromeet.team5.dto.CategoryDistanceDto;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.service.CategoryService;
@@ -39,8 +38,9 @@ public class StoreApplicationService {
             Location mapLocation
     ) {
         Assert.notNull(categoryType, "'categoryType' must not be null");
-        Assert.notNull(userLocation, "'myLocation' must not be null");
+        Assert.notNull(userLocation, "'userLocation' must not be null");
         Assert.notNull(mapLocation, "'mapLocation' must not be null");
+
         List<Store> storeList = categoryService.getStoreByCategoryAndDistanceBetween(
                 mapLocation.getLatitude(),
                 mapLocation.getLongitude(),

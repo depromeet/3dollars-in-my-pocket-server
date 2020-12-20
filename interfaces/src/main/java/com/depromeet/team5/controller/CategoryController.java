@@ -4,7 +4,6 @@ import com.depromeet.team5.application.store.StoreApplicationService;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.Store;
-import com.depromeet.team5.domain.store.StoresByCategoryAndDistance;
 import com.depromeet.team5.domain.store.StoresByCategoryAndRating;
 import com.depromeet.team5.dto.CategoryDistanceDto;
 import com.depromeet.team5.dto.CategoryReviewDto;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,40 +34,23 @@ public class CategoryController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/distance")
-    public ResponseEntity<CategoryDistanceDto> getDistanceAll(@RequestParam Double latitude,
-                                                              @RequestParam Double longitude,
-                                                              @RequestParam(required = false) Double mapLatitude,
-                                                              @RequestParam(required = false) Double mapLongitude,
-                                                              @RequestParam CategoryTypes category) {
-        if (mapLatitude != null && mapLongitude != null) {
-            return ResponseEntity.ok(
-                    storeApplicationService.getStoresByCategoryGroupByDistance(
-                            category,
-                            Location.of(latitude, longitude),
-                            Location.of(mapLatitude, mapLongitude)
-                    )
-            );
-        }
+    public ResponseEntity<CategoryDistanceDto> getStoresGroupByDistance(
+            @RequestParam Double latitude,
+            @RequestParam Double longitude,
+            @RequestParam(required = false) Double mapLatitude,
+            @RequestParam(required = false) Double mapLongitude,
+            @RequestParam CategoryTypes category
+    ) {
+        Location mapLocation = mapLatitude != null && mapLongitude != null
+                ? Location.of(mapLatitude, mapLongitude)
+                : Location.of(latitude, longitude);
         return ResponseEntity.ok(
-                toStoresByCategoryAndDistance(
-                        categoryService.getStoresByCategoryAndDistance(latitude, longitude, category),
-                        latitude,
-                        longitude
+                storeApplicationService.getStoresByCategoryGroupByDistance(
+                        category,
+                        Location.of(latitude, longitude),
+                        mapLocation
                 )
         );
-    }
-
-    private CategoryDistanceDto toStoresByCategoryAndDistance(
-            StoresByCategoryAndDistance storesByCategoryAndDistance,
-            Double latitude,
-            Double longitude
-    ) {
-        CategoryDistanceDto categoryDistanceDto = new CategoryDistanceDto();
-        categoryDistanceDto.setStoreList50(toStoreCardDtoList(storesByCategoryAndDistance.getStoresIn50(), latitude, longitude));
-        categoryDistanceDto.setStoreList100(toStoreCardDtoList(storesByCategoryAndDistance.getStoresIn100(), latitude, longitude));
-        categoryDistanceDto.setStoreList500(toStoreCardDtoList(storesByCategoryAndDistance.getStoresIn500(), latitude, longitude));
-        categoryDistanceDto.setStoreList1000(toStoreCardDtoList(storesByCategoryAndDistance.getStoresIn1000(), latitude, longitude));
-        return categoryDistanceDto;
     }
 
     private List<StoreCardDto> toStoreCardDtoList(List<Store> stores, Double latitude, Double longitude) {

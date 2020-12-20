@@ -2,7 +2,6 @@ package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.Store;
-import com.depromeet.team5.domain.store.StoresByCategoryAndDistance;
 import com.depromeet.team5.domain.store.StoresByCategoryAndRating;
 import com.depromeet.team5.repository.StoreRepository;
 import com.depromeet.team5.service.CategoryService;
@@ -18,17 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final StoreRepository storeRepository;
-
-    @Override
-    @Transactional(readOnly = true)
-    public StoresByCategoryAndDistance getStoresByCategoryAndDistance(Double latitude, Double longitude, CategoryTypes category) {
-        return StoresByCategoryAndDistance.of(
-                getStoreByCategoryAndDistanceBetween(latitude, longitude, 0D, 0.05D, category),
-                getStoreByCategoryAndDistanceBetween(latitude, longitude, 0.05D, 0.1D, category),
-                getStoreByCategoryAndDistanceBetween(latitude, longitude, 0.1D, 0.5D, category),
-                getStoreByCategoryAndDistanceBetween(latitude, longitude, 0.5D, 1D, category)
-        );
-    }
 
     @Override
     @Transactional(readOnly = true)
