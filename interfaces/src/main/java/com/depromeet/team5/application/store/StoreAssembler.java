@@ -52,28 +52,59 @@ public class StoreAssembler {
      * @param location 기준 위치
      * @return 거리별로 구분된 dto
      */
-    public CategoryDistanceDto toCategoryDistanceDto(List<Store> stores, Location location) {
+    public StoresGroupByDistanceDto toCategoryDistanceDto(List<Store> stores, Location location) {
         List<StoreCardDto> storeCardDtos = stores.stream()
                 .map(it -> this.toStoreCardDto(it, location))
                 .collect(Collectors.toList());
 
-        CategoryDistanceDto categoryDistanceDto = new CategoryDistanceDto();
-        categoryDistanceDto.setStoreList50(storeCardDtos.stream()
+        StoresGroupByDistanceDto storesGroupByDistanceDto = new StoresGroupByDistanceDto();
+        storesGroupByDistanceDto.setStoreList50(storeCardDtos.stream()
                 .filter(it -> it.getDistance() < 50)
                 .collect(Collectors.toList()));
-        categoryDistanceDto.setStoreList100(storeCardDtos.stream()
+        storesGroupByDistanceDto.setStoreList100(storeCardDtos.stream()
                 .filter(it -> it.getDistance() < 100)
                 .collect(Collectors.toList()));
-        categoryDistanceDto.setStoreList500(storeCardDtos.stream()
+        storesGroupByDistanceDto.setStoreList500(storeCardDtos.stream()
                 .filter(it -> it.getDistance() < 500)
                 .collect(Collectors.toList()));
-        categoryDistanceDto.setStoreList1000(storeCardDtos.stream()
+        storesGroupByDistanceDto.setStoreList1000(storeCardDtos.stream()
                 .filter(it -> it.getDistance() < 1000)
                 .collect(Collectors.toList()));
-        categoryDistanceDto.setStoreListOver1000(storeCardDtos.stream()
+        storesGroupByDistanceDto.setStoreListOver1000(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 1000)
                 .collect(Collectors.toList()));
-        return categoryDistanceDto;
+        return storesGroupByDistanceDto;
+    }
+
+    /**
+     * 입력받은 위치를 기준으로 가게와의 거리를 계산하고 dto 로 변환합니다.
+     *
+     * @param stores 가게 목록
+     * @param location 기준 위치
+     * @return 별점 별로 구분된 dto
+     */
+    public StoresGroupByRatingDto toCategoryReviewDto(List<Store> stores, Location location) {
+        List<StoreCardDto> storeCardDtos = stores.stream()
+                .map(it -> this.toStoreCardDto(it, location))
+                .collect(Collectors.toList());
+
+        StoresGroupByRatingDto storesGroupByRatingDto = new StoresGroupByRatingDto();
+        storesGroupByRatingDto.setStoreList0(storeCardDtos.stream()
+                .filter(it -> it.getRating() < 1.0f)
+                .collect(Collectors.toList()));
+        storesGroupByRatingDto.setStoreList1(storeCardDtos.stream()
+                .filter(it -> it.getRating() < 2.0f)
+                .collect(Collectors.toList()));
+        storesGroupByRatingDto.setStoreList2(storeCardDtos.stream()
+                .filter(it -> it.getRating() < 3.0f)
+                .collect(Collectors.toList()));
+        storesGroupByRatingDto.setStoreList3(storeCardDtos.stream()
+                .filter(it -> it.getRating() < 4.0f)
+                .collect(Collectors.toList()));
+        storesGroupByRatingDto.setStoreList4(storeCardDtos.stream()
+                .filter(it -> it.getRating() <= 5.0f)
+                .collect(Collectors.toList()));
+        return storesGroupByRatingDto;
     }
 
     public StoreCardDto toStoreCardDto(Store store, Location location) {

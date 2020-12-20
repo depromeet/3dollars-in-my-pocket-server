@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CategoryDistanceDto {
+public class StoresGroupByDistanceDto {
 
     private List<StoreCardDto> storeList50;
 

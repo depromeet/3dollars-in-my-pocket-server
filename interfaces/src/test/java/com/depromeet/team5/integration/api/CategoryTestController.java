@@ -1,6 +1,6 @@
 package com.depromeet.team5.integration.api;
 
-import com.depromeet.team5.dto.CategoryDistanceDto;
+import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +17,7 @@ public class CategoryTestController {
         this.objectMapper = objectMapper;
     }
 
-    public CategoryDistanceDto getDistanceAll(String accessToken, Double latitude, Double longitude, String category) throws Exception {
+    public StoresGroupByDistanceDto getDistanceAll(String accessToken, Double latitude, Double longitude, String category) throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/category/distance")
                 .header("Authorization", accessToken)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -25,6 +25,6 @@ public class CategoryTestController {
                 .param("longitude", longitude.toString())
                 .param("category", category))
                 .andReturn();
-        return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), CategoryDistanceDto.class);
+        return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoresGroupByDistanceDto.class);
     }
 }

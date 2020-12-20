@@ -3,9 +3,9 @@ package com.depromeet.team5.application.store;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.Store;
-import com.depromeet.team5.dto.CategoryDistanceDto;
+import com.depromeet.team5.dto.StoresGroupByDistanceDto;
+import com.depromeet.team5.dto.StoresGroupByRatingDto;
 import com.depromeet.team5.dto.StoreDetailDto;
-import com.depromeet.team5.service.CategoryService;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreApplicationService {
     private final StoreService storeService;
-    private final CategoryService categoryService;
     private final StoreAssembler storeAssembler;
 
     public StoreDetailDto getStoreDetail(Long storeId, Double latitude, Double longitude) {
@@ -32,7 +31,7 @@ public class StoreApplicationService {
         return storeAssembler.toStoreDetailDto(store, latitude, longitude);
     }
 
-    public CategoryDistanceDto getStoresByCategoryGroupByDistance(
+    public StoresGroupByDistanceDto getStoresByCategoryGroupByDistance(
             CategoryTypes categoryType,
             Location userLocation,
             Location mapLocation
@@ -41,13 +40,30 @@ public class StoreApplicationService {
         Assert.notNull(userLocation, "'userLocation' must not be null");
         Assert.notNull(mapLocation, "'mapLocation' must not be null");
 
-        List<Store> storeList = categoryService.getStoreByCategoryAndDistanceBetween(
-                mapLocation.getLatitude(),
-                mapLocation.getLongitude(),
+        List<Store> storeList = storeService.getStoresByDistanceBetweenAndCategory(
+                mapLocation,
                 0.0,
                 1.0,
                 categoryType
         );
         return storeAssembler.toCategoryDistanceDto(storeList, userLocation);
+    }
+
+    public StoresGroupByRatingDto getStoresByCategoryGroupByRating(
+        CategoryTypes categoryType,
+        Location userLocation,
+        Location mapLocation
+    ) {
+        Assert.notNull(categoryType, "'categoryType' must not be null");
+        Assert.notNull(userLocation, "'userLocation' must not be null");
+        Assert.notNull(mapLocation, "'mapLocation' must not be null");
+
+        List<Store> storeList = storeService.getStoresByDistanceBetweenAndCategory(
+                mapLocation,
+                0.0,
+                1.0,
+                categoryType
+        );
+        return storeAssembler.toCategoryReviewDto(storeList, userLocation);
     }
 }

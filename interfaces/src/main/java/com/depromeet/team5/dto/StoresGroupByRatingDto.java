@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CategoryReviewDto {
+public class StoresGroupByRatingDto {
 
     private List<StoreCardDto> storeList4;
 
