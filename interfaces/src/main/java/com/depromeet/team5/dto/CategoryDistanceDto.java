@@ -14,4 +14,6 @@ public class CategoryDistanceDto {
     private List<StoreCardDto> storeList500;
 
     private List<StoreCardDto> storeList1000;
+
+    private List<StoreCardDto> storeListOver1000;
 }

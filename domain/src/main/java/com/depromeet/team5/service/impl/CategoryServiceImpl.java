@@ -42,8 +42,10 @@ public class CategoryServiceImpl implements CategoryService {
         );
     }
 
-    private List<Store> getStoreByCategoryAndDistanceBetween(Double latitude, Double longitude, Double radiusStart, Double radiusEnd, CategoryTypes categoryType) {
-        return storeRepository.findAllByDistance(latitude, longitude, radiusStart, radiusEnd, categoryType.name());
+    @Override
+    @Transactional(readOnly = true)
+    public List<Store> getStoreByCategoryAndDistanceBetween(Double latitude, Double longitude, Double distanceStart, Double distanceEnd, CategoryTypes categoryType) {
+        return storeRepository.findAllByDistance(latitude, longitude, distanceStart, distanceEnd, categoryType.name());
     }
 
     private List<Store> getStoresByCategoryAndRatingBetween(Double latitude, Double longitude, CategoryTypes categoryType, Float ratingStart, Float ratingEnd) {

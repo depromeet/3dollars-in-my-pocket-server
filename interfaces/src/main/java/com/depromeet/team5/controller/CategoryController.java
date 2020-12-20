@@ -1,5 +1,7 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.application.store.StoreApplicationService;
+import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.store.StoresByCategoryAndDistance;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final StoreApplicationService storeApplicationService;
 
     @ApiOperation("거리순으로 특정 카테고리의 가게 정보를 가져옵니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
@@ -34,7 +38,18 @@ public class CategoryController {
     @GetMapping("/distance")
     public ResponseEntity<CategoryDistanceDto> getDistanceAll(@RequestParam Double latitude,
                                                               @RequestParam Double longitude,
+                                                              @RequestParam(required = false) Double mapLatitude,
+                                                              @RequestParam(required = false) Double mapLongitude,
                                                               @RequestParam CategoryTypes category) {
+        if (mapLatitude != null && mapLongitude != null) {
+            return ResponseEntity.ok(
+                    storeApplicationService.getStoresByCategoryGroupByDistance(
+                            category,
+                            Location.of(latitude, longitude),
+                            Location.of(mapLatitude, mapLongitude)
+                    )
+            );
+        }
         return ResponseEntity.ok(
                 toStoresByCategoryAndDistance(
                         categoryService.getStoresByCategoryAndDistance(latitude, longitude, category),
