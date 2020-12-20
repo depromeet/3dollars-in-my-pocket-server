@@ -59,16 +59,16 @@ public class StoreAssembler {
 
         StoresGroupByDistanceDto storesGroupByDistanceDto = new StoresGroupByDistanceDto();
         storesGroupByDistanceDto.setStoreList50(storeCardDtos.stream()
-                .filter(it -> it.getDistance() < 50)
+                .filter(it -> it.getDistance() >= 0 && it.getDistance() < 50)
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreList100(storeCardDtos.stream()
-                .filter(it -> it.getDistance() < 100)
+                .filter(it -> it.getDistance() >= 50 && it.getDistance() < 100)
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreList500(storeCardDtos.stream()
-                .filter(it -> it.getDistance() < 500)
+                .filter(it -> it.getDistance() >= 100 && it.getDistance() < 500)
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreList1000(storeCardDtos.stream()
-                .filter(it -> it.getDistance() < 1000)
+                .filter(it -> it.getDistance() >= 500 && it.getDistance() < 1000)
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreListOver1000(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 1000)
@@ -90,19 +90,19 @@ public class StoreAssembler {
 
         StoresGroupByRatingDto storesGroupByRatingDto = new StoresGroupByRatingDto();
         storesGroupByRatingDto.setStoreList0(storeCardDtos.stream()
-                .filter(it -> it.getRating() < 1.0f)
+                .filter(it -> it.getRating() >= 0.0f && it.getRating() < 1.0f)
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList1(storeCardDtos.stream()
-                .filter(it -> it.getRating() < 2.0f)
+                .filter(it -> it.getRating() >= 1.0f && it.getRating() < 2.0f)
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList2(storeCardDtos.stream()
-                .filter(it -> it.getRating() < 3.0f)
+                .filter(it -> it.getRating() >= 2.0f && it.getRating() < 3.0f)
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList3(storeCardDtos.stream()
-                .filter(it -> it.getRating() < 4.0f)
+                .filter(it -> it.getRating() >= 3.0f && it.getRating() < 4.0f)
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList4(storeCardDtos.stream()
-                .filter(it -> it.getRating() <= 5.0f)
+                .filter(it -> it.getRating() >= 4.0f && it.getRating() <= 5.0f)
                 .collect(Collectors.toList()));
         return storesGroupByRatingDto;
     }
