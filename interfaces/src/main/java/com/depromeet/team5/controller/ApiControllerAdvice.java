@@ -6,7 +6,7 @@ import com.depromeet.team5.dto.FailureResponse;
 import com.depromeet.team5.exception.ApplicationException;
 import com.depromeet.team5.exception.ForbiddenException;
 import com.depromeet.team5.exception.UnauthorizedException;
-import com.depromeet.team5.service.JwtService;
+import com.depromeet.team5.infrastructure.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ public class ApiControllerAdvice {
         if (authorization.equals("KakaoAK " + key)) {
             return null;
         }
-        return jwtService.decode(authorization).getUserId();
+        return jwtService.decode(authorization);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,6 +49,13 @@ public class ApiControllerAdvice {
                         .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .collect(Collectors.joining(", "))
         );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ApiResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.warn("Bad Request Exception", e);
+        return new FailureResponse<>(ResultCode.BAD_REQUEST, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -82,13 +89,6 @@ public class ApiControllerAdvice {
     public ApiResponse handleException(Exception e) {
         log.error("Unhandled Exception", e);
         return new FailureResponse<>(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ApiResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        log.warn("Bad Request Exception", e);
-        return new FailureResponse<>(ResultCode.BAD_REQUEST, e.getMessage());
     }
 
     private HttpStatus resolveStatusCode(ResultCode resultCode) {

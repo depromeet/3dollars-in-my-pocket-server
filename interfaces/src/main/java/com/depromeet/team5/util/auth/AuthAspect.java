@@ -6,7 +6,7 @@ import com.depromeet.team5.exception.*;
 import com.depromeet.team5.exception.InvalidAccessTokenException;
 import com.depromeet.team5.exception.WithdrawalUserException;
 import com.depromeet.team5.repository.UserRepository;
-import com.depromeet.team5.service.JwtService;
+import com.depromeet.team5.infrastructure.jwt.JwtService;
 import com.depromeet.team5.util.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,17 +33,11 @@ public class AuthAspect {
                 .map(it -> it.getHeader(AUTHORIZATION))
                 .orElseThrow(InvalidAccessTokenException::new);
 
-        final JwtService.Token token = jwtService.decode(accessToken);
-
-        if (token == null) {
-            return new InvalidAccessTokenException();
-        } else {
-            Long userId = token.getUserId();
-            User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId, ResultCode.UNAUTHORIZED_USER_NOT_FOUND));
-            if (user.isWithdrawal()) {
-                throw new WithdrawalUserException(userId);
-            }
-            return pjp.proceed(pjp.getArgs());
+        Long userId = jwtService.decode(accessToken);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId, ResultCode.UNAUTHORIZED_USER_NOT_FOUND));
+        if (user.isWithdrawal()) {
+            throw new WithdrawalUserException(userId);
         }
+        return pjp.proceed(pjp.getArgs());
     }
 }

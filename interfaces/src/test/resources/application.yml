@@ -10,3 +10,6 @@ aws:
 kakao:
   key:
     admin: adminKeyKakao
+jwt:
+  issuer: issuerJwt
+  secret: secretJwt

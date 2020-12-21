@@ -15,12 +15,14 @@ repositories {
 }
 
 def swagger_version = '2.9.2'
+def java_jwt_version = '3.7.0'
 
 dependencies {
     implementation project(':domain')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "com.auth0:java-jwt:${java_jwt_version}"
     implementation "io.springfox:springfox-swagger2:${swagger_version}"
     implementation "io.springfox:springfox-swagger-ui:${swagger_version}"
     compileOnly 'org.springframework.boot:spring-boot-devtools'

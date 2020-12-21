@@ -6,7 +6,7 @@ import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.dto.UserResponse;
-import com.depromeet.team5.service.JwtService;
+import com.depromeet.team5.infrastructure.jwt.JwtService;
 import com.depromeet.team5.service.LoginService;
 import com.depromeet.team5.service.UserService;
 import com.depromeet.team5.util.auth.Auth;
