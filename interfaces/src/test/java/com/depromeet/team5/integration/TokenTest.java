@@ -35,6 +35,6 @@ class TokenTest {
         mockMvc.perform(get("/api/v1/user/{userId}/token", userId))
                // then
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$").value("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3N1ZXJKd3QiLCJJRCI6MX0.y8f5y9Glws9uCwjj4FUf1XmN64nyZBypkrJBkfvDsf0\n"));
+               .andExpect(jsonPath("$").value("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3N1ZXJKd3QiLCJJRCI6MX0.y8f5y9Glws9uCwjj4FUf1XmN64nyZBypkrJBkfvDsf0"));
     }
 }
