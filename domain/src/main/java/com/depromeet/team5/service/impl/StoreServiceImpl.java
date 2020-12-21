@@ -1,6 +1,7 @@
 package com.depromeet.team5.service.impl;
 
 import com.depromeet.team5.domain.ImageUploadValue;
+import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.exception.StoreNotFoundException;
@@ -72,6 +73,18 @@ public class StoreServiceImpl implements StoreService {
             log.error("Failed to add menuCategory to store. storeId: {}, categoryName: {}",
                     store.getId(), store.getCategory().name());
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType) {
+        return storeRepository.findByDistanceBetweenAndCategory(
+                location.getLatitude(),
+                location.getLongitude(),
+                distanceStart,
+                distanceEnd,
+                categoryType.name()
+        );
     }
 
     @Override

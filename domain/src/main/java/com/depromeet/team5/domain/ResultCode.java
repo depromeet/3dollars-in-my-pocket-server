@@ -5,6 +5,7 @@ public enum ResultCode {
     BAD_REQUEST("요청에 오류가 있습니다. 다시 확인해주세요. ", "클라이언트 에러"),
     NOT_FOUND("요청한 자원이 존재하지 않습니다. 다시 확인해주세요. ", "리소스 존재하지 않음"),
     INTERNAL_SERVER_ERROR("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요. ", "서버 에러"),
+    MAINTENANCE("서버 점검 중입니다. ", "서버 점검"),
     // authorization
     INVALID_TOKEN("유효하지 않은 토큰입니다. 다시 로그인해주세요. ", "사용자 권한 확인 실패"),
     UNAUTHORIZED_USER_NOT_FOUND("사용자 인증에 실패했습니다. ", "사용자 조회 결과 없어서 인증 실패"),
