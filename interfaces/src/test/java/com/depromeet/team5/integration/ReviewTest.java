@@ -86,9 +86,6 @@ class ReviewTest {
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
         Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
-        ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest();
-        reviewUpdateRequest.setContent("updatedReviewContent");
-        reviewUpdateRequest.setRating(0);
         // when
         reviewTestController.delete(accessToken, reviewId);
         // then
