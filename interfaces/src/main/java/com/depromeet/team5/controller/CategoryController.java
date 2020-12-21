@@ -5,7 +5,7 @@ import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.StoresGroupByRatingDto;
-import com.depromeet.team5.util.auth.Auth;
+import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

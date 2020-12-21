@@ -2,7 +2,7 @@ package com.depromeet.team5.controller;
 
 import com.depromeet.team5.dto.FaqTagResponseDto;
 import com.depromeet.team5.service.FaqTagService;
-import com.depromeet.team5.util.auth.Auth;
+import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

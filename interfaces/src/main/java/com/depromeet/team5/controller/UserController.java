@@ -9,7 +9,7 @@ import com.depromeet.team5.dto.UserResponse;
 import com.depromeet.team5.infrastructure.jwt.JwtService;
 import com.depromeet.team5.service.LoginService;
 import com.depromeet.team5.service.UserService;
-import com.depromeet.team5.util.auth.Auth;
+import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
