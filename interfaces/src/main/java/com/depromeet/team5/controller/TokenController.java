@@ -1,6 +1,6 @@
 package com.depromeet.team5.controller;
 
-import com.depromeet.team5.service.JwtService;
+import com.depromeet.team5.infrastructure.jwt.JwtService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,6 @@ public class TokenController {
     @ApiOperation("(개발 환경 전용) User 의 token 을 조회합니다.")
     @GetMapping("/{userId}/token")
     public ResponseEntity<String> getUserToken(@PathVariable Long userId) {
-        return ResponseEntity.ok(
-                new JwtService.TokenRes(jwtService.create(userId)).getToken()
-        );
+        return ResponseEntity.ok(jwtService.create(userId));
     }
 }

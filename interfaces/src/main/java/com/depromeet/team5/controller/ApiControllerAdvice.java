@@ -1,15 +1,16 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.application.security.TokenService;
 import com.depromeet.team5.domain.ResultCode;
 import com.depromeet.team5.dto.ApiResponse;
 import com.depromeet.team5.dto.FailureResponse;
 import com.depromeet.team5.exception.ApplicationException;
 import com.depromeet.team5.exception.ForbiddenException;
+import com.depromeet.team5.exception.InvalidAccessTokenException;
 import com.depromeet.team5.exception.UnauthorizedException;
-import com.depromeet.team5.service.JwtService;
+import com.depromeet.team5.infrastructure.kakao.KakaoDeregisterTokenValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +24,22 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ApiControllerAdvice {
-    private final JwtService jwtService;
-
-    @Value("${kakao.key.admin}")
-    private String key;
+    private final TokenService<Long> jwtService;
+    private final KakaoDeregisterTokenValidator validator;
 
     @ModelAttribute("userId")
     public Long getUserId(@RequestHeader(required = false) String authorization) {
         if (authorization == null) {
             return null;
         }
-        if (authorization.equals("KakaoAK " + key)) {
+        if (validator.supports(authorization)) {
+            if (!validator.isValid(authorization)) {
+                log.warn("Invalid kakao token. KakaoAdminKey is not equal. authorization: {}", authorization);
+                throw new InvalidAccessTokenException();
+            }
             return null;
         }
-        return jwtService.decode(authorization).getUserId();
+        return jwtService.decode(authorization);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,6 +52,13 @@ public class ApiControllerAdvice {
                         .map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .collect(Collectors.joining(", "))
         );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ApiResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        log.warn("Bad Request Exception", e);
+        return new FailureResponse<>(ResultCode.BAD_REQUEST, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -82,13 +92,6 @@ public class ApiControllerAdvice {
     public ApiResponse handleException(Exception e) {
         log.error("Unhandled Exception", e);
         return new FailureResponse<>(ResultCode.INTERNAL_SERVER_ERROR, e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ApiResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        log.warn("Bad Request Exception", e);
-        return new FailureResponse<>(ResultCode.BAD_REQUEST, e.getMessage());
     }
 
     private HttpStatus resolveStatusCode(ResultCode resultCode) {

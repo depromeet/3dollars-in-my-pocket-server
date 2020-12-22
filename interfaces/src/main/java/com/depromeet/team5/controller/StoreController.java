@@ -5,7 +5,7 @@ import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
-import com.depromeet.team5.util.auth.Auth;
+import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

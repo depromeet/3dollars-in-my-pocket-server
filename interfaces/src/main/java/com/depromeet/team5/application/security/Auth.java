@@ -1,4 +1,4 @@
-package com.depromeet.team5.util.auth;
+package com.depromeet.team5.application.security;
 
 import java.lang.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.depromeet.team5.spring;
+package com.depromeet.team5.infrastructure.spring;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
