@@ -6,9 +6,13 @@ public enum ReviewStatus {
     DELETED(false),
     ;
 
-    private final boolean readable;
+    private final boolean visible;
 
-    ReviewStatus(boolean readable) {
-        this.readable = readable;
+    ReviewStatus(boolean visible) {
+        this.visible = visible;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 }

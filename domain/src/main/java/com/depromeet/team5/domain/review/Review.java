@@ -76,6 +76,10 @@ public class Review {
         return this;
     }
 
+    public boolean isVisible() {
+        return status != null && status.isVisible();
+    }
+
     private void validateUser(User user) {
         if (this.user != null && !this.user.equals(user)) {
             throw new ReviewModifiedByNotAuthorException();
