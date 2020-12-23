@@ -6,10 +6,12 @@ import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.dto.UserResponse;
+import com.depromeet.team5.exception.InvalidNicknameException;
 import com.depromeet.team5.infrastructure.jwt.JwtService;
 import com.depromeet.team5.service.LoginService;
 import com.depromeet.team5.service.UserService;
 import com.depromeet.team5.application.security.Auth;
+import io.micrometer.core.instrument.util.StringUtils;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -77,6 +79,9 @@ public class UserController {
     @Auth
     @PutMapping("/nickname")
     public ResponseEntity<String> setNickname(@RequestParam Long userId, @RequestParam String nickName) {
+        if (StringUtils.isBlank(nickName)) {
+            throw new InvalidNicknameException("'nickname' must not be null, empty or blank");
+        }
         loginService.setNickname(userId, nickName);
         return new ResponseEntity<>("nickname update success", HttpStatus.OK);
     }
