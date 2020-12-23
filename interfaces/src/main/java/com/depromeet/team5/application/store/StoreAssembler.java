@@ -1,6 +1,7 @@
 package com.depromeet.team5.application.store;
 
 import com.depromeet.team5.application.review.ReviewAssembler;
+import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.ImageDto;
 import com.depromeet.team5.dto.MenuDto;
@@ -34,6 +35,7 @@ public class StoreAssembler {
         storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
         storeDetailDto.setMenu(store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList()));
         storeDetailDto.setReviewDetailResponses(store.getReview().stream()
+                .filter(Review::isVisible)
                 .map(reviewAssembler::toReviewDetailResponse)
                 .sorted(Comparator.comparing(ReviewDetailResponse::getCreatedAt).reversed())
                 .collect(Collectors.toList()));
