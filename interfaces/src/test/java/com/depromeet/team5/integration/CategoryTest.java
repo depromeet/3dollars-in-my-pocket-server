@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.dto.CategoryDistanceDto;
+import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.integration.api.CategoryTestController;
 import com.depromeet.team5.integration.api.UserTestController;
@@ -44,9 +44,9 @@ class CategoryTest {
         String accessToken = loginDto.getToken();
         Long userId = loginDto.getUserId();
         // when
-        CategoryDistanceDto categoryDistanceDto =
+        StoresGroupByDistanceDto storesGroupByDistanceDto =
                 categoryTestController.getDistanceAll(accessToken, 37.0, 127.0, "bungeoppang");
         // then
-        assertThat(categoryDistanceDto).isNotNull();
+        assertThat(storesGroupByDistanceDto).isNotNull();
     }
 }

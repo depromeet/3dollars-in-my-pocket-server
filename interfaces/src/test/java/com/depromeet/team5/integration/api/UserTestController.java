@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserTestController {
     private final MockMvc mockMvc;
@@ -64,7 +65,7 @@ public class UserTestController {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("userId", userId.toString())
                 .param("nickName", nickname))
-                .andReturn();
+                .andExpect(status().isOk());
     }
 
     public void signout(String token) throws Exception {

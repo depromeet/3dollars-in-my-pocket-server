@@ -5,7 +5,7 @@ import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
-import com.depromeet.team5.util.auth.Auth;
+import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -69,7 +68,7 @@ public class StoreController {
         return ResponseEntity.ok(storeIdDto);
     }
 
-    @ApiOperation("모든 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiOperation("내 주변 가게들을 조회합니다(거리 가까운순 5개). 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/get")

@@ -41,31 +41,11 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "  GROUP BY id" +
             "  HAVING distance >= :radiusStart AND distance < :radiusEnd" +
             "  ORDER BY distance", nativeQuery = true)
-    List<Store> findAllByDistance(@Param("latitude") final Double latitude,
-                                  @Param("longitude") final Double longitude,
-                                  @Param("radiusStart") final Double radiusStart,
-                                  @Param("radiusEnd") final Double radiusEnd,
-                                  @Param("category") final String category);
-
-    @Query(value = "SELECT *, (" +
-            "    6371 * acos (" +
-            "      cos ( radians( :latitude ) )  " +
-            "      * cos( radians( latitude ) )" +
-            "      * cos( radians( longitude ) - radians( :longitude ) )" +
-            "      + sin ( radians( :latitude ) )" +
-            "      * sin( radians( latitude ) )" +
-            "    )" +
-            "  ) AS distance" +
-            "  FROM store" +
-            "  WHERE category LIKE :category AND rating >= :ratingStart AND rating < :ratingEnd" +
-            "  GROUP BY id" +
-            "  HAVING distance <= 1" +
-            "  ORDER BY distance", nativeQuery = true)
-    List<Store> findAllByReview(@Param("latitude") final Double latitude,
-                                @Param("longitude") final Double longitude,
-                                @Param("category") final String category,
-                                @Param("ratingStart") final Float ratingStart,
-                                @Param("ratingEnd") final Float ratingEnd);
+    List<Store> findByDistanceBetweenAndCategory(@Param("latitude") final Double latitude,
+                                                 @Param("longitude") final Double longitude,
+                                                 @Param("radiusStart") final Double distanceStart,
+                                                 @Param("radiusEnd") final Double distanceEnd,
+                                                 @Param("category") final String category);
 
     Page<Store> findAllByUser(User user, Pageable pageable);
 }
