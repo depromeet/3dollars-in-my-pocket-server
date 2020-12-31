@@ -62,18 +62,23 @@ public class StoreAssembler {
         StoresGroupByDistanceDto storesGroupByDistanceDto = new StoresGroupByDistanceDto();
         storesGroupByDistanceDto.setStoreList50(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 0 && it.getDistance() < 50)
+                .sorted(Comparator.comparing(StoreCardDto::getDistance))
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreList100(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 50 && it.getDistance() < 100)
+                .sorted(Comparator.comparing(StoreCardDto::getDistance))
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreList500(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 100 && it.getDistance() < 500)
+                .sorted(Comparator.comparing(StoreCardDto::getDistance))
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreList1000(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 500 && it.getDistance() < 1000)
+                .sorted(Comparator.comparing(StoreCardDto::getDistance))
                 .collect(Collectors.toList()));
         storesGroupByDistanceDto.setStoreListOver1000(storeCardDtos.stream()
                 .filter(it -> it.getDistance() >= 1000)
+                .sorted(Comparator.comparing(StoreCardDto::getDistance))
                 .collect(Collectors.toList()));
         return storesGroupByDistanceDto;
     }
@@ -93,18 +98,23 @@ public class StoreAssembler {
         StoresGroupByRatingDto storesGroupByRatingDto = new StoresGroupByRatingDto();
         storesGroupByRatingDto.setStoreList0(storeCardDtos.stream()
                 .filter(it -> it.getRating() >= 0.0f && it.getRating() < 1.0f)
+                .sorted(Comparator.comparing(StoreCardDto::getRating).reversed())
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList1(storeCardDtos.stream()
                 .filter(it -> it.getRating() >= 1.0f && it.getRating() < 2.0f)
+                .sorted(Comparator.comparing(StoreCardDto::getRating).reversed())
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList2(storeCardDtos.stream()
                 .filter(it -> it.getRating() >= 2.0f && it.getRating() < 3.0f)
+                .sorted(Comparator.comparing(StoreCardDto::getRating).reversed())
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList3(storeCardDtos.stream()
                 .filter(it -> it.getRating() >= 3.0f && it.getRating() < 4.0f)
+                .sorted(Comparator.comparing(StoreCardDto::getRating).reversed())
                 .collect(Collectors.toList()));
         storesGroupByRatingDto.setStoreList4(storeCardDtos.stream()
                 .filter(it -> it.getRating() >= 4.0f && it.getRating() <= 5.0f)
+                .sorted(Comparator.comparing(StoreCardDto::getRating).reversed())
                 .collect(Collectors.toList()));
         return storesGroupByRatingDto;
     }

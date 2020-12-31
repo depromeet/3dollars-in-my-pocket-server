@@ -32,9 +32,9 @@ public class LocationDistanceUtils {
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
 
-        if (unit == "kilometer") {
+        if ("kilometer".equals(unit)) {
             dist = dist * 1.609344;
-        } else if (unit == "meter") {
+        } else if ("meter".equals(unit)) {
             dist = dist * 1609.344;
         }
 

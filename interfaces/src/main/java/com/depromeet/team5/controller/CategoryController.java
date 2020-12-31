@@ -33,13 +33,14 @@ public class CategoryController {
             @RequestParam(required = false) Double mapLongitude,
             @RequestParam CategoryTypes category
     ) {
+        Location userLocation = Location.of(latitude, longitude);
         Location mapLocation = mapLatitude != null && mapLongitude != null
                 ? Location.of(mapLatitude, mapLongitude)
-                : Location.of(latitude, longitude);
+                : userLocation;
         return ResponseEntity.ok(
                 storeApplicationService.getStoresByCategoryGroupByDistance(
                         category,
-                        Location.of(latitude, longitude),
+                        userLocation,
                         mapLocation
                 )
         );
@@ -56,14 +57,15 @@ public class CategoryController {
             @RequestParam(required = false) Double mapLongitude,
             @RequestParam CategoryTypes category
     ) {
+        Location userLocation = Location.of(latitude, longitude);
         Location mapLocation = mapLatitude != null && mapLongitude != null
                 ? Location.of(mapLatitude, mapLongitude)
-                : Location.of(latitude, longitude);
+                : userLocation;
 
         return ResponseEntity.ok(
                 storeApplicationService.getStoresByCategoryGroupByRating(
                         category,
-                        Location.of(latitude, longitude),
+                        userLocation,
                         mapLocation
                 )
         );
