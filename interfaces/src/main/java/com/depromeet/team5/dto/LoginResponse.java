@@ -3,7 +3,7 @@ package com.depromeet.team5.dto;
 import lombok.Data;
 
 @Data
-public class LoginDto {
+public class LoginResponse {
 
     private String token;
 

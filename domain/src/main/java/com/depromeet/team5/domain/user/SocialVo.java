@@ -6,4 +6,5 @@ import lombok.Value;
 public class SocialVo {
     String socialId;
     SocialTypes socialType;
+    String token;
 }

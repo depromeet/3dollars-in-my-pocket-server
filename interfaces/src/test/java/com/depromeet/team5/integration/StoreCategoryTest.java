@@ -2,8 +2,7 @@ package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.store.CategoryTypes;
-import com.depromeet.team5.domain.store.MenuCategory;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.StoreIdDto;
 import com.depromeet.team5.integration.api.StoreTestController;
@@ -54,7 +53,7 @@ class StoreCategoryTest {
     @Test
     void save() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         menuCategoryService.create(CategoryTypes.BUNGEOPPANG.name());
         // when
         StoreDto storeDto = new StoreDto();

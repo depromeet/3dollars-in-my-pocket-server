@@ -11,4 +11,6 @@ public class UserDto {
     private String name;
 
     private SocialTypes socialType;
+
+    private String token;
 }

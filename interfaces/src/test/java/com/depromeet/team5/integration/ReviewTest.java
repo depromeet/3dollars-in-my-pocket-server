@@ -7,7 +7,6 @@ import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.depromeet.team5.repository.ReviewRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +41,7 @@ class ReviewTest {
     void setUp() throws Exception {
         reviewTestController = new ReviewTestController(mockMvc, objectMapper);
 
-        LoginDto loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
+        LoginResponse loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
         this.accessToken = loginDto.getToken();
         this.userId = loginDto.getUserId();
         StoreIdDto storeIdDto = new StoreTestController(mockMvc, objectMapper).createStore(accessToken, loginDto.getUserId());

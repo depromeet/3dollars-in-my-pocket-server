@@ -2,7 +2,7 @@ package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserResponse;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +42,7 @@ class UserTest {
     @Test
     void getMe() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         String accessToken = loginDto.getToken();
         userTestController.setNickname(accessToken, loginDto.getUserId(), "nickname");
         // when
@@ -55,7 +55,7 @@ class UserTest {
     @Test
     void setNicknameTest0() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         String accessToken = loginDto.getToken();
         Long userId = loginDto.getUserId();
         // when
@@ -69,7 +69,7 @@ class UserTest {
     @Test
     void setNicknameTest1() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         String accessToken = loginDto.getToken();
         Long userId = loginDto.getUserId();
         // when
@@ -85,7 +85,7 @@ class UserTest {
     @Test
     void setNicknameTest2() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         String accessToken = loginDto.getToken();
         Long userId = loginDto.getUserId();
         // when
