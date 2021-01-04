@@ -74,10 +74,9 @@ public class User {
         throw new NickNameDuplicatedException(withdrawalUser.getUserId(), withdrawalUser.getName());
     }
 
-    public User signOut() {
+    public void signOut() {
         this.setState(false);
         this.setStatus(UserStatusType.INACTIVE);
-        return this;
     }
 
     public boolean isWithdrawal() {

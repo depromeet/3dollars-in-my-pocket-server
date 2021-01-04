@@ -3,7 +3,6 @@ package com.depromeet.team5.application.user;
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.SocialVo;
 import com.depromeet.team5.dto.LoginResponse;
-import com.depromeet.team5.exception.BadRequestException;
 import com.depromeet.team5.exception.InvalidAccessTokenException;
 import com.depromeet.team5.infrastructure.apple.AppleTokenVerifier;
 import com.depromeet.team5.infrastructure.kakao.KakaoTokenVerifier;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserApplicationService {
 
     private final UserService userService;
@@ -24,6 +22,7 @@ public class UserApplicationService {
     private final KakaoTokenVerifier kakaoTokenVerifier;
     private final AppleTokenVerifier appleTokenVerifier;
 
+    @Transactional
     public LoginResponse login(SocialVo socialVo) {
 
         boolean isVerified = false;
@@ -43,6 +42,7 @@ public class UserApplicationService {
         throw new InvalidAccessTokenException();
     }
 
+    @Transactional(readOnly = true)
     public UserResponse getMe(Long userId) {
 
         User user = userService.getActiveUser(userId);
