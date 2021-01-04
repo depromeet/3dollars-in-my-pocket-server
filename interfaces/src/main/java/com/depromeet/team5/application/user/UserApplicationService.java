@@ -3,7 +3,9 @@ package com.depromeet.team5.application.user;
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.SocialVo;
 import com.depromeet.team5.dto.LoginResponse;
+import com.depromeet.team5.exception.BadRequestException;
 import com.depromeet.team5.exception.InvalidAccessTokenException;
+import com.depromeet.team5.infrastructure.apple.AppleTokenVerifier;
 import com.depromeet.team5.infrastructure.kakao.KakaoTokenVerifier;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.UserResponse;
@@ -20,14 +22,20 @@ public class UserApplicationService {
     private final UserService userService;
     private final UserAssembler userAssembler;
     private final KakaoTokenVerifier kakaoTokenVerifier;
+    private final AppleTokenVerifier appleTokenVerifier;
 
     public LoginResponse login(SocialVo socialVo) {
+
         boolean isVerified = false;
         SocialTypes socialType = socialVo.getSocialType();
         String token = socialVo.getToken();
+
         if (socialType.equals(SocialTypes.KAKAO)) {
             isVerified = kakaoTokenVerifier.isVerified(token);
+        } else if (socialType.equals(SocialTypes.APPLE)) {
+            isVerified = appleTokenVerifier.isVerified(token);
         }
+
         if (isVerified) {
             User user = userService.getOrCreateUser(socialVo.getSocialId(), socialType);
             return userAssembler.toLoginResponse(user);
@@ -36,6 +44,7 @@ public class UserApplicationService {
     }
 
     public UserResponse getMe(Long userId) {
+
         User user = userService.getActiveUser(userId);
         return userAssembler.toUserResponse(user);
     }
