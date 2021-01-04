@@ -3,11 +3,9 @@ package com.depromeet.team5.controller;
 import com.depromeet.team5.application.user.UserApplicationService;
 import com.depromeet.team5.domain.user.SocialVo;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.dto.UserResponse;
-import com.depromeet.team5.infrastructure.jwt.JwtService;
-import com.depromeet.team5.service.LoginService;
 import com.depromeet.team5.service.UserService;
 import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.*;
@@ -24,21 +22,14 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final LoginService loginService;
     private final UserService userService;
-    private final JwtService jwtService;
     private final UserApplicationService userApplicationService;
 
     @ApiOperation("로그인을 하여 토큰을 발급받습니다.")
     @PostMapping("/login")
-    public ResponseEntity<LoginDto> login(@RequestBody UserDto userDto) {
-        SocialVo socialVo = SocialVo.of(userDto.getSocialId(), userDto.getSocialType());
-        User user = loginService.login(socialVo);
-        LoginDto loginDto = new LoginDto();
-        loginDto.setUserId(user.getId());
-        loginDto.setState(user.getState());
-        loginDto.setToken(jwtService.create(user.getId()));
-        return new ResponseEntity<>(loginDto, HttpStatus.OK);
+    public ResponseEntity<LoginResponse> login(@RequestBody UserDto userDto) {
+        SocialVo socialVo = SocialVo.of(userDto.getSocialId(), userDto.getSocialType(), userDto.getToken());
+        return ResponseEntity.ok(userApplicationService.login(socialVo));
     }
 
     @ApiOperation("내 정보를 조회합니다. 인증이 필요한 요청입니다.")
@@ -69,7 +60,7 @@ public class UserController {
     @Auth
     @GetMapping("/info")
     public ResponseEntity<User> userInfo(@RequestParam Long userId) {
-        return new ResponseEntity<>(loginService.userInfo(userId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getActiveUser(userId), HttpStatus.OK);
     }
 
     @ApiOperation("사용자의 닉네임을 설정합니다. 인증이 필요한 요청입니다.")
@@ -77,7 +68,7 @@ public class UserController {
     @Auth
     @PutMapping("/nickname")
     public ResponseEntity<String> setNickname(@RequestParam Long userId, @RequestParam String nickName) {
-        loginService.setNickname(userId, nickName);
+        userService.setNickname(userId, nickName);
         return new ResponseEntity<>("nickname update success", HttpStatus.OK);
     }
 
@@ -86,7 +77,7 @@ public class UserController {
     @Auth
     @PostMapping("/signout")
     public ResponseEntity<String> signOutUser(@ModelAttribute("userId") @ApiIgnore Long userId) {
-        userService.signout(userId);
+        userService.signOut(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

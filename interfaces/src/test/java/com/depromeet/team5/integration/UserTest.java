@@ -3,7 +3,7 @@ package com.depromeet.team5.integration;
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.dto.UserResponse;
 import com.depromeet.team5.integration.api.UserTestController;
@@ -40,7 +40,7 @@ class UserTest {
     @Test
     void getMe() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         String accessToken = loginDto.getToken();
         userTestController.setNickname(accessToken, loginDto.getUserId(), "nickname");
         // when
@@ -56,7 +56,7 @@ class UserTest {
         UserDto userDto = new UserDto();
         userDto.setSocialType(SocialTypes.KAKAO);
         userDto.setSocialId("socialId");
-        LoginDto loginDto = userTestController.login(userDto);
+        LoginResponse loginDto = userTestController.login(userDto);
         String accessToken = loginDto.getToken();
         Long userId = loginDto.getUserId();
         // when

@@ -3,7 +3,7 @@ package com.depromeet.team5.integration;
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.UserStatusType;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.depromeet.team5.repository.UserRepository;
@@ -42,7 +42,7 @@ class SignOutTest {
     @Test
     void siginout() throws Exception {
         // given
-        LoginDto loginDto = this.login( "kakao1", SocialTypes.KAKAO);
+        LoginResponse loginDto = this.login( "kakao1", SocialTypes.KAKAO);
         // when
         String token = loginDto.getToken();
         userTestController.signout(token);
@@ -54,23 +54,23 @@ class SignOutTest {
     @Test
     void signout_signin() throws Exception {
         // given
-        LoginDto firstSignUpResult = this.login( "kakao1", SocialTypes.KAKAO);
+        LoginResponse firstSignUpResult = this.login( "kakao1", SocialTypes.KAKAO);
         String token = firstSignUpResult.getToken();
         userTestController.signout(token);
         assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
                 .filter(it -> it.getStatus() == UserStatusType.INACTIVE)).isPresent();
         // when
-        LoginDto loginDto = this.login("kakao1", SocialTypes.KAKAO);
+        LoginResponse loginDto = this.login("kakao1", SocialTypes.KAKAO);
         // then
         assertThat(loginDto.getUserId()).isEqualTo(firstSignUpResult.getUserId());
         assertThat(loginDto.getState()).isFalse();
     }
 
-    private LoginDto login(String socialId, SocialTypes socialType) throws Exception {
+    private LoginResponse login(String socialId, SocialTypes socialType) throws Exception {
         UserDto userDto = new UserDto();
         userDto.setSocialId(socialId);
         userDto.setSocialType(socialType);
-        LoginDto loginDto = userTestController.login(userDto);
+        LoginResponse loginDto = userTestController.login(userDto);
         assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
                 .filter(it -> it.getStatus() == UserStatusType.ACTIVE)).isPresent();
         return loginDto;

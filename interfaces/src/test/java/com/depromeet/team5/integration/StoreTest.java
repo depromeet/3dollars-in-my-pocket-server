@@ -1,10 +1,8 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.dto.*;
-import com.depromeet.team5.integration.api.ReviewTestController;
 import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +45,7 @@ class StoreTest {
     @Test
     void save() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         StoreDto storeDto = new StoreDto();
         storeDto.setStoreName("storeName");
         storeDto.setLatitude(37.0);
@@ -71,7 +69,7 @@ class StoreTest {
     @Test
     void get_given_invalid_latitude_should_return_400_bad_request() throws Exception{
         //given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         //when
         mockMvc.perform(get("/api/v1/store/get?latitude=37.1%26longitude=127.1")
                 .header("Authorization", loginDto.getToken()))
