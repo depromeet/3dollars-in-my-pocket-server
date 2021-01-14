@@ -35,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User userInfo(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         if (user.getStatus() == UserStatusType.INACTIVE)
@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
         if (userRepository.findFirst1ByNameAndStatus(trimmedNickname, UserStatusType.ACTIVE).isPresent()) {
             throw new NickNameDuplicatedException(userId, nickname);
         }
-        user.setName(nickname);
+        user.setName(trimmedNickname);
     }
 
     private User getOrCreateUser(String socialId, SocialTypes socialType) {
@@ -68,7 +68,7 @@ public class LoginServiceImpl implements LoginService {
             WithdrawalUser withdrawalUser = withdrawalUserOptional.get();
             User user = userRepository.findById(withdrawalUser.getUserId())
                     .map(it -> it.resignin(userRepository, withdrawalUser))
-                    .orElseThrow(() -> new UserNotFoundException(withdrawalUser.getUserId()));
+                    .orElseGet(() -> createUser(socialId, socialType));
             withdrawalUserRepository.delete(withdrawalUser);
             return user;
         }

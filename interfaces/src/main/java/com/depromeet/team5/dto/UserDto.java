@@ -8,7 +8,5 @@ public class UserDto {
 
     private String socialId;
 
-    private String name;
-
     private SocialTypes socialType;
 }
