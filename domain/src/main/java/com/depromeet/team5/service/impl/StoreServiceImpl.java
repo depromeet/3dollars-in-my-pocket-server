@@ -4,6 +4,7 @@ import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
+import com.depromeet.team5.exception.ImageNotFoundException;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.StoreDeleteRequestDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;
@@ -31,13 +32,13 @@ public class StoreServiceImpl implements StoreService {
     private final S3FileUploadService s3FileUploadService;
     private final MenuCategoryRepository menuCategoryRepository;
     private final StoreMenuCategoryRepository storeMenuCategoryRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     @Transactional
-    public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues) {
+    public Store saveStore(StoreCreateValue storeCreateValue, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        List<Image> image = convertImage(imageUploadValues);
-        Store store = Store.from(storeCreateValue, image, user);
+        Store store = Store.from(storeCreateValue, user);
         storeRepository.save(store);
         this.addStoreMenuCategory(store.getId());
         return store;
@@ -108,10 +109,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues) {
+    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> image = convertImage(imageUploadValues);
-        store.setStore(storeUpdateValue, image);
+        store.setStore(storeUpdateValue);
         storeRepository.save(store);
     }
 
@@ -128,6 +128,15 @@ public class StoreServiceImpl implements StoreService {
         } else {
             store.addDeleteId(storeId, userId, deleteReasonType);
         }
+    }
+
+    @Override
+    @Transactional
+    public void saveImage(Long storeId, List<ImageUploadValue> imageUploadValues) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
+        List<Image> image = convertImage(imageUploadValues);
+        store.addImage(image);
+        storeRepository.save(store);
     }
 
     private List<Image> convertImage(List<ImageUploadValue> imageUploadValues) {

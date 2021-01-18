@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface StoreService {
-    Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues);
+    Store saveStore(StoreCreateValue storeCreateValue, Long userId);
 
     List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType);
 
@@ -19,7 +19,10 @@ public interface StoreService {
 
     Store getStore(Long storeId);
 
-    void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues);
+    void updateStore(StoreUpdateValue storeUpdateValue, Long storeId);
 
     void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType);
+
+    void saveImage(Long storeId, List<ImageUploadValue> imageUploadValues);
+
 }

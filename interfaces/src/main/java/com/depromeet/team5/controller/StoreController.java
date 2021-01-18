@@ -41,8 +41,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
-                                           @RequestPart(value = "image", required = false) List<MultipartFile> image,
+    public ResponseEntity<StoreIdDto> save(@RequestBody StoreDto storeDto,
                                            @RequestParam Long userId) {
         Store store = storeService.saveStore(
                 StoreCreateValue.of(
@@ -56,12 +55,7 @@ public class StoreController {
                                         .collect(Collectors.toList())
                                 ).orElse(Collections.emptyList())
                 ),
-                userId,
-                Optional.ofNullable(image)
-                        .map(images -> images.stream()
-                                .map(this::toImageUploadValue)
-                                .collect(Collectors.toList())
-                        ).orElse(Collections.emptyList())
+                userId
         );
         StoreIdDto storeIdDto = new StoreIdDto();
         storeIdDto.setStoreId(store.getId());
@@ -118,8 +112,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
-    public ResponseEntity<String> updateStore(StoreUpdateDto storeUpdateDto,
-                                              @RequestPart(value = "image", required = false) List<MultipartFile> image,
+    public ResponseEntity<String> updateStore(@RequestBody StoreUpdateDto storeUpdateDto,
                                               @RequestParam Long storeId) {
         storeService.updateStore(
                 StoreUpdateValue.of(
@@ -132,12 +125,7 @@ public class StoreController {
                                         .collect(Collectors.toList()))
                                 .orElse(Collections.emptyList())
                 ),
-                storeId,
-                Optional.ofNullable(image)
-                        .map(it -> it.stream()
-                                .map(this::toImageUploadValue)
-                                .collect(Collectors.toList()))
-                        .orElse(Collections.emptyList())
+                storeId
         );
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }
@@ -151,6 +139,21 @@ public class StoreController {
                                          @RequestParam DeleteReasonType deleteReasonType) {
         storeService.deleteStore(storeId, userId, deleteReasonType);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
+    }
+
+    @ApiOperation("가게의 이미지를 등록합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @PostMapping("/image")
+    public ResponseEntity<String> saveImage(ImageRequestDto imageRequestDto,
+                                            @RequestPart(value = "image", required = false) List<MultipartFile> image) {
+        storeService.saveImage(imageRequestDto.getStoreId(),
+                Optional.ofNullable(image)
+                        .map(it -> it.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList()))
+                        .orElse(Collections.emptyList()));
+        return new ResponseEntity<>("image save success", HttpStatus.OK);
     }
 
     private ImageUploadValue toImageUploadValue(MultipartFile multipartFile) {
