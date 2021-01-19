@@ -139,6 +139,14 @@ public class StoreServiceImpl implements StoreService {
         storeRepository.save(store);
     }
 
+    @Override
+    @Transactional
+    public void deleteImage(Long imageId) {
+        Image image = imageRepository.findById(imageId).orElseThrow(() -> new ImageNotFoundException(imageId));
+        imageRepository.delete(image);
+        s3FileUploadService.delete(image.getUrl());
+    }
+
     private List<Image> convertImage(List<ImageUploadValue> imageUploadValues) {
         return imageUploadValues.stream()
                 .filter(Objects::nonNull)

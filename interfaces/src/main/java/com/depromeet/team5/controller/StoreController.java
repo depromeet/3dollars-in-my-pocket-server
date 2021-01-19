@@ -156,6 +156,15 @@ public class StoreController {
         return new ResponseEntity<>("image save success", HttpStatus.OK);
     }
 
+    @ApiOperation("가게의 이미지를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @DeleteMapping("/image")
+    public ResponseEntity<String> deleteImage(@RequestParam Long imageId) {
+        storeService.deleteImage(imageId);
+        return new ResponseEntity<>("image delete success", HttpStatus.OK);
+    }
+
     private ImageUploadValue toImageUploadValue(MultipartFile multipartFile) {
         try {
             return ImageUploadValue.of(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), multipartFile.getContentType());
