@@ -2,7 +2,7 @@ package com.depromeet.team5.application.review;
 
 import com.depromeet.team5.domain.review.ReviewUpdateValue;
 import com.depromeet.team5.dto.ReviewResponse;
-import com.depromeet.team5.service.ReviewService;
+import com.depromeet.team5.domain.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

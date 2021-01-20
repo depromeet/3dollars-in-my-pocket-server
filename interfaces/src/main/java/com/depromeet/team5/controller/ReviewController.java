@@ -8,7 +8,7 @@ import com.depromeet.team5.dto.ReviewDto;
 import com.depromeet.team5.dto.ReviewPomDto;
 import com.depromeet.team5.dto.ReviewResponse;
 import com.depromeet.team5.dto.ReviewUpdateRequest;
-import com.depromeet.team5.service.ReviewService;
+import com.depromeet.team5.domain.review.ReviewService;
 import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
