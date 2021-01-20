@@ -77,7 +77,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType) {
+    public List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryType categoryType) {
         return storeRepository.findByDistanceBetweenAndCategory(
                 location.getLatitude(),
                 location.getLongitude(),

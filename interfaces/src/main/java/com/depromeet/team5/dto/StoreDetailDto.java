@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -19,11 +19,12 @@ public class StoreDetailDto {
 
     private String storeName;
 
-    private CategoryTypes category;
+    private CategoryType category;
 
     private List<ImageDto> image;
 
-    private List<MenuDto> menu = new ArrayList<>();
+    @JsonProperty("menu")
+    private List<MenuResponse> menuResponses = new ArrayList<>();
 
     @JsonProperty("review")
     private List<ReviewDetailResponse> reviewDetailResponses = new ArrayList<>();

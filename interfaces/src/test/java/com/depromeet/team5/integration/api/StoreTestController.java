@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration.api;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
-import com.depromeet.team5.dto.MenuDto;
+import com.depromeet.team5.domain.store.CategoryType;
+import com.depromeet.team5.dto.MenuRequest;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.StoreIdDto;
@@ -47,11 +47,11 @@ public class StoreTestController {
         storeDto.setStoreName("storeName");
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
-        storeDto.setCategory(CategoryTypes.BUNGEOPPANG);
-        MenuDto menuDto = new MenuDto();
-        menuDto.setName("menuName");
-        menuDto.setPrice("menuPrice");
-        storeDto.setMenu(Collections.singletonList(menuDto));
+        storeDto.setCategory(CategoryType.BUNGEOPPANG);
+        MenuRequest menuRequest = new MenuRequest();
+        menuRequest.setName("menuName");
+        menuRequest.setPrice("menuPrice");
+        storeDto.setMenu(Collections.singletonList(menuRequest));
         storeDto.setImage(Collections.emptyList());
         return this.save(accessToken, userId, storeDto, Collections.emptyList());
     }

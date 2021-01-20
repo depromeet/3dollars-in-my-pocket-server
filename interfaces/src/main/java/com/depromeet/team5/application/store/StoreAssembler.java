@@ -32,7 +32,7 @@ public class StoreAssembler {
         storeDetailDto.setStoreName(store.getStoreName());
         storeDetailDto.setCategory(store.getCategory());
         storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
-        storeDetailDto.setMenu(store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList()));
+        storeDetailDto.setMenuResponses(store.getMenu().stream().map(MenuResponse::from).collect(Collectors.toList()));
         storeDetailDto.setReviewDetailResponses(store.getReview().stream()
                 .filter(Review::isVisible)
                 .map(reviewAssembler::toReviewDetailResponse)

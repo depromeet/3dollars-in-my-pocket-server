@@ -16,5 +16,5 @@ public class StoreUpdateDto {
 
     private List<MultipartFile> image;
 
-    private List<MenuDto> menu;
+    private List<MenuRequest> menu;
 }

@@ -28,19 +28,20 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
                                  @Param("longitude") final Double longitude);
 
     @Query(value = "SELECT *, (" +
-            "    6371 * acos (" +
-            "      cos ( radians( :latitude ) )  " +
+            "    6371 * acos(" +
+            "      cos( radians( :latitude ) )  " +
             "      * cos( radians( latitude ) )" +
             "      * cos( radians( longitude ) - radians( :longitude ) )" +
-            "      + sin ( radians( :latitude ) )" +
+            "      + sin( radians( :latitude ) )" +
             "      * sin( radians( latitude ) )" +
             "    )" +
             "  ) AS distance" +
-            "  FROM store" +
-            "  WHERE category LIKE :category" +
-            "  GROUP BY id" +
-            "  HAVING distance >= :radiusStart AND distance < :radiusEnd" +
-            "  ORDER BY distance", nativeQuery = true)
+            "  FROM store s" +
+            "  INNER JOIN menu m ON s.id = m.menu_id" +
+            "  WHERE m.category = :category" +
+            "  GROUP BY s.id" +
+            "  HAVING s.distance >= :radiusStart AND s.distance < :radiusEnd" +
+            "  ORDER BY s.distance", nativeQuery = true)
     List<Store> findByDistanceBetweenAndCategory(@Param("latitude") final Double latitude,
                                                  @Param("longitude") final Double longitude,
                                                  @Param("radiusStart") final Double distanceStart,

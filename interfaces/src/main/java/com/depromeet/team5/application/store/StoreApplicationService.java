@@ -1,7 +1,7 @@
 package com.depromeet.team5.application.store;
 
 import com.depromeet.team5.domain.Location;
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.StoresGroupByRatingDto;
@@ -32,7 +32,7 @@ public class StoreApplicationService {
     }
 
     public StoresGroupByDistanceDto getStoresByCategoryGroupByDistance(
-            CategoryTypes categoryType,
+            CategoryType categoryType,
             Location userLocation,
             Location mapLocation
     ) {
@@ -50,7 +50,7 @@ public class StoreApplicationService {
     }
 
     public StoresGroupByRatingDto getStoresByCategoryGroupByRating(
-        CategoryTypes categoryType,
+        CategoryType categoryType,
         Location userLocation,
         Location mapLocation
     ) {

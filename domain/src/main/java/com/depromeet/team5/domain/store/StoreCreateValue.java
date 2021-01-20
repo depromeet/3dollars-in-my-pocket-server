@@ -12,7 +12,7 @@ public class StoreCreateValue {
 
     String storeName;
 
-    CategoryTypes category;
+    CategoryType category;
 
     List<MenuCreateValue> menus;
 }

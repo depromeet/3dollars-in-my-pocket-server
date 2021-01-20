@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.Store;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ public class StoreMyPageDto {
 
     private String storeName;
 
-    private CategoryTypes category;
+    private CategoryType category;
 
     private Float rating;
 

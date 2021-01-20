@@ -11,6 +11,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+ /**
+ * category 는 enum 으로 관리함.
+ * MenuCategory 는 사용하지 않음
+ */
+@Deprecated
 @Table(uniqueConstraints = @UniqueConstraint(name = "unique_name", columnNames = "enum_name"))
 @Entity
 @Getter

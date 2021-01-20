@@ -1,6 +1,6 @@
 package com.depromeet.team5.domain.review;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.exception.ReviewModifiedByNotAuthorException;
@@ -30,7 +30,7 @@ public class Review {
     private String storeName;
 
     @Enumerated(value = EnumType.STRING)
-    private CategoryTypes category;
+    private CategoryType category;
 
     private String contents;
 

@@ -52,7 +52,10 @@ public class StoreController {
                         storeDto.getCategory(),
                         Optional.ofNullable(storeDto.getMenu())
                                 .map(menu -> menu.stream()
-                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .map(it -> MenuCreateValue.of(
+                                                it.getCategory() != null ? it.getCategory() : storeDto.getCategory(),
+                                                it.getName(),
+                                                it.getPrice()))
                                         .collect(Collectors.toList())
                                 ).orElse(Collections.emptyList())
                 ),
@@ -128,7 +131,10 @@ public class StoreController {
                         storeUpdateDto.getStoreName(),
                         Optional.ofNullable(storeUpdateDto.getMenu())
                                 .map(menu -> menu.stream()
-                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .map(it -> MenuCreateValue.of(
+                                                it.getCategory() != null ? it.getCategory() : storeService.getStore(storeId).getCategory(),
+                                                it.getName(),
+                                                it.getPrice()))
                                         .collect(Collectors.toList()))
                                 .orElse(Collections.emptyList())
                 ),
