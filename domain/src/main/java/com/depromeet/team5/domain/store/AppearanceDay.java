@@ -1,0 +1,34 @@
+package com.depromeet.team5.domain.store;
+
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Data
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+public class AppearanceDay {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Enumerated(value = EnumType.STRING)
+    private AppearanceDayType day;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    public static AppearanceDay from(AppearanceDayType appearanceDayType) {
+        AppearanceDay appearanceDay = new AppearanceDay();
+        appearanceDay.setDay(appearanceDayType);
+        return appearanceDay;
+    }
+}

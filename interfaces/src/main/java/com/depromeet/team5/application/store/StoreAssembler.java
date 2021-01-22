@@ -3,6 +3,8 @@ package com.depromeet.team5.application.store;
 import com.depromeet.team5.application.review.ReviewAssembler;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.review.Review;
+import com.depromeet.team5.domain.store.AppearanceDay;
+import com.depromeet.team5.domain.store.PaymentMethod;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.util.LocationDistanceUtils;
@@ -30,6 +32,9 @@ public class StoreAssembler {
         storeDetailDto.setLatitude(store.getLatitude());
         storeDetailDto.setLongitude(store.getLongitude());
         storeDetailDto.setStoreName(store.getStoreName());
+        storeDetailDto.setStoreType(store.getStoreType());
+        storeDetailDto.setAppearanceDays(store.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toList()));
+        storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toList()));
         storeDetailDto.setCategory(store.getCategory());
         storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
         storeDetailDto.setMenu(store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList()));

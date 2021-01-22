@@ -38,8 +38,8 @@ public class StoreController {
     private final StoreApplicationService storeApplicationService;
 
     @ApiOperation("가게 정보를 저장합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
+    //@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    //@Auth
     @PostMapping("/save")
     public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
                                            @RequestPart(value = "image", required = false) List<MultipartFile> image,
@@ -49,6 +49,9 @@ public class StoreController {
                         storeDto.getLatitude(),
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
+                        Optional.ofNullable(storeDto.getStoreType()).orElse(StoreType.ROAD),
+                        Optional.ofNullable(storeDto.getAppearanceDays()).orElse(Collections.emptyList()),
+                        Optional.ofNullable(storeDto.getPaymentMethods()).orElse(Collections.emptyList()),
                         storeDto.getCategory(),
                         Optional.ofNullable(storeDto.getMenu())
                                 .map(menu -> menu.stream()
@@ -69,8 +72,8 @@ public class StoreController {
     }
 
     @ApiOperation("내 주변 가게들을 조회합니다(거리 가까운순 5개). 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
+    //@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    //@Auth
     @GetMapping("/get")
     public ResponseEntity<List<StoreCardDto>> getAll(@RequestParam Double latitude,
                                                      @RequestParam Double longitude) {
@@ -83,8 +86,8 @@ public class StoreController {
     }
 
     @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
+    //@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    //@Auth
     @GetMapping("/user")
     public ResponseEntity<StoreMyPagePomDto> getAllByUser(@RequestParam Long userId,
                                                           @RequestParam Integer page) {
@@ -105,8 +108,8 @@ public class StoreController {
     }
 
     @ApiOperation("특정 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
+    //@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    //@Auth
     @GetMapping("/detail")
     public ResponseEntity<StoreDetailDto> getDetail(@RequestParam Long storeId,
                                                     @RequestParam Double latitude,
@@ -115,8 +118,8 @@ public class StoreController {
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
+    //@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    //@Auth
     @PutMapping("/update")
     public ResponseEntity<String> updateStore(StoreUpdateDto storeUpdateDto,
                                               @RequestPart(value = "image", required = false) List<MultipartFile> image,
@@ -126,6 +129,9 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
+                        Optional.ofNullable(storeUpdateDto.getStoreType()).orElse(StoreType.ROAD),
+                        Optional.ofNullable(storeUpdateDto.getAppearanceDays()).orElse(Collections.emptyList()),
+                        Optional.ofNullable(storeUpdateDto.getPaymentMethods()).orElse(Collections.emptyList()),
                         Optional.ofNullable(storeUpdateDto.getMenu())
                                 .map(menu -> menu.stream()
                                         .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
@@ -143,8 +149,8 @@ public class StoreController {
     }
 
     @ApiOperation("특정 가게의 정보를 삭제합니다. 인증이 필요한 요청입니다.")
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
-    @Auth
+    //@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    //@Auth
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam Long storeId,
                                          @RequestParam Long userId,
