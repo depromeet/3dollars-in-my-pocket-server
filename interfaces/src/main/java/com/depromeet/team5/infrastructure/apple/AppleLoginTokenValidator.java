@@ -1,6 +1,6 @@
 package com.depromeet.team5.infrastructure.apple;
 
-import com.depromeet.team5.application.security.TokenVerifier;
+import com.depromeet.team5.application.security.TokenValidator;
 import com.depromeet.team5.exception.FailedToParseJwtException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,11 +26,12 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AppleTokenVerifier implements TokenVerifier {
+public class AppleLoginTokenValidator implements TokenValidator {
 
     @Value("${apple.client_id}")
     private String appleClientId;
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
 
     private ApplePublicKeyResponse getApplePublicKey() {
         return webClient.mutate()
@@ -50,7 +51,7 @@ public class AppleTokenVerifier implements TokenVerifier {
             String decodedTokenHeader = new String(Base64.getDecoder().decode(tokenHeader), StandardCharsets.UTF_8);
 
             @SuppressWarnings("unchecked")
-            Map<String, String> header = new ObjectMapper().readValue(decodedTokenHeader, Map.class);
+            Map<String, String> header = objectMapper.readValue(decodedTokenHeader, Map.class);
             ApplePublicKeyResponse.Key key = response.getMatchedKey(header.get("kid"), header.get("alg"))
                     .orElseThrow(() -> new NullPointerException("Failed get public key from apple's id server."));
 
@@ -72,7 +73,12 @@ public class AppleTokenVerifier implements TokenVerifier {
     }
 
     @Override
-    public boolean isVerified(String accessToken){
+    public boolean supports(String accessToken) {
+        return false;
+    }
+
+    @Override
+    public boolean isValid(String accessToken){
         Claims claim = getClaims(accessToken);
         return claim != null
                 && claim.getIssuer().equals("https://appleid.apple.com")
