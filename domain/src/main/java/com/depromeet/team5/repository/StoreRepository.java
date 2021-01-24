@@ -4,6 +4,7 @@ import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -49,4 +50,8 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
                                                  @Param("category") final String category);
 
     Page<Store> findAllByUser(User user, Pageable pageable);
+
+    Slice<Store> findByIdGreaterThan(Long storeId, Pageable pageable);
+
+    Store saveAndFlush(Store store);
 }
