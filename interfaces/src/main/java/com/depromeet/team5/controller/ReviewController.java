@@ -79,7 +79,7 @@ public class ReviewController {
                         userId,
                         reviewId,
                         ReviewUpdateValue.of(
-                                reviewUpdateRequest.getContent(),
+                                reviewUpdateRequest.getContents(),
                                 reviewUpdateRequest.getRating()
                         )
                 )

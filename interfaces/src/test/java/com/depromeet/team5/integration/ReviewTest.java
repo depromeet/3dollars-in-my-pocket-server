@@ -7,7 +7,6 @@ import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.depromeet.team5.repository.ReviewRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,7 +70,7 @@ class ReviewTest {
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
         Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
         ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest();
-        reviewUpdateRequest.setContent("updatedReviewContent");
+        reviewUpdateRequest.setContents("updatedReviewContent");
         reviewUpdateRequest.setRating(0);
         // when
         ReviewResponse reviewResponse = reviewTestController.update(accessToken, reviewId, reviewUpdateRequest);
