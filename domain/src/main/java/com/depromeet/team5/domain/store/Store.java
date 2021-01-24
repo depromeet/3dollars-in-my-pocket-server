@@ -109,7 +109,7 @@ public class Store {
         this.rating = rating;
     }
 
-    public void addImage(List<Image> imageList) {
+    public void addImages(List<Image> imageList) {
         this.image.addAll(imageList);
     }
 }

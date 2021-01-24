@@ -4,7 +4,6 @@ import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.exception.ImageNotFoundException;
 import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.StoreDeleteRequestDuplicatedException;
 import com.depromeet.team5.exception.UserNotFoundException;
@@ -134,17 +133,19 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void saveImage(Long storeId, List<ImageUploadValue> imageUploadValues) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> image = convertImage(imageUploadValues);
-        store.addImage(image);
+        List<Image> images = convertImage(imageUploadValues);
+        store.addImages(images);
         storeRepository.save(store);
     }
 
     @Override
     @Transactional
     public void deleteImage(Long imageId) {
-        Image image = imageRepository.findById(imageId).orElseThrow(() -> new ImageNotFoundException(imageId));
-        imageRepository.delete(image);
-        s3FileUploadService.delete(image.getUrl());
+        imageRepository.findById(imageId)
+                .ifPresent(image -> {
+                    imageRepository.delete(image);
+                    s3FileUploadService.delete(image.getUrl());
+                });
     }
 
     private List<Image> convertImage(List<ImageUploadValue> imageUploadValues) {

@@ -144,11 +144,11 @@ public class StoreController {
     @ApiOperation("가게의 이미지를 등록합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
-    @PostMapping("/image")
-    public ResponseEntity<String> saveImage(ImageRequestDto imageRequestDto,
-                                            @RequestPart(value = "image", required = false) List<MultipartFile> image) {
-        storeService.saveImage(imageRequestDto.getStoreId(),
-                Optional.ofNullable(image)
+    @PostMapping("/{storeId}/images")
+    public ResponseEntity<String> saveImage(@PathVariable Long storeId,
+                                            @RequestPart(value = "image", required = false) List<MultipartFile> images) {
+        storeService.saveImage(storeId,
+                Optional.ofNullable(images)
                         .map(it -> it.stream()
                                 .map(this::toImageUploadValue)
                                 .collect(Collectors.toList()))
@@ -159,8 +159,8 @@ public class StoreController {
     @ApiOperation("가게의 이미지를 삭제합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
-    @DeleteMapping("/image")
-    public ResponseEntity<String> deleteImage(@RequestParam Long imageId) {
+    @DeleteMapping("/images/{imageId}")
+    public ResponseEntity<String> deleteImage(@PathVariable Long imageId) {
         storeService.deleteImage(imageId);
         return new ResponseEntity<>("image delete success", HttpStatus.OK);
     }
