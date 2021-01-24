@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -80,6 +82,11 @@ public class ReviewServiceImpl implements ReviewService {
                     this.calculateRating(review.getStoreId());
                     reviewRepository.save(review);
                 });
+    }
+
+    @Override
+    public Optional<Review> getReview(Long reviewId) {
+        return reviewRepository.findByIdAndStatus(reviewId, ReviewStatus.POSTED);
     }
 
     // TODO: migration 끝나면 삭제된 리뷰 제외하고 계산하도록 쿼리 수정해야함.

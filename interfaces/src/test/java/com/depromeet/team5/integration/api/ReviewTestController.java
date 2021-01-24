@@ -1,9 +1,6 @@
 package com.depromeet.team5.integration.api;
 
-import com.depromeet.team5.dto.ReviewDto;
-import com.depromeet.team5.dto.ReviewPomDto;
-import com.depromeet.team5.dto.ReviewResponse;
-import com.depromeet.team5.dto.ReviewUpdateRequest;
+import com.depromeet.team5.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,6 +44,12 @@ public class ReviewTestController {
                 .queryParam("page", page.toString()))
                 .andReturn();
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), ReviewPomDto.class);
+    }
+
+    public MvcResult getDetailReview(String accessToken, Long reviewId) throws Exception {
+        return mockMvc.perform(get("/api/v1/review/{reviewId}", reviewId)
+                .header("Authorization", accessToken))
+                .andReturn();
     }
 
     public ReviewResponse update(String accessToken, Long reviewId, ReviewUpdateRequest reviewUpdateRequest) throws Exception {
