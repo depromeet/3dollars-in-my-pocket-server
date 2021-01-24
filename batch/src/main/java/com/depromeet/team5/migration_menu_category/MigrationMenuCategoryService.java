@@ -20,7 +20,9 @@ public class MigrationMenuCategoryService {
         storeSlice.getContent().forEach(store -> {
             CategoryType categoryType = store.getCategory();
             store.getMenu().forEach(menu -> {
-                menu.setCategory(categoryType);
+                if (menu.getCategory() == null) {
+                    menu.setCategory(categoryType);
+                }
             });
         });
         return storeSlice;
