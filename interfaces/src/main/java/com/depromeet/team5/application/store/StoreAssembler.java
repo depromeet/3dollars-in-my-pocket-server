@@ -33,8 +33,8 @@ public class StoreAssembler {
         storeDetailDto.setLongitude(store.getLongitude());
         storeDetailDto.setStoreName(store.getStoreName());
         storeDetailDto.setStoreType(store.getStoreType());
-        storeDetailDto.setAppearanceDays(store.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toList()));
-        storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toList()));
+        storeDetailDto.setAppearanceDays(store.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toSet()));
+        storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet()));
         storeDetailDto.setCategory(store.getCategory());
         storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
         storeDetailDto.setMenu(store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList()));
@@ -44,8 +44,8 @@ public class StoreAssembler {
                 .sorted(Comparator.comparing(ReviewDetailResponse::getCreatedAt).reversed())
                 .collect(Collectors.toList()));
         storeDetailDto.setRating(Optional.ofNullable(store.getRating()).orElseGet(() -> {
-           log.error("'rating' must not be null. storeId: {}", store.getId());
-           return 0f;
+            log.error("'rating' must not be null. storeId: {}", store.getId());
+            return 0f;
         }));
         storeDetailDto.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter"));
         storeDetailDto.setUser(store.getUser());
@@ -55,7 +55,7 @@ public class StoreAssembler {
     /**
      * 입력받은 위치를 기준으로 가게와의 거리를 계산하고 dto 로 변환합니다.
      *
-     * @param stores 가게 목록
+     * @param stores   가게 목록
      * @param location 기준 위치
      * @return 거리별로 구분된 dto
      */
@@ -91,7 +91,7 @@ public class StoreAssembler {
     /**
      * 입력받은 위치를 기준으로 가게와의 거리를 계산하고 dto 로 변환합니다.
      *
-     * @param stores 가게 목록
+     * @param stores   가게 목록
      * @param location 기준 위치
      * @return 별점 별로 구분된 dto
      */

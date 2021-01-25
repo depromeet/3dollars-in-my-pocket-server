@@ -2,7 +2,9 @@ package com.depromeet.team5.domain.store;
 
 import lombok.Value;
 
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
 
 @Value(staticConstructor = "of")
 public class StoreCreateValue {
@@ -15,9 +17,9 @@ public class StoreCreateValue {
 
     StoreType storeType;
 
-    List<AppearanceDayType> appearanceDays;
+    Set<DayOfWeek> appearanceDays;
 
-    List<PaymentMethodType> paymentMethods;
+    Set<PaymentMethodType> paymentMethods;
 
     CategoryTypes category;
 

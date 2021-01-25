@@ -1,6 +1,5 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.AppearanceDayType;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
@@ -8,8 +7,10 @@ import com.depromeet.team5.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class StoreDetailDto {
@@ -24,9 +25,9 @@ public class StoreDetailDto {
 
     private StoreType storeType;
 
-    private List<AppearanceDayType> appearanceDays;
+    private Set<DayOfWeek> appearanceDays;
 
-    private List<PaymentMethodType> paymentMethods;
+    private Set<PaymentMethodType> paymentMethods;
 
     private CategoryTypes category;
 

@@ -9,9 +9,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -36,13 +39,11 @@ public class Store {
     @Enumerated(value = EnumType.STRING)
     private CategoryTypes category;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "appearance_day_id")
-    private List<AppearanceDay> appearanceDays = new ArrayList<>();
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AppearanceDay> appearanceDays = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name ="payment_method_id")
-    private List<PaymentMethod> paymentMethods = new ArrayList<>();
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_id")
@@ -82,31 +83,21 @@ public class Store {
         store.storeType = storeCreateValue.getStoreType();
         store.category = storeCreateValue.getCategory();
         store.image = imageList;
-        store.review = new ArrayList<>();
-        store.rating = 0F;
-        store.deleteRequest = new ArrayList<>();
         store.user = user;
-        if (storeCreateValue.getAppearanceDays() != null){
-            store.appearanceDays = storeCreateValue.getAppearanceDays()
-                    .stream()
-                    .map(AppearanceDay::from)
-                    .collect(Collectors.toList());
-        } else {
-            store.appearanceDays = new ArrayList<>();
+        if (storeCreateValue.getAppearanceDays() != null) {
+            for (DayOfWeek day : storeCreateValue.getAppearanceDays()) {
+                store.appearanceDays.add(AppearanceDay.from(store, day));
+            }
         }
-        if (storeCreateValue.getPaymentMethods() != null){
-            store.paymentMethods = storeCreateValue.getPaymentMethods()
-                    .stream()
-                    .map(PaymentMethod::from)
-                    .collect(Collectors.toList());
-        } else {
-            store.paymentMethods = new ArrayList<>();
+        if (storeCreateValue.getPaymentMethods() != null) {
+            for (PaymentMethodType paymentMethodType : storeCreateValue.getPaymentMethods()) {
+                store.paymentMethods.add(PaymentMethod.from(store, paymentMethodType));
+            }
         }
-        if (storeCreateValue.getMenus() != null){
+        if (storeCreateValue.getMenus() != null) {
             store.menu = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
-        } else {
-            store.menu = new ArrayList<>();
         }
+
         return store;
     }
 
@@ -119,19 +110,17 @@ public class Store {
         appearanceDays.clear();
         paymentMethods.clear();
         menu.clear();
-        if (storeUpdateValue.getAppearanceDays() != null){
-            appearanceDays.addAll(storeUpdateValue.getAppearanceDays()
-                    .stream()
-                    .map(AppearanceDay::from)
-                    .collect(Collectors.toList()));
+        if (storeUpdateValue.getAppearanceDays() != null) {
+            for (DayOfWeek day : storeUpdateValue.getAppearanceDays()) {
+                appearanceDays.add(AppearanceDay.from(this, day));
+            }
         }
-        if (storeUpdateValue.getPaymentMethods() != null){
-            paymentMethods.addAll(storeUpdateValue.getPaymentMethods()
-                    .stream()
-                    .map(PaymentMethod::from)
-                    .collect(Collectors.toList()));
+        if (storeUpdateValue.getPaymentMethods() != null) {
+            for (PaymentMethodType paymentMethodType : storeUpdateValue.getPaymentMethods()) {
+                paymentMethods.add(PaymentMethod.from(this, paymentMethodType));
+            }
         }
-        if (storeUpdateValue.getMenus() != null){
+        if (storeUpdateValue.getMenus() != null) {
             menu.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
     }

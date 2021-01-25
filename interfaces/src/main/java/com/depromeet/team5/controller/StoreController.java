@@ -49,9 +49,9 @@ public class StoreController {
                         storeDto.getLatitude(),
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
-                        Optional.ofNullable(storeDto.getStoreType()).orElse(StoreType.ROAD),
-                        Optional.ofNullable(storeDto.getAppearanceDays()).orElse(Collections.emptyList()),
-                        Optional.ofNullable(storeDto.getPaymentMethods()).orElse(Collections.emptyList()),
+                        storeDto.getStoreType(),
+                        Optional.ofNullable(storeDto.getAppearanceDays()).orElse(Collections.emptySet()),
+                        Optional.ofNullable(storeDto.getPaymentMethods()).orElse(Collections.emptySet()),
                         storeDto.getCategory(),
                         Optional.ofNullable(storeDto.getMenu())
                                 .map(menu -> menu.stream()
@@ -129,9 +129,9 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
-                        Optional.ofNullable(storeUpdateDto.getStoreType()).orElse(StoreType.ROAD),
-                        Optional.ofNullable(storeUpdateDto.getAppearanceDays()).orElse(Collections.emptyList()),
-                        Optional.ofNullable(storeUpdateDto.getPaymentMethods()).orElse(Collections.emptyList()),
+                        storeUpdateDto.getStoreType(),
+                        Optional.ofNullable(storeUpdateDto.getAppearanceDays()).orElse(Collections.emptySet()),
+                        Optional.ofNullable(storeUpdateDto.getPaymentMethods()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeUpdateDto.getMenu())
                                 .map(menu -> menu.stream()
                                         .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))

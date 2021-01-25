@@ -1,13 +1,14 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.AppearanceDayType;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class StoreDto {
@@ -20,9 +21,9 @@ public class StoreDto {
 
     private StoreType storeType;
 
-    private List<AppearanceDayType> appearanceDays;
+    private Set<DayOfWeek> appearanceDays;
 
-    private List<PaymentMethodType> paymentMethods;
+    private Set<PaymentMethodType> paymentMethods;
 
     private CategoryTypes category;
 

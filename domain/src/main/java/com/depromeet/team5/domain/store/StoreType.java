@@ -8,5 +8,5 @@ public enum StoreType {
     STORE("매장"),
     CONVENIENCE_STORE("편의점");
 
-    private final String type;
+    private final String storeType;
 }
