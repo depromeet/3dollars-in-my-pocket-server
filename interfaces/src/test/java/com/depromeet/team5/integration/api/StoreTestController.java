@@ -1,6 +1,8 @@
 package com.depromeet.team5.integration.api;
 
 import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.PaymentMethodType;
+import com.depromeet.team5.domain.store.StoreType;
 import com.depromeet.team5.dto.MenuDto;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.dto.StoreDto;
@@ -11,8 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.util.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,6 +47,9 @@ public class StoreTestController {
     public StoreIdDto createStore(String accessToken, Long userId) throws Exception {
         StoreDto storeDto = new StoreDto();
         storeDto.setStoreName("storeName");
+        storeDto.setStoreType(StoreType.ROAD);
+        storeDto.setAppearanceDays(new HashSet<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.FRIDAY)));
+        storeDto.setPaymentMethods(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
         storeDto.setCategory(CategoryTypes.BUNGEOPPANG);
