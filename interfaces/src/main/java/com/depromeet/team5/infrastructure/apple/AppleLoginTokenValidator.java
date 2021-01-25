@@ -28,6 +28,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AppleLoginTokenValidator implements TokenValidator {
 
+    @Value("${apple.base_url")
+    private String appleBaseUrl;
     @Value("${apple.client_id}")
     private String appleClientId;
     private final WebClient webClient;
@@ -35,13 +37,13 @@ public class AppleLoginTokenValidator implements TokenValidator {
 
     private ApplePublicKeyResponse getApplePublicKey() {
         return webClient.mutate()
-                 .baseUrl("https://appleid.apple.com")
-                 .build()
-                 .get()
-                 .uri("/auth/keys")
-                 .retrieve()
-                 .bodyToMono(ApplePublicKeyResponse.class)
-                 .block();
+                .baseUrl(appleBaseUrl)
+                .build()
+                .get()
+                .uri("/auth/keys")
+                .retrieve()
+                .bodyToMono(ApplePublicKeyResponse.class)
+                .block();
     }
 
     private Claims getClaims(String token) {
@@ -78,11 +80,11 @@ public class AppleLoginTokenValidator implements TokenValidator {
     }
 
     @Override
-    public boolean isValid(String accessToken){
+    public boolean isValid(String accessToken) {
         Claims claim = getClaims(accessToken);
         return claim != null
-                && claim.getIssuer().equals("https://appleid.apple.com")
-                && claim.getAudience().equals(appleClientId)
+                && appleBaseUrl.equals(claim.getIssuer())
+                && appleClientId.equals(claim.getAudience())
                 && claim.getExpiration().after(new Date());
     }
 }
