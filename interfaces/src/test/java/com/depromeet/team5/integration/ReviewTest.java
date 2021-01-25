@@ -41,10 +41,10 @@ class ReviewTest {
     void setUp() throws Exception {
         reviewTestController = new ReviewTestController(mockMvc, objectMapper);
 
-        LoginResponse loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
-        this.accessToken = loginDto.getToken();
-        this.userId = loginDto.getUserId();
-        StoreIdDto storeIdDto = new StoreTestController(mockMvc, objectMapper).createStore(accessToken, loginDto.getUserId());
+        LoginResponse loginResponse = new UserTestController(mockMvc, objectMapper).createTestUser();
+        this.accessToken = loginResponse.getToken();
+        this.userId = loginResponse.getUserId();
+        StoreIdDto storeIdDto = new StoreTestController(mockMvc, objectMapper).createStore(accessToken, loginResponse.getUserId());
         this.storeId = storeIdDto.getStoreId();
     }
 

@@ -40,9 +40,9 @@ class CategoryTest {
     @Test
     void enum_소문자로_입력해도_성공() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
-        String accessToken = loginDto.getToken();
-        Long userId = loginDto.getUserId();
+        LoginResponse loginResponse = userTestController.createTestUser();
+        String accessToken = loginResponse.getToken();
+        Long userId = loginResponse.getUserId();
         // when
         StoresGroupByDistanceDto storesGroupByDistanceDto =
                 categoryTestController.getDistanceAll(accessToken, 37.0, 127.0, "bungeoppang");

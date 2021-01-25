@@ -53,7 +53,7 @@ class StoreCategoryTest {
     @Test
     void save() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
+        LoginResponse loginResponse = userTestController.createTestUser();
         menuCategoryService.create(CategoryTypes.BUNGEOPPANG.name());
         // when
         StoreDto storeDto = new StoreDto();
@@ -64,8 +64,8 @@ class StoreCategoryTest {
         storeDto.setMenu(Collections.emptyList());
         storeDto.setImage(Collections.emptyList());
         StoreIdDto storeIdDto = storeTestController.save(
-                loginDto.getToken(),
-                loginDto.getUserId(),
+                loginResponse.getToken(),
+                loginResponse.getUserId(),
                 storeDto,
                 Collections.emptyList()
         );
