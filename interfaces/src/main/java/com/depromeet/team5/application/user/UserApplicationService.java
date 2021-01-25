@@ -1,6 +1,6 @@
 package com.depromeet.team5.application.user;
 
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.domain.user.SocialVo;
 import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.exception.InvalidAccessTokenException;
@@ -28,7 +28,7 @@ public class UserApplicationService {
     public LoginResponse login(SocialVo socialVo) {
 
         boolean isValid = true;
-        SocialTypes socialType = socialVo.getSocialType();
+        SocialType socialType = socialVo.getSocialType();
         String token = socialVo.getToken();
 
         if (token != null) {
@@ -49,11 +49,11 @@ public class UserApplicationService {
         return userAssembler.toUserResponse(user);
     }
 
-    private boolean checkLoginToken(SocialTypes socialType, String token) {
+    private boolean checkLoginToken(SocialType socialType, String token) {
 
-        if (Objects.equals(socialType, SocialTypes.KAKAO)) {
+        if (Objects.equals(socialType, SocialType.KAKAO)) {
             return kakaoLoginTokenValidator.isValid(token);
-        } else if (Objects.equals(socialType, SocialTypes.APPLE)) {
+        } else if (Objects.equals(socialType, SocialType.APPLE)) {
             return appleLoginTokenValidator.isValid(token);
         }
 

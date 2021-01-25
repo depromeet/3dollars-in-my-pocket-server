@@ -21,7 +21,7 @@ public class WithdrawalUser {
     private String name;
 
     @Enumerated(value = EnumType.STRING)
-    private SocialTypes socialType;
+    private SocialType socialType;
 
     private String socialId;
 

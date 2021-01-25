@@ -1,6 +1,6 @@
 package com.depromeet.team5.service;
 
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.domain.user.UserStatusType;
 
@@ -11,9 +11,9 @@ public interface UserService {
 
     User getActiveUser(Long userId);
 
-    User createUser(String socialId, SocialTypes socialTypes);
+    User createUser(String socialId, SocialType socialType);
 
-    User getOrCreateUser(String socialId, SocialTypes socialType);
+    User getOrCreateUser(String socialId, SocialType socialType);
 
     void signOut(Long userId);
 

@@ -1,6 +1,6 @@
 package com.depromeet.team5.service.impl;
 
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.domain.user.WithdrawalUser;
@@ -42,15 +42,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User createUser(String socialId, SocialTypes socialTypes) {
-        User user = User.of(socialId, socialTypes);
+    public User createUser(String socialId, SocialType socialType) {
+        User user = User.of(socialId, socialType);
         userRepository.save(user);
         return user;
     }
 
     @Transactional
     @Override
-    public User getOrCreateUser(String socialId, SocialTypes socialType) {
+    public User getOrCreateUser(String socialId, SocialType socialType) {
 
         Optional<WithdrawalUser> withdrawalUserOptional =
                 withdrawalUserRepository.findBySocialIdAndSocialType(socialId, socialType);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void kakaoDeregister(String header, String userId, String referrerType) {
-        Optional<User> user = userRepository.findBySocialIdAndSocialType(userId, SocialTypes.KAKAO);
+        Optional<User> user = userRepository.findBySocialIdAndSocialType(userId, SocialType.KAKAO);
         user.ifPresent(it -> signOut(it.getId()));
     }
 
