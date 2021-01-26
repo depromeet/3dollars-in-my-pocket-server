@@ -64,18 +64,18 @@ public class Store {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Store from(StoreCreateValue storeCreateValue, List<Image> imageList, User user) {
+    public static Store from(StoreCreateValue storeCreateValue, User user) {
         Store store = new Store();
         store.latitude = storeCreateValue.getLatitude();
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.category = storeCreateValue.getCategory();
-        store.image = imageList;
+        store.image = new ArrayList<>();
         store.review = new ArrayList<>();
         store.rating = 0F;
         store.deleteRequest = new ArrayList<>();
         store.user = user;
-        if (storeCreateValue.getMenus() != null){
+        if (storeCreateValue.getMenus() != null) {
             store.menu = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
         } else {
             store.menu = new ArrayList<>();
@@ -83,13 +83,12 @@ public class Store {
         return store;
     }
 
-    public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
+    public void setStore(StoreUpdateValue storeUpdateValue) {
         // latitude = storeUpdateValue.getLatitude();
         // longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
-        image.addAll(imageList);
         menu.clear();
-        if (storeUpdateValue.getMenus() != null){
+        if (storeUpdateValue.getMenus() != null) {
             menu.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
     }
@@ -108,5 +107,9 @@ public class Store {
 
     public void setRating(Float rating) {
         this.rating = rating;
+    }
+
+    public void addImages(List<Image> imageList) {
+        this.image.addAll(imageList);
     }
 }

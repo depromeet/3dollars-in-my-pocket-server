@@ -1,10 +1,8 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.dto.*;
-import com.depromeet.team5.integration.api.ReviewTestController;
 import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,9 +55,8 @@ class StoreTest {
         menuDto.setName("menuName");
         menuDto.setPrice("menuPrice");
         storeDto.setMenu(Collections.singletonList(menuDto));
-        storeDto.setImage(Collections.emptyList());
         // when
-        StoreIdDto storeIdDto = storeTestController.save(loginDto.getToken(), loginDto.getUserId(), storeDto, Collections.emptyList());
+        StoreIdDto storeIdDto = storeTestController.save(loginDto.getToken(), loginDto.getUserId(), storeDto);
         // then
         assertThat(storeIdDto.getStoreId()).isNotNull();
         StoreDetailDto storeDetailDto = storeTestController.detail(loginDto.getToken(), storeIdDto.getStoreId(), 37.1, 127.1);

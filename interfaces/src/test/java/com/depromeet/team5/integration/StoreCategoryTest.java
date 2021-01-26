@@ -2,7 +2,6 @@ package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.domain.store.CategoryTypes;
-import com.depromeet.team5.domain.store.MenuCategory;
 import com.depromeet.team5.dto.LoginDto;
 import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.StoreIdDto;
@@ -63,12 +62,10 @@ class StoreCategoryTest {
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
         storeDto.setMenu(Collections.emptyList());
-        storeDto.setImage(Collections.emptyList());
         StoreIdDto storeIdDto = storeTestController.save(
                 loginDto.getToken(),
                 loginDto.getUserId(),
-                storeDto,
-                Collections.emptyList()
+                storeDto
         );
         // then
         assertThat(storeRepository.findAll()).hasSize(1);

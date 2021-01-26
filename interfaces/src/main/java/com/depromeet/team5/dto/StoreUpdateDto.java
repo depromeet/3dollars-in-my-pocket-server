@@ -14,7 +14,5 @@ public class StoreUpdateDto {
 
     private String storeName;
 
-    private List<MultipartFile> image;
-
     private List<MenuDto> menu;
 }
