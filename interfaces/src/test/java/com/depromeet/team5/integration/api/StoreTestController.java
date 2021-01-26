@@ -3,7 +3,6 @@ package com.depromeet.team5.integration.api;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -58,16 +57,7 @@ public class StoreTestController {
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreDetailDto.class);
     }
 
-    public void saveImage(String accessToken, ImageRequestDto imageRequestDto) throws Exception {
-        mockMvc.perform(post("/api/v1/store/image")
-                .header("Authorization", accessToken)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("storeId", imageRequestDto.getStoreId().toString())
-                .param("image", imageRequestDto.getImage().toString()))
-                .andExpect(status().isOk());
-    }
-
-    public void deleteImage(String accessToken, Long imageId) throws Exception{
+    public void deleteImage(String accessToken, Long imageId) throws Exception {
         mockMvc.perform(delete("/api/v1/store/image")
                 .header("Authorization", accessToken)
                 .queryParam("imageId", imageId.toString()))
