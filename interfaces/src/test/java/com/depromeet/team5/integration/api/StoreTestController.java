@@ -9,6 +9,7 @@ import com.depromeet.team5.dto.StoreDto;
 import com.depromeet.team5.dto.StoreIdDto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -32,11 +33,13 @@ public class StoreTestController {
                            StoreDto storeDto) throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/store/save")
                 .header("Authorization", accessToken)
-                .param("userId", userId.toString())
-                .param("latitude", storeDto.getLatitude().toString())
-                .param("longitude", storeDto.getLongitude().toString())
-                .param("storeName", storeDto.getStoreName())
-                .param("category", storeDto.getCategory().name())
+                .contentType(MediaType.APPLICATION_JSON)
+                .queryParam("userId", userId.toString())
+                .content(objectMapper.writeValueAsBytes(storeDto))
+//                .param("latitude", storeDto.getLatitude().toString())
+//                .param("longitude", storeDto.getLongitude().toString())
+//                .param("storeName", storeDto.getStoreName())
+//                .param("category", storeDto.getCategory().name())
         ).andReturn();
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreIdDto.class);
     }

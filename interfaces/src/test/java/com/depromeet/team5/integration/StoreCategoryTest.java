@@ -74,8 +74,7 @@ class StoreCategoryTest {
         StoreIdDto storeIdDto = storeTestController.save(
                 loginResponse.getToken(),
                 loginResponse.getUserId(),
-                storeDto,
-                Collections.emptyList()
+                storeDto
         );
         // then
         assertThat(storeRepository.findAll()).hasSize(1);

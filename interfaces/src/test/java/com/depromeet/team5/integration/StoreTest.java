@@ -64,7 +64,7 @@ class StoreTest {
         menuDto.setPrice("menuPrice");
         storeDto.setMenu(Collections.singletonList(menuDto));
         // when
-        StoreIdDto storeIdDto = storeTestController.save(loginResponse.getToken(), loginResponse.getUserId(), storeDto, Collections.emptyList());
+        StoreIdDto storeIdDto = storeTestController.save(loginResponse.getToken(), loginResponse.getUserId(), storeDto);
         // then
         assertThat(storeIdDto.getStoreId()).isNotNull();
         StoreDetailDto storeDetailDto = storeTestController.detail(loginResponse.getToken(), storeIdDto.getStoreId(), 37.1, 127.1);

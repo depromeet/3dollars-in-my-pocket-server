@@ -68,7 +68,7 @@ class ReviewTest {
         // given
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
-        Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
+        Long reviewId = reviewPomDto.getContent().get(0).getId();
         ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest();
         reviewUpdateRequest.setContents("updatedReviewContent");
         reviewUpdateRequest.setRating(0);
@@ -84,7 +84,7 @@ class ReviewTest {
         // given
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
-        Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
+        Long reviewId = reviewPomDto.getContent().get(0).getId();
         // when
         reviewTestController.delete(accessToken, reviewId);
         // then
