@@ -8,9 +8,9 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class ReviewUpdateRequest {
-    @NotBlank
+    @NotBlank(message = "'contents' must not be blank")
     @Length(min = 1, max = 255)
-    private String content;
+    private String contents;
     @Range(min = 0, max = 5)
     private Integer rating;
 }

@@ -70,7 +70,7 @@ class ReviewTest {
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
         Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
         ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest();
-        reviewUpdateRequest.setContent("updatedReviewContent");
+        reviewUpdateRequest.setContents("updatedReviewContent");
         reviewUpdateRequest.setRating(0);
         // when
         ReviewResponse reviewResponse = reviewTestController.update(accessToken, reviewId, reviewUpdateRequest);
