@@ -13,8 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findFirst1ByNameAndStatus(String name, UserStatusType type);
 
-    Optional<User> findByIdAndStatus(Long userId, UserStatusType type);
-
     long countByCreatedAtBetween(LocalDateTime createdAtBegin, LocalDateTime createdAtEnd);
 
     long countByCreatedAtLessThan(LocalDateTime createdAt);

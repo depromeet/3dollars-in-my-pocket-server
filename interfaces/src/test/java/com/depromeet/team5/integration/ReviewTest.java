@@ -41,7 +41,7 @@ class ReviewTest {
     void setUp() throws Exception {
         reviewTestController = new ReviewTestController(mockMvc, objectMapper);
 
-        LoginDto loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
+        LoginResponse loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
         this.accessToken = loginDto.getToken();
         this.userId = loginDto.getUserId();
         StoreIdDto storeIdDto = new StoreTestController(mockMvc, objectMapper).createStore(accessToken, loginDto.getUserId());

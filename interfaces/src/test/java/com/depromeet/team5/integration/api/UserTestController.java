@@ -2,7 +2,7 @@ package com.depromeet.team5.integration.api;
 
 import com.depromeet.team5.domain.user.SocialTypes;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.dto.UserResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ public class UserTestController {
         this.objectMapper = objectMapper;
     }
 
-    public LoginDto login(UserDto userDto) throws Exception {
+    public LoginResponse login(UserDto userDto) throws Exception {
         MockHttpServletRequestBuilder builder = post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userDto));
@@ -32,11 +32,11 @@ public class UserTestController {
                         .andReturn()
                         .getResponse()
                         .getContentAsString(),
-                LoginDto.class
+                LoginResponse.class
         );
     }
 
-    public LoginDto createTestUser() throws Exception {
+    public LoginResponse createTestUser() throws Exception {
         UserDto userDto = new UserDto();
         userDto.setSocialId("socialId");
         userDto.setSocialType(SocialTypes.KAKAO);

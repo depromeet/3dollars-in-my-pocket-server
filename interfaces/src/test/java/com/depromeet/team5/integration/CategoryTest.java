@@ -2,7 +2,7 @@ package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.dto.StoresGroupByDistanceDto;
-import com.depromeet.team5.dto.LoginDto;
+import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.integration.api.CategoryTestController;
 import com.depromeet.team5.integration.api.UserTestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,7 @@ class CategoryTest {
     @Test
     void enum_소문자로_입력해도_성공() throws Exception {
         // given
-        LoginDto loginDto = userTestController.createTestUser();
+        LoginResponse loginDto = userTestController.createTestUser();
         String accessToken = loginDto.getToken();
         Long userId = loginDto.getUserId();
         // when
