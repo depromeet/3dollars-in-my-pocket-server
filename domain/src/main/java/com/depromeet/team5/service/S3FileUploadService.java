@@ -1,12 +1,16 @@
 package com.depromeet.team5.service;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.depromeet.team5.domain.ImageUploadValue;
+import com.depromeet.team5.exception.FailedToDeleteImageException;
 import com.depromeet.team5.exception.FailedToUploadImageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,5 +72,18 @@ public class S3FileUploadService {
 
     private static String getSavedFileName(String origName) {
         return getUuid() + origName.substring(origName.lastIndexOf('.'));
+    }
+
+    public void delete(String url) {
+        String[] key = url.split("/");
+        try {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, key[key.length-1]));
+        } catch (AmazonServiceException e) {
+            log.error("Failed to delete image", e);
+            throw new FailedToDeleteImageException();
+        } catch (SdkClientException e) {
+            log.error("Failed to upload image", e);
+            throw new FailedToDeleteImageException();
+        }
     }
 }

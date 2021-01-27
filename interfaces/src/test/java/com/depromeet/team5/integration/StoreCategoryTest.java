@@ -12,6 +12,7 @@ import com.depromeet.team5.integration.api.UserTestController;
 import com.depromeet.team5.repository.StoreMenuCategoryRepository;
 import com.depromeet.team5.repository.StoreRepository;
 import com.depromeet.team5.service.MenuCategoryService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,12 +71,10 @@ class StoreCategoryTest {
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
         storeDto.setMenu(Collections.emptyList());
-        storeDto.setImage(Collections.emptyList());
         StoreIdDto storeIdDto = storeTestController.save(
                 loginDto.getToken(),
                 loginDto.getUserId(),
-                storeDto,
-                Collections.emptyList()
+                storeDto
         );
         // then
         assertThat(storeRepository.findAll()).hasSize(1);

@@ -47,7 +47,7 @@ public class Store {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "image_id")
-    private List<Image> image;
+    private List<Image> image = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "menu_id")
@@ -75,15 +75,15 @@ public class Store {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static Store from(StoreCreateValue storeCreateValue, List<Image> imageList, User user) {
+    public static Store from(StoreCreateValue storeCreateValue, User user) {
         Store store = new Store();
         store.latitude = storeCreateValue.getLatitude();
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.storeType = storeCreateValue.getStoreType();
         store.category = storeCreateValue.getCategory();
-        store.image = imageList;
         store.user = user;
+      
         if (storeCreateValue.getAppearanceDays() != null) {
             for (DayOfWeek day : storeCreateValue.getAppearanceDays()) {
                 store.appearanceDays.add(AppearanceDay.from(store, day));
@@ -101,12 +101,11 @@ public class Store {
         return store;
     }
 
-    public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
+    public void setStore(StoreUpdateValue storeUpdateValue) {
         // latitude = storeUpdateValue.getLatitude();
         // longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
         storeType = storeUpdateValue.getStoreType();
-        image.addAll(imageList);
         appearanceDays.clear();
         paymentMethods.clear();
         menu.clear();
@@ -139,5 +138,9 @@ public class Store {
 
     public void setRating(Float rating) {
         this.rating = rating;
+    }
+
+    public void addImages(List<Image> imageList) {
+        this.image.addAll(imageList);
     }
 }
