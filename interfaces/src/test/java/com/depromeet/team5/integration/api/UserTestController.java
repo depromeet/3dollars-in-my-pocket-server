@@ -1,6 +1,6 @@
 package com.depromeet.team5.integration.api;
 
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserDto;
@@ -39,7 +39,7 @@ public class UserTestController {
     public LoginResponse createTestUser() throws Exception {
         UserDto userDto = new UserDto();
         userDto.setSocialId("socialId");
-        userDto.setSocialType(SocialTypes.KAKAO);
+        userDto.setSocialType(SocialType.KAKAO);
         return login(userDto);
     }
 

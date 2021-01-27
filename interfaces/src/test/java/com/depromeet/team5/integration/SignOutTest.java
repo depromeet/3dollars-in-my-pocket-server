@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.domain.user.UserStatusType;
 import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.dto.UserDto;
@@ -42,37 +42,37 @@ class SignOutTest {
     @Test
     void siginout() throws Exception {
         // given
-        LoginResponse loginDto = this.login( "kakao1", SocialTypes.KAKAO);
+        LoginResponse loginResponse = this.login( "kakao1", SocialType.KAKAO);
         // when
-        String token = loginDto.getToken();
+        String token = loginResponse.getToken();
         userTestController.signout(token);
         // then
-        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
+        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialType.KAKAO)
                 .filter(it -> it.getStatus() == UserStatusType.INACTIVE)).isPresent();
     }
 
     @Test
     void signout_signin() throws Exception {
         // given
-        LoginResponse firstSignUpResult = this.login( "kakao1", SocialTypes.KAKAO);
+        LoginResponse firstSignUpResult = this.login( "kakao1", SocialType.KAKAO);
         String token = firstSignUpResult.getToken();
         userTestController.signout(token);
-        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
+        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialType.KAKAO)
                 .filter(it -> it.getStatus() == UserStatusType.INACTIVE)).isPresent();
         // when
-        LoginResponse loginDto = this.login("kakao1", SocialTypes.KAKAO);
+        LoginResponse loginResponse = this.login("kakao1", SocialType.KAKAO);
         // then
-        assertThat(loginDto.getUserId()).isEqualTo(firstSignUpResult.getUserId());
-        assertThat(loginDto.getState()).isFalse();
+        assertThat(loginResponse.getUserId()).isEqualTo(firstSignUpResult.getUserId());
+        assertThat(loginResponse.getState()).isFalse();
     }
 
-    private LoginResponse login(String socialId, SocialTypes socialType) throws Exception {
+    private LoginResponse login(String socialId, SocialType socialType) throws Exception {
         UserDto userDto = new UserDto();
         userDto.setSocialId(socialId);
         userDto.setSocialType(socialType);
-        LoginResponse loginDto = userTestController.login(userDto);
-        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialTypes.KAKAO)
+        LoginResponse loginResponse = userTestController.login(userDto);
+        assertThat(userRepository.findBySocialIdAndSocialType("kakao1", SocialType.KAKAO)
                 .filter(it -> it.getStatus() == UserStatusType.ACTIVE)).isPresent();
-        return loginDto;
+        return loginResponse;
     }
 }

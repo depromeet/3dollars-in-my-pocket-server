@@ -42,22 +42,22 @@ class UserTest {
     @Test
     void getMe() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
-        String accessToken = loginDto.getToken();
-        userTestController.setNickname(accessToken, loginDto.getUserId(), "nickname");
+        LoginResponse loginResponse = userTestController.createTestUser();
+        String accessToken = loginResponse.getToken();
+        userTestController.setNickname(accessToken, loginResponse.getUserId(), "nickname");
         // when
         UserResponse userResponse = userTestController.getMe(accessToken);
         // then
-        assertThat(userResponse.getUserId()).isEqualTo(loginDto.getUserId());
+        assertThat(userResponse.getUserId()).isEqualTo(loginResponse.getUserId());
         assertThat(userResponse.getName()).isEqualTo("nickname");
     }
 
     @Test
     void setNicknameTest0() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
-        String accessToken = loginDto.getToken();
-        Long userId = loginDto.getUserId();
+        LoginResponse loginResponse = userTestController.createTestUser();
+        String accessToken = loginResponse.getToken();
+        Long userId = loginResponse.getUserId();
         // when
         userTestController.setNickname(accessToken, userId, "nickname");
         // then
@@ -69,9 +69,9 @@ class UserTest {
     @Test
     void setNicknameTest1() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
-        String accessToken = loginDto.getToken();
-        Long userId = loginDto.getUserId();
+        LoginResponse loginResponse = userTestController.createTestUser();
+        String accessToken = loginResponse.getToken();
+        Long userId = loginResponse.getUserId();
         // when
         mockMvc.perform(put("/api/v1/user/nickname")
                 .header("Authorization", accessToken)
@@ -85,9 +85,9 @@ class UserTest {
     @Test
     void setNicknameTest2() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
-        String accessToken = loginDto.getToken();
-        Long userId = loginDto.getUserId();
+        LoginResponse loginResponse = userTestController.createTestUser();
+        String accessToken = loginResponse.getToken();
+        Long userId = loginResponse.getUserId();
         // when
         mockMvc.perform(put("/api/v1/user/nickname")
                 .header("Authorization", accessToken)

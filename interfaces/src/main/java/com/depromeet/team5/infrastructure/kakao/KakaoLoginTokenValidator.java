@@ -1,6 +1,6 @@
 package com.depromeet.team5.infrastructure.kakao;
 
-import com.depromeet.team5.application.security.TokenVerifier;
+import com.depromeet.team5.application.security.TokenValidator;
 import com.google.common.net.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KakaoTokenVerifier implements TokenVerifier {
+public class KakaoLoginTokenValidator implements TokenValidator {
 
     private final WebClient webClient;
 
     @Override
-    public boolean isVerified(String accessToken) {
+    public boolean supports(String accessToken) {
+        return false;
+    }
+
+    @Override
+    public boolean isValid(String accessToken) {
 
         ClientResponse clientResponse = webClient.mutate()
                  .baseUrl("https://kapi.kakao.com")

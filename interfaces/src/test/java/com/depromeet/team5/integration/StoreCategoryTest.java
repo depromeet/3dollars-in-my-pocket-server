@@ -59,7 +59,7 @@ class StoreCategoryTest {
     @Test
     void save() throws Exception {
         // given
-        LoginResponse loginDto = userTestController.createTestUser();
+        LoginResponse loginResponse = userTestController.createTestUser();
         menuCategoryService.create(CategoryTypes.BUNGEOPPANG.name());
         // when
         StoreDto storeDto = new StoreDto();
@@ -72,9 +72,10 @@ class StoreCategoryTest {
         storeDto.setLongitude(127.0);
         storeDto.setMenu(Collections.emptyList());
         StoreIdDto storeIdDto = storeTestController.save(
-                loginDto.getToken(),
-                loginDto.getUserId(),
-                storeDto
+                loginResponse.getToken(),
+                loginResponse.getUserId(),
+                storeDto,
+                Collections.emptyList()
         );
         // then
         assertThat(storeRepository.findAll()).hasSize(1);

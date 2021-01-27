@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.dto.UserDto;
 import com.depromeet.team5.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +37,7 @@ class LoginTest {
     void login_카카오_로그인_처음_가입하는_경우() throws Exception {
         UserDto userDto = new UserDto();
         userDto.setSocialId("socialIdForKakao");
-        userDto.setSocialType(SocialTypes.KAKAO);
+        userDto.setSocialType(SocialType.KAKAO);
 
         mockMvc.perform(post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -48,14 +48,14 @@ class LoginTest {
                .andExpect(jsonPath("$.state").value(Boolean.FALSE))
                .andReturn();
 
-        assertThat(userRepository.findBySocialIdAndSocialType("socialIdForKakao", SocialTypes.KAKAO)).isNotEmpty();
+        assertThat(userRepository.findBySocialIdAndSocialType("socialIdForKakao", SocialType.KAKAO)).isNotEmpty();
     }
 
     @Test
     void login_애플_로그인_처음_가입하는_경우() throws Exception {
         UserDto userDto = new UserDto();
         userDto.setSocialId("socialIdForApple");
-        userDto.setSocialType(SocialTypes.APPLE);
+        userDto.setSocialType(SocialType.APPLE);
 
         mockMvc.perform(post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -66,6 +66,6 @@ class LoginTest {
                .andExpect(jsonPath("$.state").value(Boolean.FALSE))
                .andReturn();
 
-        assertThat(userRepository.findBySocialIdAndSocialType("socialIdForApple", SocialTypes.APPLE)).isNotEmpty();
+        assertThat(userRepository.findBySocialIdAndSocialType("socialIdForApple", SocialType.APPLE)).isNotEmpty();
     }
 }
