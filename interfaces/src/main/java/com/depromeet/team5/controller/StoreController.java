@@ -41,7 +41,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
+    public ResponseEntity<StoreIdDto> save(@ModelAttribute StoreDto storeDto,
                                            @RequestParam Long userId) {
         Store store = storeService.saveStore(
                 StoreCreateValue.of(
@@ -115,7 +115,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
-    public ResponseEntity<String> updateStore(StoreUpdateDto storeUpdateDto,
+    public ResponseEntity<String> updateStore(@ModelAttribute StoreUpdateDto storeUpdateDto,
                                               @RequestParam Long storeId) {
         storeService.updateStore(
                 StoreUpdateValue.of(
