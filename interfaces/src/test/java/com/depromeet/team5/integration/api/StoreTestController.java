@@ -34,8 +34,11 @@ public class StoreTestController {
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/store/save")
                 .header("Authorization", accessToken)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .queryParam("userId", userId.toString())
-                .content(objectMapper.writeValueAsBytes(storeDto))
+                .param("userId", userId.toString())
+                .param("latitude", storeDto.getLatitude().toString())
+                .param("longitude", storeDto.getLongitude().toString())
+                .param("storeName", storeDto.getStoreName())
+                .param("category", storeDto.getCategory().name())
         ).andReturn();
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreIdDto.class);
     }
