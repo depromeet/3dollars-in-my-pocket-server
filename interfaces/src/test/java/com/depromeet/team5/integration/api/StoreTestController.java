@@ -3,6 +3,7 @@ package com.depromeet.team5.integration.api;
 import com.depromeet.team5.domain.store.CategoryTypes;
 import com.depromeet.team5.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -25,6 +26,7 @@ public class StoreTestController {
                            StoreDto storeDto) throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/store/save")
                 .header("Authorization", accessToken)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("userId", userId.toString())
                 .param("latitude", storeDto.getLatitude().toString())
                 .param("longitude", storeDto.getLongitude().toString())
