@@ -33,13 +33,12 @@ public class StoreTestController {
                            StoreDto storeDto) throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/store/save")
                 .header("Authorization", accessToken)
-                .contentType(MediaType.APPLICATION_JSON)
-                .queryParam("userId", userId.toString())
-                .content(objectMapper.writeValueAsBytes(storeDto))
-//                .param("latitude", storeDto.getLatitude().toString())
-//                .param("longitude", storeDto.getLongitude().toString())
-//                .param("storeName", storeDto.getStoreName())
-//                .param("category", storeDto.getCategory().name())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("userId", userId.toString())
+                .param("latitude", storeDto.getLatitude().toString())
+                .param("longitude", storeDto.getLongitude().toString())
+                .param("storeName", storeDto.getStoreName())
+                .param("category", storeDto.getCategory().name())
         ).andReturn();
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreIdDto.class);
     }
