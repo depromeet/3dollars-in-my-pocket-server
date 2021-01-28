@@ -5,5 +5,6 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class SocialVo {
     String socialId;
-    SocialTypes socialType;
+    SocialType socialType;
+    String token;
 }

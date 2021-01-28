@@ -16,15 +16,20 @@ repositories {
 
 def swagger_version = '2.9.2'
 def java_jwt_version = '3.7.0'
+def jjwt_version = '0.11.2'
 
 dependencies {
     implementation project(':domain')
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation "com.auth0:java-jwt:${java_jwt_version}"
     implementation "io.springfox:springfox-swagger2:${swagger_version}"
     implementation "io.springfox:springfox-swagger-ui:${swagger_version}"
+    compile "io.jsonwebtoken:jjwt-api:${jjwt_version}"
+    runtime "io.jsonwebtoken:jjwt-impl:${jjwt_version}",
+            "io.jsonwebtoken:jjwt-jackson:${jjwt_version}"
     compileOnly 'org.springframework.boot:spring-boot-devtools'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'

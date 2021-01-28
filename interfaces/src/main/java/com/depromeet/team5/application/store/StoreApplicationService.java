@@ -50,9 +50,9 @@ public class StoreApplicationService {
     }
 
     public StoresGroupByRatingDto getStoresByCategoryGroupByRating(
-        CategoryTypes categoryType,
-        Location userLocation,
-        Location mapLocation
+            CategoryTypes categoryType,
+            Location userLocation,
+            Location mapLocation
     ) {
         Assert.notNull(categoryType, "'categoryType' must not be null");
         Assert.notNull(userLocation, "'userLocation' must not be null");
