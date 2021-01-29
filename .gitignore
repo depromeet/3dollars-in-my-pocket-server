@@ -1,15 +1,15 @@
 HELP.md
 .gradle
 build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
 /interfaces/src/main/resources/application.yml
 /interfaces/src/main/resources/application-local.yml
 /admin/src/main/resources/application.yml
 /admin/src/main/resources/application-local.yml
 /batch/src/main/resources/application.yml
 /batch/src/main/resources/application-local.yml
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**
-!**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -37,4 +37,3 @@ out/
 ### VS Code ###
 .vscode/
 
-/batch/src/main/resources/application-local.yml
