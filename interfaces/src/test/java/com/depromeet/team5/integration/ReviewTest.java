@@ -2,7 +2,6 @@ package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
 import com.depromeet.team5.dto.*;
-import com.depromeet.team5.exception.ReviewNotFoundException;
 import com.depromeet.team5.integration.api.ReviewTestController;
 import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,9 +42,9 @@ class ReviewTest {
         reviewTestController = new ReviewTestController(mockMvc, objectMapper);
         storeTestController = new StoreTestController(mockMvc, objectMapper);
 
-        LoginDto loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
-        this.accessToken = loginDto.getToken();
-        this.userId = loginDto.getUserId();
+        LoginResponse loginResponse = new UserTestController(mockMvc, objectMapper).createTestUser();
+        this.accessToken = loginResponse.getToken();
+        this.userId = loginResponse.getUserId();
     }
 
     @Test
@@ -71,9 +69,9 @@ class ReviewTest {
         Long storeId = storeTestController.createStore(accessToken, userId).getStoreId();
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
-        Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
+        Long reviewId = reviewPomDto.getContent().get(0).getId();
         ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest();
-        reviewUpdateRequest.setContent("updatedReviewContent");
+        reviewUpdateRequest.setContents("updatedReviewContent");
         reviewUpdateRequest.setRating(0);
         // when
         ReviewResponse reviewResponse = reviewTestController.update(accessToken, reviewId, reviewUpdateRequest);
@@ -88,7 +86,7 @@ class ReviewTest {
         Long storeId = storeTestController.createStore(accessToken, userId).getStoreId();
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
-        Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
+        Long reviewId = reviewPomDto.getContent().get(0).getId();
         // when
         reviewTestController.delete(accessToken, reviewId);
         // then

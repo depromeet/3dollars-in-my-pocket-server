@@ -9,12 +9,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -38,6 +39,13 @@ public class Store {
      * 이름
      */
     private String storeName;
+
+    /**
+     * 가게 종류
+     */
+    @Enumerated(value = EnumType.STRING)
+    private StoreType storeType;
+
     /**
      * 가게 카테고리는 없어지고, 메뉴 카테고리를 사용합니다.
      * 가게마다 대표카테고리는 존재하는데, 메뉴 개수나 개인화 점수 등 데이터에 따라 동적으로 변경될 수 있어서 db 에 값을 저장하지 않습니다.
@@ -45,12 +53,20 @@ public class Store {
     @Deprecated
     @Enumerated(value = EnumType.STRING)
     private CategoryType category;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AppearanceDay> appearanceDays = new HashSet<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
+
     /**
-     * 가게 사진들
+     * 가게 사진
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "image_id") // FIXME: storeId
-    private List<Image> image;
+    @JoinColumn(name = "image_id")
+    private List<Image> image = new ArrayList<>(); // FIXME: storeId
+
     /**
      * 메뉴
      */
@@ -98,42 +114,59 @@ public class Store {
     /**
      * 새 가게를 생성합니다.
      * @param storeCreateValue 가게 생성 정보
-     * @param imageList 가게 사진 목록
      * @param user 제보자
      * @return 새로 생성한 가게
      */
-    public static Store from(StoreCreateValue storeCreateValue, List<Image> imageList, User user) {
+    public static Store from(StoreCreateValue storeCreateValue, User user) {
         Store store = new Store();
         store.latitude = storeCreateValue.getLatitude();
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
+        store.storeType = storeCreateValue.getStoreType();
         store.category = storeCreateValue.getCategory();
-        store.image = imageList;
-        store.review = new ArrayList<>();
-        store.rating = 0F;
-        store.deleteRequest = new ArrayList<>();
         store.user = user;
-        if (storeCreateValue.getMenus() != null){
-            store.menu = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
-        } else {
-            store.menu = new ArrayList<>();
+
+        if (storeCreateValue.getAppearanceDays() != null) {
+            for (DayOfWeek day : storeCreateValue.getAppearanceDays()) {
+                store.appearanceDays.add(AppearanceDay.from(store, day));
+            }
         }
+        if (storeCreateValue.getPaymentMethods() != null) {
+            for (PaymentMethodType paymentMethodType : storeCreateValue.getPaymentMethods()) {
+                store.paymentMethods.add(PaymentMethod.from(store, paymentMethodType));
+            }
+        }
+        if (storeCreateValue.getMenus() != null) {
+            store.menu = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
+        }
+
         return store;
     }
 
     /**
      * 가게 정보 수정
      * @param storeUpdateValue 가게 수정할 정보
-     * @param imageList 가게 사진 목록
      */
-    public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
+    public void setStore(StoreUpdateValue storeUpdateValue) {
         // TODO: 가게 위치 수정 막으려고 주석 추가함. 가게 위치 수정 허용되면 주석 해제 필요.
         // latitude = storeUpdateValue.getLatitude();
         // longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
-        image.addAll(imageList);
+        storeType = storeUpdateValue.getStoreType();
+        appearanceDays.clear();
+        paymentMethods.clear();
         menu.clear();
-        if (storeUpdateValue.getMenus() != null){
+        if (storeUpdateValue.getAppearanceDays() != null) {
+            for (DayOfWeek day : storeUpdateValue.getAppearanceDays()) {
+                appearanceDays.add(AppearanceDay.from(this, day));
+            }
+        }
+        if (storeUpdateValue.getPaymentMethods() != null) {
+            for (PaymentMethodType paymentMethodType : storeUpdateValue.getPaymentMethods()) {
+                paymentMethods.add(PaymentMethod.from(this, paymentMethodType));
+            }
+        }
+        if (storeUpdateValue.getMenus() != null) {
             menu.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
     }
@@ -155,10 +188,9 @@ public class Store {
     /**
      * 가게 카테고리 추가
      * @param storeMenuCategory 메뉴에 추가된 가게 카테고리
-     * @return
      */
-    public boolean addStoreMenuCategory(StoreMenuCategory storeMenuCategory) {
-        return storeMenuCategories.add(storeMenuCategory);
+    public void addStoreMenuCategory(StoreMenuCategory storeMenuCategory) {
+        storeMenuCategories.add(storeMenuCategory);
     }
 
     /**
@@ -192,5 +224,13 @@ public class Store {
             }
         }
         return categoryType;
+    }
+
+    /**
+     * 이미지 추가
+     * @param imageList 이미지 목록
+     */
+    public void addImages(List<Image> imageList) {
+        this.image.addAll(imageList);
     }
 }

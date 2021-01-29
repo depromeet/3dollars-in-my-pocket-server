@@ -13,3 +13,6 @@ kakao:
 jwt:
   issuer: issuerJwt
   secret: secretJwt
+apple:
+  base_url: appleBaseUrl
+  client_id: appleClientId
