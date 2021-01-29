@@ -41,8 +41,8 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "  INNER JOIN menu m ON s.id = m.menu_id" +
             "  WHERE m.category = :category" +
             "  GROUP BY s.id" +
-            "  HAVING s.distance >= :radiusStart AND s.distance < :radiusEnd" +
-            "  ORDER BY s.distance", nativeQuery = true)
+            "  HAVING distance >= :radiusStart AND distance < :radiusEnd" +
+            "  ORDER BY distance", nativeQuery = true)
     List<Store> findByDistanceBetweenAndCategory(@Param("latitude") final Double latitude,
                                                  @Param("longitude") final Double longitude,
                                                  @Param("radiusStart") final Double distanceStart,
@@ -52,6 +52,4 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
     Page<Store> findAllByUser(User user, Pageable pageable);
 
     Slice<Store> findByIdGreaterThan(Long storeId, Pageable pageable);
-
-    Store saveAndFlush(Store store);
 }
