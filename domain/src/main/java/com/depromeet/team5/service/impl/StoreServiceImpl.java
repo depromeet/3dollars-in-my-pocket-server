@@ -37,8 +37,9 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        List<Image> image = convertImage(imageUploadValues);
-        Store store = Store.from(storeCreateValue, image, user);
+        List<Image> images = convertImages(imageUploadValues);
+        imageRepository.saveAll(images);
+        Store store = Store.from(storeCreateValue, images, user);
         storeRepository.save(store);
         this.addStoreMenuCategory(store.getId());
         return store;
@@ -111,9 +112,9 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> image = convertImage(imageUploadValues);
-        store.setStore(storeUpdateValue, image);
-        storeRepository.save(store);
+        List<Image> images = convertImages(imageUploadValues);
+        imageRepository.saveAll(images);
+        store.setStore(storeUpdateValue, images);
     }
 
     @Override
@@ -133,11 +134,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void saveImage(Long storeId, List<ImageUploadValue> imageUploadValues) {
+    public List<Image> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> images = convertImage(imageUploadValues);
+        List<Image> images = convertImages(imageUploadValues);
+        imageRepository.saveAll(images);
         store.addImages(images);
-        storeRepository.save(store);
+        return images;
     }
 
     @Override
@@ -150,7 +152,7 @@ public class StoreServiceImpl implements StoreService {
                 });
     }
 
-    private List<Image> convertImage(List<ImageUploadValue> imageUploadValues) {
+    private List<Image> convertImages(List<ImageUploadValue> imageUploadValues) {
         return imageUploadValues.stream()
                 .filter(Objects::nonNull)
                 .map(s3FileUploadService::upload)

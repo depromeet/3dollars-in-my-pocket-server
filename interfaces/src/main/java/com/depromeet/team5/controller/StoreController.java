@@ -169,22 +169,23 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/{storeId}/images")
-    public ResponseEntity<String> saveImage(@PathVariable Long storeId,
-                                            @RequestPart(value = "image", required = false) List<MultipartFile> images) {
-        storeService.saveImage(storeId,
-                Optional.ofNullable(images)
-                        .map(it -> it.stream()
-                                .map(this::toImageUploadValue)
-                                .collect(Collectors.toList()))
-                        .orElse(Collections.emptyList()));
-        return new ResponseEntity<>("image save success", HttpStatus.OK);
+    public ResponseEntity<List<ImageResponse>> saveImages(@PathVariable Long storeId,
+                                                         @RequestPart(value = "image", required = false) List<MultipartFile> images) {
+
+        List<ImageUploadValue> imageUploadValues = Optional.ofNullable(images)
+                .map(it -> it.stream()
+                        .map(this::toImageUploadValue)
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+        return ResponseEntity.ok(storeApplicationService.saveImages(storeId, imageUploadValues));
     }
 
     @ApiOperation("가게의 이미지를 삭제합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
-    @DeleteMapping("/images/{imageId}")
-    public ResponseEntity<String> deleteImage(@PathVariable Long imageId) {
+    @DeleteMapping("{storeId}/images/{imageId}")
+    public ResponseEntity<String> deleteImage(@PathVariable Long storeId,
+                                              @PathVariable Long imageId) {
         storeService.deleteImage(imageId);
         return new ResponseEntity<>("image delete success", HttpStatus.OK);
     }

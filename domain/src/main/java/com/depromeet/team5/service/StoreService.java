@@ -23,7 +23,7 @@ public interface StoreService {
 
     void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType);
 
-    void saveImage(Long storeId, List<ImageUploadValue> imageUploadValues);
+    List<Image> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues);
 
     void deleteImage(Long imageId);
 }

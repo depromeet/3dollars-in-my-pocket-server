@@ -1,8 +1,11 @@
 package com.depromeet.team5.application.store;
 
+import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryType;
+import com.depromeet.team5.domain.store.Image;
 import com.depromeet.team5.domain.store.Store;
+import com.depromeet.team5.dto.ImageResponse;
 import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.StoresGroupByRatingDto;
 import com.depromeet.team5.dto.StoreDetailDto;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Application Service
@@ -50,9 +54,9 @@ public class StoreApplicationService {
     }
 
     public StoresGroupByRatingDto getStoresByCategoryGroupByRating(
-        CategoryType categoryType,
-        Location userLocation,
-        Location mapLocation
+            CategoryType categoryType,
+            Location userLocation,
+            Location mapLocation
     ) {
         Assert.notNull(categoryType, "'categoryType' must not be null");
         Assert.notNull(userLocation, "'userLocation' must not be null");
@@ -65,5 +69,13 @@ public class StoreApplicationService {
                 categoryType
         );
         return storeAssembler.toCategoryReviewDto(storeList, userLocation);
+    }
+
+    @Transactional
+    public List<ImageResponse> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues) {
+        List<Image> images = storeService.saveImages(storeId, imageUploadValues);
+        return images.stream()
+                .map(ImageResponse::of)
+                .collect(Collectors.toList());
     }
 }

@@ -77,12 +77,9 @@ public class S3FileUploadService {
     public void delete(String url) {
         String[] key = url.split("/");
         try {
-            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, key[key.length-1]));
-        } catch (AmazonServiceException e) {
-            log.error("Failed to delete image", e);
-            throw new FailedToDeleteImageException();
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, key[key.length - 1]));
         } catch (SdkClientException e) {
-            log.error("Failed to upload image", e);
+            log.error("Failed to delete image", e);
             throw new FailedToDeleteImageException();
         }
     }
