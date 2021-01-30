@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
 import com.depromeet.team5.dto.*;
@@ -58,11 +58,12 @@ class StoreTest {
         storeDto.setPaymentMethods(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
-        storeDto.setCategory(CategoryTypes.BUNGEOPPANG);
-        MenuDto menuDto = new MenuDto();
-        menuDto.setName("menuName");
-        menuDto.setPrice("menuPrice");
-        storeDto.setMenu(Collections.singletonList(menuDto));
+        storeDto.setCategory(CategoryType.BUNGEOPPANG);
+        MenuRequest menuRequest = new MenuRequest();
+        menuRequest.setCategory(CategoryType.BUNGEOPPANG);
+        menuRequest.setName("menuName");
+        menuRequest.setPrice("menuPrice");
+        storeDto.setMenu(Collections.singletonList(menuRequest));
         // when
         StoreIdDto storeIdDto = storeTestController.save(loginResponse.getToken(), loginResponse.getUserId(), storeDto);
         // then

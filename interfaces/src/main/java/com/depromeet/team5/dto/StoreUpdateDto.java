@@ -22,6 +22,6 @@ public class StoreUpdateDto {
     private Set<DayOfWeek> appearanceDays;
 
     private Set<PaymentMethodType> paymentMethods;
-  
-    private List<MenuDto> menu;
+
+    private List<MenuRequest> menu;
 }

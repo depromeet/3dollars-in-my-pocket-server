@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
 import com.depromeet.team5.domain.user.User;
@@ -29,11 +29,12 @@ public class StoreDetailDto {
 
     private Set<PaymentMethodType> paymentMethods;
 
-    private CategoryTypes category;
+    private CategoryType category;
 
     private List<ImageDto> image;
 
-    private List<MenuDto> menu = new ArrayList<>();
+    @JsonProperty("menu")
+    private List<MenuResponse> menuResponses = new ArrayList<>();
 
     @JsonProperty("review")
     private List<ReviewDetailResponse> reviewDetailResponses = new ArrayList<>();

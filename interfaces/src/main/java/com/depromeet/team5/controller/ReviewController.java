@@ -1,15 +1,13 @@
 package com.depromeet.team5.controller;
 
 import com.depromeet.team5.application.review.ReviewApplicationService;
+import com.depromeet.team5.application.security.Auth;
 import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.review.ReviewCreateValue;
+import com.depromeet.team5.domain.review.ReviewService;
 import com.depromeet.team5.domain.review.ReviewUpdateValue;
-import com.depromeet.team5.dto.ReviewDto;
-import com.depromeet.team5.dto.ReviewPomDto;
-import com.depromeet.team5.dto.ReviewResponse;
-import com.depromeet.team5.dto.ReviewUpdateRequest;
-import com.depromeet.team5.service.ReviewService;
-import com.depromeet.team5.application.security.Auth;
+import com.depromeet.team5.dto.*;
+import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,6 +54,14 @@ public class ReviewController {
                         reviewPage.getTotalPages()
                 )
         );
+    }
+
+    @ApiOperation("특정 리뷰를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @GetMapping("/{reviewId}")
+    public ResponseEntity<ReviewDetailResponse> getReview(@PathVariable Long reviewId) {
+        return ResponseEntity.ok(reviewApplicationService.getDetailReview(reviewId));
     }
 
     @ApiOperation("사용자가 작성한 리뷰를 수정합니다. 인증이 필요한 요청입니다.")

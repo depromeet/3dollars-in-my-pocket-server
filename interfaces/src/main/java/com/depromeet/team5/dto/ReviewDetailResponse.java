@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.user.User;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ public class ReviewDetailResponse {
     private Long id;
     private Long storeId;
     private String storeName;
-    private CategoryTypes category;
+    private CategoryType category;
     private String contents;
     private Integer rating;
     private User user;

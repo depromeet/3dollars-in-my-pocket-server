@@ -21,7 +21,7 @@ public class StoreCreateValue {
 
     Set<PaymentMethodType> paymentMethods;
 
-    CategoryTypes category;
+    CategoryType category;
 
     List<MenuCreateValue> menus;
 }

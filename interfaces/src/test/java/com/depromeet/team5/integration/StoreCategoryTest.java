@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
 import com.depromeet.team5.dto.LoginResponse;
@@ -12,7 +12,6 @@ import com.depromeet.team5.integration.api.UserTestController;
 import com.depromeet.team5.repository.StoreMenuCategoryRepository;
 import com.depromeet.team5.repository.StoreRepository;
 import com.depromeet.team5.service.MenuCategoryService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,14 +59,15 @@ class StoreCategoryTest {
     void save() throws Exception {
         // given
         LoginResponse loginResponse = userTestController.createTestUser();
-        menuCategoryService.create(CategoryTypes.BUNGEOPPANG.name());
+        menuCategoryService.create(CategoryType.BUNGEOPPANG.name());
         // when
         StoreDto storeDto = new StoreDto();
         storeDto.setStoreName("storeName");
+        storeDto.setCategory(CategoryType.BUNGEOPPANG);
         storeDto.setStoreType(StoreType.ROAD);
         storeDto.setAppearanceDays(new HashSet<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.FRIDAY)));
         storeDto.setPaymentMethods(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
-        storeDto.setCategory(CategoryTypes.BUNGEOPPANG);
+        storeDto.setCategory(CategoryType.BUNGEOPPANG);
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
         storeDto.setMenu(Collections.emptyList());

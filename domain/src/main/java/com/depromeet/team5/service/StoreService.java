@@ -11,7 +11,7 @@ import java.util.List;
 public interface StoreService {
     Store saveStore(StoreCreateValue storeCreateValue, Long userId);
 
-    List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType);
+    List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryType categoryType);
 
     List<Store> getAll(Double latitude, Double longitude);
 

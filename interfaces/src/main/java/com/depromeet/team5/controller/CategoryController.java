@@ -2,7 +2,7 @@ package com.depromeet.team5.controller;
 
 import com.depromeet.team5.application.store.StoreApplicationService;
 import com.depromeet.team5.domain.Location;
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.StoresGroupByRatingDto;
 import com.depromeet.team5.application.security.Auth;
@@ -31,7 +31,7 @@ public class CategoryController {
             @RequestParam Double longitude,
             @RequestParam(required = false) Double mapLatitude,
             @RequestParam(required = false) Double mapLongitude,
-            @RequestParam CategoryTypes category
+            @RequestParam CategoryType category
     ) {
         Location userLocation = Location.of(latitude, longitude);
         Location mapLocation = mapLatitude != null && mapLongitude != null
@@ -55,7 +55,7 @@ public class CategoryController {
             @RequestParam Double longitude,
             @RequestParam(required = false) Double mapLatitude,
             @RequestParam(required = false) Double mapLongitude,
-            @RequestParam CategoryTypes category
+            @RequestParam CategoryType category
     ) {
         Location userLocation = Location.of(latitude, longitude);
         Location mapLocation = mapLatitude != null && mapLongitude != null

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Deprecated
 @Embeddable
 @EqualsAndHashCode(of = {"storeId", "menuCategoryId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,6 +1,6 @@
 package com.depromeet.team5.dto;
 
-import com.depromeet.team5.domain.store.CategoryTypes;
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.Data;
@@ -12,7 +12,7 @@ public class StoreCardDto {
 
     private String storeName;
 
-    private CategoryTypes category;
+    private CategoryType category;
 
     private Integer distance;
 
