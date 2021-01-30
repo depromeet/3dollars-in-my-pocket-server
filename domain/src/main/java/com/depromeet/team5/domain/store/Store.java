@@ -117,13 +117,14 @@ public class Store {
      * @param user 제보자
      * @return 새로 생성한 가게
      */
-    public static Store from(StoreCreateValue storeCreateValue, User user) {
+    public static Store from(StoreCreateValue storeCreateValue, List<Image> imageList, User user) {
         Store store = new Store();
         store.latitude = storeCreateValue.getLatitude();
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.storeType = storeCreateValue.getStoreType();
         store.category = storeCreateValue.getCategory();
+        store.image = imageList;
         store.user = user;
 
         if (storeCreateValue.getAppearanceDays() != null) {
@@ -147,7 +148,7 @@ public class Store {
      * 가게 정보 수정
      * @param storeUpdateValue 가게 수정할 정보
      */
-    public void setStore(StoreUpdateValue storeUpdateValue) {
+    public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
         // TODO: 가게 위치 수정 막으려고 주석 추가함. 가게 위치 수정 허용되면 주석 해제 필요.
         // latitude = storeUpdateValue.getLatitude();
         // longitude = storeUpdateValue.getLongitude();
@@ -155,6 +156,7 @@ public class Store {
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
         paymentMethods.clear();
+        image.addAll(imageList);
         menu.clear();
         if (storeUpdateValue.getAppearanceDays() != null) {
             for (DayOfWeek day : storeUpdateValue.getAppearanceDays()) {

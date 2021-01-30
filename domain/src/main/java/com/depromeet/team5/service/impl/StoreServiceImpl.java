@@ -35,9 +35,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public Store saveStore(StoreCreateValue storeCreateValue, Long userId) {
+    public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        Store store = Store.from(storeCreateValue, user);
+        List<Image> image = convertImage(imageUploadValues);
+        Store store = Store.from(storeCreateValue, image, user);
         storeRepository.save(store);
         this.addStoreMenuCategory(store.getId());
         return store;
@@ -108,9 +109,10 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId) {
+    public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        store.setStore(storeUpdateValue);
+        List<Image> image = convertImage(imageUploadValues);
+        store.setStore(storeUpdateValue, image);
         storeRepository.save(store);
     }
 

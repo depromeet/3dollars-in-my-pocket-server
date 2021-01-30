@@ -41,7 +41,8 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreIdDto> save(@ModelAttribute StoreDto storeDto,
+    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
+                                           @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                            @RequestParam Long userId) {
         Store store = storeService.saveStore(
                 StoreCreateValue.of(
@@ -61,7 +62,12 @@ public class StoreController {
                                         .collect(Collectors.toList())
                                 ).orElse(Collections.emptyList())
                 ),
-                userId
+                userId,
+                Optional.ofNullable(image)
+                        .map(images -> images.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList())
+                        ).orElse(Collections.emptyList())
         );
         StoreIdDto storeIdDto = new StoreIdDto();
         storeIdDto.setStoreId(store.getId());
@@ -118,7 +124,8 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
-    public ResponseEntity<String> updateStore(@ModelAttribute StoreUpdateDto storeUpdateDto,
+    public ResponseEntity<String> updateStore(StoreUpdateDto storeUpdateDto,
+                                              @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                               @RequestParam Long storeId) {
         storeService.updateStore(
                 StoreUpdateValue.of(
@@ -137,7 +144,12 @@ public class StoreController {
                                         .collect(Collectors.toList()))
                                 .orElse(Collections.emptyList())
                 ),
-                storeId
+                storeId,
+                Optional.ofNullable(image)
+                        .map(it -> it.stream()
+                                .map(this::toImageUploadValue)
+                                .collect(Collectors.toList()))
+                        .orElse(Collections.emptyList())
         );
         return new ResponseEntity<>("store update success", HttpStatus.OK);
     }
