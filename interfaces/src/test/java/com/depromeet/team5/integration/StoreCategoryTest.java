@@ -71,10 +71,12 @@ class StoreCategoryTest {
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
         storeDto.setMenu(Collections.emptyList());
+        storeDto.setImage(Collections.emptyList());
         StoreIdDto storeIdDto = storeTestController.save(
                 loginResponse.getToken(),
                 loginResponse.getUserId(),
-                storeDto
+                storeDto,
+                Collections.emptyList()
         );
         // then
         assertThat(storeRepository.findAll()).hasSize(1);

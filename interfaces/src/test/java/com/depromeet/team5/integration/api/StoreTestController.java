@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -30,7 +31,8 @@ public class StoreTestController {
 
     public StoreIdDto save(String accessToken,
                            Long userId,
-                           StoreDto storeDto) throws Exception {
+                           StoreDto storeDto,
+                           List<MultipartFile> image) throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/store/save")
                 .header("Authorization", accessToken)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -56,7 +58,8 @@ public class StoreTestController {
         menuRequest.setName("menuName");
         menuRequest.setPrice("menuPrice");
         storeDto.setMenu(Collections.singletonList(menuRequest));
-        return this.save(accessToken, userId, storeDto);
+        storeDto.setImage(Collections.emptyList());
+        return this.save(accessToken, userId, storeDto, Collections.emptyList());
     }
 
     public StoreDetailDto detail(String accessToken, Long storeId, Double latitude, Double longitude) throws Exception {
