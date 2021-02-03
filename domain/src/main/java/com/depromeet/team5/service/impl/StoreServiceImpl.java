@@ -152,6 +152,13 @@ public class StoreServiceImpl implements StoreService {
                 });
     }
 
+    @Override
+    @Transactional
+    public List<Image> getStoreImages(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
+        return store.getImage();
+    }
+
     private List<Image> convertImages(List<ImageUploadValue> imageUploadValues) {
         return imageUploadValues.stream()
                 .filter(Objects::nonNull)

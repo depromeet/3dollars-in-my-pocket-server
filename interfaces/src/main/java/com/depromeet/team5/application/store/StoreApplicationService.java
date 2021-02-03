@@ -74,8 +74,11 @@ public class StoreApplicationService {
     @Transactional
     public List<ImageResponse> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues) {
         List<Image> images = storeService.saveImages(storeId, imageUploadValues);
-        return images.stream()
-                .map(ImageResponse::of)
-                .collect(Collectors.toList());
+        return storeAssembler.toImageResponse(images);
+    }
+
+    public List<ImageResponse> getStoreImages(Long storeId) {
+        List<Image> images = storeService.getStoreImages(storeId);
+        return storeAssembler.toImageResponse(images);
     }
 }
