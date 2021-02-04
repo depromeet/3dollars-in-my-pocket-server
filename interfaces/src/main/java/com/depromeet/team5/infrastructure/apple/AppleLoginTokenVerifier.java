@@ -1,6 +1,7 @@
 package com.depromeet.team5.infrastructure.apple;
 
 import com.depromeet.team5.application.security.TokenValidator;
+import com.depromeet.team5.application.security.TokenVerifier;
 import com.depromeet.team5.exception.FailedToParseJwtException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AppleLoginTokenValidator implements TokenValidator {
+public class AppleLoginTokenVerifier implements TokenVerifier {
 
     @Value("${apple.base_url")
     private String appleBaseUrl;
@@ -75,12 +76,7 @@ public class AppleLoginTokenValidator implements TokenValidator {
     }
 
     @Override
-    public boolean supports(String accessToken) {
-        return false;
-    }
-
-    @Override
-    public boolean isValid(String accessToken) {
+    public boolean isVerified(String accessToken) {
         Claims claim = getClaims(accessToken);
         return claim != null
                 && appleBaseUrl.equals(claim.getIssuer())
