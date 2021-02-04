@@ -4,6 +4,7 @@ import com.depromeet.team5.application.review.ReviewAssembler;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.store.AppearanceDay;
+import com.depromeet.team5.domain.store.Image;
 import com.depromeet.team5.domain.store.PaymentMethod;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.*;
@@ -129,5 +130,11 @@ public class StoreAssembler {
             return null;
         }
         return StoreCardDto.of(store, location.getLatitude(), location.getLongitude());
+    }
+
+    public List<ImageResponse> toImageResponse(List<Image> images) {
+        return images.stream()
+                .map(ImageResponse::of)
+                .collect(Collectors.toList());
     }
 }

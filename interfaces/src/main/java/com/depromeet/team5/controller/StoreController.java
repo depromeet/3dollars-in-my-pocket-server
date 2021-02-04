@@ -170,7 +170,7 @@ public class StoreController {
     @Auth
     @PostMapping("/{storeId}/images")
     public ResponseEntity<List<ImageResponse>> saveImages(@PathVariable Long storeId,
-                                                         @RequestPart(value = "image", required = false) List<MultipartFile> images) {
+                                                          @RequestPart(value = "image", required = false) List<MultipartFile> images) {
 
         List<ImageUploadValue> imageUploadValues = Optional.ofNullable(images)
                 .map(it -> it.stream()
@@ -187,7 +187,15 @@ public class StoreController {
     public ResponseEntity<String> deleteImage(@PathVariable Long storeId,
                                               @PathVariable Long imageId) {
         storeService.deleteImage(imageId);
-        return new ResponseEntity<>("image delete success", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ApiOperation("특정 가게의 이미지를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @GetMapping("/{storeId}/images")
+    public ResponseEntity<List<ImageResponse>> getStoreImages(@PathVariable Long storeId) {
+        return ResponseEntity.ok(storeApplicationService.getStoreImages(storeId));
     }
 
     private ImageUploadValue toImageUploadValue(MultipartFile multipartFile) {

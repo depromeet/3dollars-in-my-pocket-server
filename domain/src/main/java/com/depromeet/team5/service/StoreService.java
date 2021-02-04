@@ -26,4 +26,6 @@ public interface StoreService {
     List<Image> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues);
 
     void deleteImage(Long imageId);
+
+    List<Image> getStoreImages(Long storeId);
 }
