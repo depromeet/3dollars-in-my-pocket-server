@@ -5,6 +5,8 @@ import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 public class StoreCardDto {
 
@@ -30,7 +32,7 @@ public class StoreCardDto {
         storeCardDto.distance = (int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter");
         storeCardDto.latitude = store.getLatitude();
         storeCardDto.longitude = store.getLongitude();
-        storeCardDto.rating = store.getRating();
+        storeCardDto.rating = Optional.ofNullable(store.getRating()).orElse(0f);
         return storeCardDto;
     }
 }
