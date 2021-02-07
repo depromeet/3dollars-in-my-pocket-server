@@ -5,6 +5,7 @@ import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -13,8 +14,15 @@ public class StoreCardDto {
     private Long id;
 
     private String storeName;
-
+    /**
+     * 대표 카테고리
+     */
+    @Deprecated
     private CategoryType category;
+    /**
+     * 가게 카테고리 목록
+     */
+    private List<CategoryType> categories;
 
     private Integer distance;
 
@@ -29,6 +37,7 @@ public class StoreCardDto {
         storeCardDto.id = store.getId();
         storeCardDto.storeName = store.getStoreName();
         storeCardDto.category = store.getCategory();
+        storeCardDto.categories = store.getCategoryTypes();
         storeCardDto.distance = (int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter");
         storeCardDto.latitude = store.getLatitude();
         storeCardDto.longitude = store.getLongitude();

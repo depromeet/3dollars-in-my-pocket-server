@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +42,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
+    public ResponseEntity<StoreIdDto> save(@Valid StoreDto storeDto,
                                            @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                            @RequestParam Long userId) {
         Store store = storeService.saveStore(
@@ -49,10 +50,11 @@ public class StoreController {
                         storeDto.getLatitude(),
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
+                        storeDto.getCategory(),
+                        storeDto.getCategories() != null ? storeDto.getCategories() : Collections.emptyList(),
                         storeDto.getStoreType(),
                         Optional.ofNullable(storeDto.getAppearanceDays()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeDto.getPaymentMethods()).orElse(Collections.emptySet()),
-                        storeDto.getCategory(),
                         Optional.ofNullable(storeDto.getMenu())
                                 .map(menu -> menu.stream()
                                         .map(it -> MenuCreateValue.of(
@@ -124,7 +126,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
-    public ResponseEntity<String> updateStore(StoreUpdateDto storeUpdateDto,
+    public ResponseEntity<String> updateStore(@Valid StoreUpdateDto storeUpdateDto,
                                               @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                               @RequestParam Long storeId) {
         storeService.updateStore(
@@ -132,6 +134,8 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
+                        storeUpdateDto.getCategoryType(),
+                        storeUpdateDto.getCategoryTypes() != null ? storeUpdateDto.getCategoryTypes() : Collections.emptyList(),
                         storeUpdateDto.getStoreType(),
                         Optional.ofNullable(storeUpdateDto.getAppearanceDays()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeUpdateDto.getPaymentMethods()).orElse(Collections.emptySet()),

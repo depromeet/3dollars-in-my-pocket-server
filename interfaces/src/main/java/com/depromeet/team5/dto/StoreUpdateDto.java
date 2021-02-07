@@ -1,5 +1,6 @@
 package com.depromeet.team5.dto;
 
+import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
 import lombok.Data;
@@ -17,6 +18,16 @@ public class StoreUpdateDto {
     private Double longitude;
 
     private String storeName;
+    /**
+     * 대표 카테고리
+     * v1 에서만 입력하는 값
+     */
+    @Deprecated
+    private CategoryType categoryType;
+    /**
+     * 카테고리 목록
+     */
+    private List<CategoryType> categoryTypes;
 
     private StoreType storeType;
 

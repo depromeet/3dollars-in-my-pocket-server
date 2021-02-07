@@ -38,8 +38,7 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "    )" +
             "  ) AS distance" +
             "  FROM store s" +
-            "  INNER JOIN menu m ON s.id = m.menu_id" +
-            "  WHERE m.category = :category" +
+            "  WHERE s.category = :category" +
             "  GROUP BY s.id" +
             "  HAVING distance >= :radiusStart AND distance < :radiusEnd" +
             "  ORDER BY distance", nativeQuery = true)
