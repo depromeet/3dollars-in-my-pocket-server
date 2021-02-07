@@ -11,11 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -149,9 +145,8 @@ public class Store {
      * @param storeUpdateValue 가게 수정할 정보
      */
     public void setStore(StoreUpdateValue storeUpdateValue, List<Image> imageList) {
-        // TODO: 가게 위치 수정 막으려고 주석 추가함. 가게 위치 수정 허용되면 주석 해제 필요.
-        // latitude = storeUpdateValue.getLatitude();
-        // longitude = storeUpdateValue.getLongitude();
+        latitude = storeUpdateValue.getLatitude();
+        longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
