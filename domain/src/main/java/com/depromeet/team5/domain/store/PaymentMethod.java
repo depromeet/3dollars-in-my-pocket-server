@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -36,6 +37,15 @@ public class PaymentMethod {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public boolean equals(Object paymentMethod) {
+        PaymentMethod pm = (PaymentMethod) paymentMethod;
+        return Objects.equals(getMethod(), pm.getMethod());
+    }
+
+    public int hashCode() {
+        return method.hashCode();
+    }
 
     public static PaymentMethod from(Store store, PaymentMethodType paymentMethodType) {
        return new PaymentMethod(store, paymentMethodType);

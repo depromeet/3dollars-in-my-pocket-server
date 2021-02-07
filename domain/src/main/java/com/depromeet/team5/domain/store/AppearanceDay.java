@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -37,6 +38,15 @@ public class AppearanceDay {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public boolean equals(Object appearanceDay) {
+        AppearanceDay ad = (AppearanceDay) appearanceDay;
+        return Objects.equals(getDay(), ad.getDay());
+    }
+
+    public int hashCode() {
+        return day.hashCode();
+    }
 
     public static AppearanceDay from(Store store, DayOfWeek day) {
         return new AppearanceDay(store, day);
