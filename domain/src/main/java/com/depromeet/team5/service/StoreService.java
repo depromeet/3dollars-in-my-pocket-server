@@ -23,7 +23,7 @@ public interface StoreService {
 
     void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType);
 
-    List<Image> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues);
+    Image addImage(Long storeId, String imageUrl);
 
     void deleteImage(Long imageId);
 

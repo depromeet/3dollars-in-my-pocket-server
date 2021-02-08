@@ -38,9 +38,9 @@ public class StoreAssembler {
         storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet()));
         storeDetailDto.setCategory(store.getCategory());
         storeDetailDto.setCategories(store.getCategoryTypes());
-        storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
-        storeDetailDto.setMenuResponses(store.getMenu().stream().map(MenuResponse::from).collect(Collectors.toList()));
-        storeDetailDto.setReviewDetailResponses(store.getReview().stream()
+        storeDetailDto.setImage(store.getImages().stream().map(ImageDto::from).collect(Collectors.toList()));
+        storeDetailDto.setMenuResponses(store.getMenus().stream().map(MenuResponse::from).collect(Collectors.toList()));
+        storeDetailDto.setReviewDetailResponses(store.getReviews().stream()
                 .filter(Review::isVisible)
                 .map(reviewAssembler::toReviewDetailResponse)
                 .sorted(Comparator.comparing(ReviewDetailResponse::getCreatedAt).reversed())
@@ -133,9 +133,10 @@ public class StoreAssembler {
         return StoreCardDto.of(store, location.getLatitude(), location.getLongitude());
     }
 
-    public List<ImageResponse> toImageResponse(List<Image> images) {
-        return images.stream()
-                .map(ImageResponse::of)
-                .collect(Collectors.toList());
+    public ImageResponse toImageResponse(Image image) {
+        if (image == null) {
+            return null;
+        }
+        return ImageResponse.from(image);
     }
 }

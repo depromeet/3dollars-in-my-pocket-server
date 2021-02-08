@@ -9,6 +9,7 @@ import com.depromeet.team5.dto.ImageResponse;
 import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.StoresGroupByRatingDto;
 import com.depromeet.team5.dto.StoreDetailDto;
+import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -24,17 +26,18 @@ import java.util.stream.Collectors;
  * 로직은 여기에 직접 작성하지 않고, 상위 클래스들에게 위임해서 처리합니다.
  */
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StoreApplicationService {
     private final StoreService storeService;
     private final StoreAssembler storeAssembler;
+    private final S3FileUploadService s3FileUploadService;
 
     public StoreDetailDto getStoreDetail(Long storeId, Double latitude, Double longitude) {
         Store store = storeService.getStore(storeId);
         return storeAssembler.toStoreDetailDto(store, latitude, longitude);
     }
 
+    @Transactional(readOnly = true)
     public StoresGroupByDistanceDto getStoresByCategoryGroupByDistance(
             CategoryType categoryType,
             Location userLocation,
@@ -53,6 +56,7 @@ public class StoreApplicationService {
         return storeAssembler.toCategoryDistanceDto(storeList, userLocation);
     }
 
+    @Transactional(readOnly = true)
     public StoresGroupByRatingDto getStoresByCategoryGroupByRating(
             CategoryType categoryType,
             Location userLocation,
@@ -71,14 +75,28 @@ public class StoreApplicationService {
         return storeAssembler.toCategoryReviewDto(storeList, userLocation);
     }
 
-    @Transactional
-    public List<ImageResponse> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues) {
-        List<Image> images = storeService.saveImages(storeId, imageUploadValues);
-        return storeAssembler.toImageResponse(images);
+    @Transactional(readOnly = true)
+    public List<ImageResponse> getStoreImages(Long storeId) {
+        Assert.notNull(storeId, "'storeId' must not be null");
+
+        return storeService.getStoreImages(storeId).stream()
+                .map(storeAssembler::toImageResponse)
+                .collect(Collectors.toList());
     }
 
-    public List<ImageResponse> getStoreImages(Long storeId) {
-        List<Image> images = storeService.getStoreImages(storeId);
-        return storeAssembler.toImageResponse(images);
+    /**
+     * 가게에 이미지 1개 추가
+     *
+     * @param storeId 가게 식별자
+     * @param imageUploadValue 이미지 업로드 정보
+     * @return 가게에 추가된 이미지 정보
+     */
+    public ImageResponse addImage(Long storeId, ImageUploadValue imageUploadValue) {
+        Assert.notNull(storeId, "'storeId' must not be null");
+        Assert.notNull(imageUploadValue, "'imageUploadValue' must not be null");
+
+        String imageUrl = s3FileUploadService.upload(imageUploadValue);
+        Image image = storeService.addImage(storeId, imageUrl);
+        return storeAssembler.toImageResponse(image);
     }
 }
