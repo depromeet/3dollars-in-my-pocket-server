@@ -37,6 +37,7 @@ public class StoreAssembler {
         storeDetailDto.setAppearanceDays(store.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toSet()));
         storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet()));
         storeDetailDto.setCategory(store.getCategory());
+        storeDetailDto.setCategories(store.getCategoryTypes());
         storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
         storeDetailDto.setMenuResponses(store.getMenu().stream().map(MenuResponse::from).collect(Collectors.toList()));
         storeDetailDto.setReviewDetailResponses(store.getReview().stream()

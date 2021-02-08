@@ -22,6 +22,14 @@ public class StoreDetailDto {
     private Double longitude;
 
     private String storeName;
+    /**
+     * 대표 카테고리
+     */
+    private CategoryType category;
+    /**
+     * 가게 카테고리 목록
+     */
+    private List<CategoryType> categories;
 
     private StoreType storeType;
 
@@ -29,7 +37,6 @@ public class StoreDetailDto {
 
     private Set<PaymentMethodType> paymentMethods;
 
-    private CategoryType category;
 
     private List<ImageDto> image;
 

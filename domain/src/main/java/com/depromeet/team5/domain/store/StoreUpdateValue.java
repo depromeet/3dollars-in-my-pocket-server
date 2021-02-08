@@ -14,6 +14,16 @@ public class StoreUpdateValue {
     Double longitude;
 
     String storeName;
+    /**
+     * 가게 카테고리
+     * v1 에서만 사용하는 값
+     */
+    @Deprecated
+    CategoryType categoryType;
+    /**
+     * 카테고리 목록
+     */
+    List<CategoryType> categoryTypes;
 
     StoreType storeType;
 

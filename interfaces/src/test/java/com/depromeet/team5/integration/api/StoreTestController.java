@@ -40,7 +40,7 @@ public class StoreTestController {
                 .param("latitude", storeDto.getLatitude().toString())
                 .param("longitude", storeDto.getLongitude().toString())
                 .param("storeName", storeDto.getStoreName())
-                .param("category", storeDto.getCategory().name())
+                .param("category", storeDto.getCategoryType().name())
         ).andReturn();
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreIdDto.class);
     }
@@ -53,7 +53,7 @@ public class StoreTestController {
         storeDto.setPaymentMethods(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
-        storeDto.setCategory(CategoryType.BUNGEOPPANG);
+        storeDto.setCategoryType(CategoryType.BUNGEOPPANG);
         MenuRequest menuRequest = new MenuRequest();
         menuRequest.setName("menuName");
         menuRequest.setPrice("menuPrice");

@@ -3,7 +3,9 @@ package com.depromeet.team5.dto;
 import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.DayOfWeek;
@@ -18,18 +20,29 @@ public class StoreDto {
     private Double longitude;
 
     private String storeName;
-
-    private StoreType storeType;
-
-    private Set<DayOfWeek> appearanceDays;
-
-    private Set<PaymentMethodType> paymentMethods;
-
     /**
-     * menu 에서 카테고리 관리하게 변경되어서, category 직접 업데이트 하는 기능은 제거.
+     * 대표 카테고리
+     * v1 에서만 입력하는 값
      */
     @Deprecated
-    private CategoryType category;
+    @JsonProperty("category")
+    private CategoryType categoryType;
+    /**
+     * 가게 카테고리 목록
+     * v1 에서 입력하지 않는 값
+     */
+    @Nullable
+    @JsonProperty("categories")
+    private List<CategoryType> categoryTypes;
+
+    @Nullable
+    private StoreType storeType;
+
+    @Nullable
+    private Set<DayOfWeek> appearanceDays;
+
+    @Nullable
+    private Set<PaymentMethodType> paymentMethods;
 
     private List<MultipartFile> image;
 

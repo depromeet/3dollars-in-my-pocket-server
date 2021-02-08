@@ -2,11 +2,13 @@ package com.depromeet.team5.domain.store;
 
 import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.user.User;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
@@ -43,12 +45,17 @@ public class Store {
     private StoreType storeType;
 
     /**
-     * 가게 카테고리는 없어지고, 메뉴 카테고리를 사용합니다.
-     * 가게마다 대표카테고리는 존재하는데, 메뉴 개수나 개인화 점수 등 데이터에 따라 동적으로 변경될 수 있어서 db 에 값을 저장하지 않습니다.
+     * 가게 대표 카테고리
      */
-    @Deprecated
     @Enumerated(value = EnumType.STRING)
     private CategoryType category;
+    /**
+     * 카테고리 목록
+     */
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "storeId")
+    private final List<StoreCategory> categories = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AppearanceDay> appearanceDays = new HashSet<>();
@@ -119,7 +126,10 @@ public class Store {
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.storeType = storeCreateValue.getStoreType();
-        store.category = storeCreateValue.getCategory();
+        store.category = storeCreateValue.getCategoryType();
+        store.categories.addAll(storeCreateValue.getCategoryTypes().stream()
+                .map(StoreCategory::from)
+                .collect(Collectors.toList()));
         store.image = imageList;
         store.user = user;
 
@@ -148,6 +158,8 @@ public class Store {
         latitude = storeUpdateValue.getLatitude();
         longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
+        category = storeUpdateValue.getCategoryType();
+        this.updateCategories(storeUpdateValue.getCategoryTypes());
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
         paymentMethods.clear();
@@ -166,6 +178,19 @@ public class Store {
         if (storeUpdateValue.getMenus() != null) {
             menu.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
+    }
+
+    private void updateCategories(List<CategoryType> categoryTypes) {
+        Set<CategoryType> beforeCategoryTypeSet = this.categories.stream()
+                .map(StoreCategory::getCategory)
+                .collect(Collectors.toSet());
+        Set<CategoryType> afterCategoryTypeSet = new HashSet<>(categoryTypes);
+
+        this.categories.removeIf(it -> !afterCategoryTypeSet.contains(it));
+        this.categories.addAll(categoryTypes.stream()
+                .filter(it -> !beforeCategoryTypeSet.contains(it))
+                .map(StoreCategory::from)
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -224,7 +249,29 @@ public class Store {
     }
 
     /**
+     * 직접 입력한 카테고리 목록과 메뉴에 등록된 카테고리의 목록의 합집합
+     * 카테고리에 속하는 메뉴 개수가 많은 순서로 정렬
+     *
+     * @return 정렬된 가게 카테고리 목록
+     */
+    public List<CategoryType> getCategoryTypes() {
+        Map<CategoryType, Long> categoryMenuCountMap = this.getMenu().stream()
+                .collect(Collectors.groupingBy(Menu::getCategory, Collectors.counting()));
+        this.getCategories().stream()
+                .map(StoreCategory::getCategory)
+                .forEach(it -> categoryMenuCountMap.putIfAbsent(it, 0L));
+        List<CategoryType> results = categoryMenuCountMap.keySet().stream()
+                .sorted(Comparator.comparing(categoryMenuCountMap::get))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(results)) {
+            return Collections.singletonList(this.category != null ? this.category : CategoryType.BUNGEOPPANG);
+        }
+        return results;
+    }
+
+    /**
      * 이미지 추가
+     *
      * @param imageList 이미지 목록
      */
     public void addImages(List<Image> imageList) {
