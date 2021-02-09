@@ -19,7 +19,7 @@ public class MigrationMenuCategoryService {
         Slice<Store> storeSlice = storeRepository.findByIdGreaterThan(storeId, pageable);
         storeSlice.getContent().forEach(store -> {
             CategoryType categoryType = store.getCategory();
-            store.getMenu().forEach(menu -> {
+            store.getMenus().forEach(menu -> {
                 if (menu.getCategory() == null) {
                     menu.setCategory(categoryType);
                 }

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -134,12 +135,15 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional
-    public List<Image> saveImages(Long storeId, List<ImageUploadValue> imageUploadValues) {
+    public Image addImage(Long storeId, String imageUrl) {
+        Assert.notNull(storeId, "'storeId' must not be null");
+        Assert.hasText(imageUrl, "'imageUrl' must not be null, empty or blank");
+
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> images = convertImages(imageUploadValues);
-        imageRepository.saveAll(images);
-        store.addImages(images);
-        return images;
+        Image image = Image.from(imageUrl);
+        imageRepository.save(image);
+        store.addImage(image);
+        return image;
     }
 
     @Override
@@ -156,7 +160,7 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public List<Image> getStoreImages(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        return store.getImage();
+        return store.getImages();
     }
 
     private List<Image> convertImages(List<ImageUploadValue> imageUploadValues) {

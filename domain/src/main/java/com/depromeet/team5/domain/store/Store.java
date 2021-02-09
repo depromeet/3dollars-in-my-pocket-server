@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -67,21 +68,24 @@ public class Store {
      * 가게 사진
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "image")
     @JoinColumn(name = "image_id")
-    private List<Image> image = new ArrayList<>(); // FIXME: storeId
+    private List<Image> images = new ArrayList<>(); // FIXME: storeId
 
     /**
      * 메뉴
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "menu")
     @JoinColumn(name = "menu_id") // FIXME: storeId
-    private List<Menu> menu = new ArrayList<>();
+    private List<Menu> menus = new ArrayList<>();
     /**
      * 리뷰
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "review")
     @JoinColumn(name = "storeId")
-    private List<Review> review = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
     /**
      * 평균 평점
      */
@@ -90,8 +94,9 @@ public class Store {
      * 삭제 요청
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "delete_request")
     @JoinColumn(name = "delete_id") // FIXME: storeId
-    private List<DeleteRequest> deleteRequest = new ArrayList<>();
+    private List<DeleteRequest> deleteRequests = new ArrayList<>();
     /**
      * 제보자
      */
@@ -130,7 +135,7 @@ public class Store {
         store.categories.addAll(storeCreateValue.getCategoryTypes().stream()
                 .map(StoreCategory::from)
                 .collect(Collectors.toList()));
-        store.image = imageList;
+        store.images = imageList;
         store.user = user;
 
         if (storeCreateValue.getAppearanceDays() != null) {
@@ -144,7 +149,7 @@ public class Store {
             }
         }
         if (storeCreateValue.getMenus() != null) {
-            store.menu = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
+            store.menus = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
         }
 
         return store;
@@ -163,8 +168,8 @@ public class Store {
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
         paymentMethods.clear();
-        image.addAll(imageList);
-        menu.clear();
+        images.addAll(imageList);
+        menus.clear();
         if (storeUpdateValue.getAppearanceDays() != null) {
             for (DayOfWeek day : storeUpdateValue.getAppearanceDays()) {
                 appearanceDays.add(AppearanceDay.from(this, day));
@@ -176,7 +181,7 @@ public class Store {
             }
         }
         if (storeUpdateValue.getMenus() != null) {
-            menu.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
+            menus.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
     }
 
@@ -204,7 +209,7 @@ public class Store {
         deleteRequestId.setStoreId(storeId); // FIXME: 가게 정보는 storeId 를 따로 입력받지 않고, this.id 를 사용하면 됨.
         deleteRequestId.setUserId(userId);
         deleteRequestId.setReason(deleteReasonType);
-        deleteRequest.add(deleteRequestId);
+        deleteRequests.add(deleteRequestId);
     }
 
     /**
@@ -235,7 +240,7 @@ public class Store {
     }
 
     private CategoryType resolveRepresentativeCategory() {
-        Map<CategoryType, List<Menu>> categoryMenuMap = menu.stream().collect(Collectors.groupingBy(Menu::getCategory));
+        Map<CategoryType, List<Menu>> categoryMenuMap = menus.stream().collect(Collectors.groupingBy(Menu::getCategory));
         CategoryType categoryType = CategoryType.BUNGEOPPANG;
         int count = 0;
         for (Map.Entry<CategoryType, List<Menu>> entry : categoryMenuMap.entrySet()) {
@@ -255,7 +260,7 @@ public class Store {
      * @return 정렬된 가게 카테고리 목록
      */
     public List<CategoryType> getCategoryTypes() {
-        Map<CategoryType, Long> categoryMenuCountMap = this.getMenu().stream()
+        Map<CategoryType, Long> categoryMenuCountMap = this.getMenus().stream()
                 .collect(Collectors.groupingBy(Menu::getCategory, Collectors.counting()));
         this.getCategories().stream()
                 .map(StoreCategory::getCategory)
@@ -275,6 +280,16 @@ public class Store {
      * @param imageList 이미지 목록
      */
     public void addImages(List<Image> imageList) {
-        this.image.addAll(imageList);
+        this.images.addAll(imageList);
+    }
+
+    /**
+     * 이미지 1개 추가
+     *
+     * @param image 가게 이미지
+     */
+    public void addImage(Image image) {
+        Assert.notNull(image, "'image' must not be null");
+        this.images.add(image);
     }
 }
