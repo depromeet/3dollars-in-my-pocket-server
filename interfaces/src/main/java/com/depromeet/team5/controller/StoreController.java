@@ -1,11 +1,12 @@
 package com.depromeet.team5.controller;
 
+import com.depromeet.team5.application.security.Auth;
 import com.depromeet.team5.application.store.StoreApplicationService;
 import com.depromeet.team5.domain.ImageUploadValue;
+import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.StoreService;
-import com.depromeet.team5.application.security.Auth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 @Api(value = "Store")
 @RestController
 @CrossOrigin(origins = {"*"})
-@RequestMapping("/api/v1/store")
+@RequestMapping({"/api/v1/store", "/api/v1/stores"})
 @RequiredArgsConstructor
 public class StoreController {
 
@@ -112,6 +113,15 @@ public class StoreController {
                                                     @RequestParam Double latitude,
                                                     @RequestParam Double longitude) {
         return ResponseEntity.ok(storeApplicationService.getStoreDetail(storeId, latitude, longitude));
+    }
+
+    @ApiOperation("위도, 경도 주위 가게 목록을 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @GetMapping
+    public ResponseEntity<List<StoreResponse>> getStoresByLocation(@RequestParam Double latitude,
+                                                                   @RequestParam Double longitude) {
+        return ResponseEntity.ok(storeApplicationService.getStoreResponse(Location.of(latitude, longitude), 0.5));
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")

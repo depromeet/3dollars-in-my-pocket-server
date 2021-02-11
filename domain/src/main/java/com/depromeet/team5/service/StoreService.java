@@ -1,5 +1,6 @@
 package com.depromeet.team5.service;
 
+import com.amazonaws.services.kms.model.CustomKeyStoresListEntry;
 import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.*;
@@ -14,6 +15,8 @@ public interface StoreService {
     List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType);
 
     List<Store> getAll(Double latitude, Double longitude);
+
+    List<Store> getStoresByLocationAndDistance(Location location, Double distance);
 
     Page<Store> getAllByUser(Long userId, Pageable pageable);
 
