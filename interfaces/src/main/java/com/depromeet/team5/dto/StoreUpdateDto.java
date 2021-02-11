@@ -24,13 +24,11 @@ public class StoreUpdateDto {
      * v1 에서만 입력하는 값
      */
     @Deprecated
-    @JsonProperty("category")
-    private CategoryType categoryType;
+    private CategoryType category;
     /**
      * 카테고리 목록
      */
-    @JsonProperty("categories")
-    private List<CategoryType> categoryTypes;
+    private List<CategoryType> categories;
 
     private StoreType storeType;
 
