@@ -3,7 +3,6 @@ package com.depromeet.team5.dto;
 import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,15 +24,13 @@ public class StoreDto {
      * v1 에서만 입력하는 값
      */
     @Deprecated
-    @JsonProperty("category")
-    private CategoryType categoryType;
+    private CategoryType category;
     /**
      * 가게 카테고리 목록
      * v1 에서 입력하지 않는 값
      */
     @Nullable
-    @JsonProperty("categories")
-    private List<CategoryType> categoryTypes;
+    private List<CategoryType> categories;
 
     @Nullable
     private StoreType storeType;
