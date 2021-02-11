@@ -52,15 +52,15 @@ public class StoreController {
                         storeDto.getLatitude(),
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
-                        storeDto.getCategoryType(),
-                        storeDto.getCategoryTypes() != null ? storeDto.getCategoryTypes() : Collections.emptyList(),
+                        storeDto.getCategory(),
+                        storeDto.getCategories() != null ? storeDto.getCategories() : Collections.emptyList(),
                         storeDto.getStoreType(),
                         Optional.ofNullable(storeDto.getAppearanceDays()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeDto.getPaymentMethods()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeDto.getMenu())
                                 .map(menu -> menu.stream()
                                         .map(it -> MenuCreateValue.of(
-                                                it.getCategory() != null ? it.getCategory() : storeDto.getCategoryType(),
+                                                it.getCategory() != null ? it.getCategory() : storeDto.getCategory(),
                                                 it.getName(),
                                                 it.getPrice()))
                                         .collect(Collectors.toList())
@@ -136,8 +136,8 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
-                        storeUpdateDto.getCategoryType(),
-                        storeUpdateDto.getCategoryTypes() != null ? storeUpdateDto.getCategoryTypes() : Collections.emptyList(),
+                        storeUpdateDto.getCategory(),
+                        storeUpdateDto.getCategories() != null ? storeUpdateDto.getCategories() : Collections.emptyList(),
                         storeUpdateDto.getStoreType(),
                         Optional.ofNullable(storeUpdateDto.getAppearanceDays()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeUpdateDto.getPaymentMethods()).orElse(Collections.emptySet()),

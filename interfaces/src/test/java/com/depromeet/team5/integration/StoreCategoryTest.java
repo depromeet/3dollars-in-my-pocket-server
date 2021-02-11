@@ -63,11 +63,10 @@ class StoreCategoryTest {
         // when
         StoreDto storeDto = new StoreDto();
         storeDto.setStoreName("storeName");
-        storeDto.setCategoryType(CategoryType.BUNGEOPPANG);
+        storeDto.setCategory(CategoryType.BUNGEOPPANG);
         storeDto.setStoreType(StoreType.ROAD);
         storeDto.setAppearanceDays(new HashSet<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.FRIDAY)));
         storeDto.setPaymentMethods(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
-        storeDto.setCategoryType(CategoryType.BUNGEOPPANG);
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
         storeDto.setMenu(Collections.emptyList());

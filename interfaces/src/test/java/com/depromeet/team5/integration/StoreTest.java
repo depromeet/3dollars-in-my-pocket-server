@@ -58,7 +58,7 @@ class StoreTest {
         storeDto.setPaymentMethods(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
         storeDto.setLatitude(37.0);
         storeDto.setLongitude(127.0);
-        storeDto.setCategoryType(CategoryType.BUNGEOPPANG);
+        storeDto.setCategory(CategoryType.BUNGEOPPANG);
         MenuRequest menuRequest = new MenuRequest();
         menuRequest.setCategory(CategoryType.BUNGEOPPANG);
         menuRequest.setName("menuName");
