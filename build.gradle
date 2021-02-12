@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = 'com.depromeet.team5'
-    version = '1.7.0.RELEASE'
+    version = '1.7.2.RELEASE'
     sourceCompatibility = '1.8'
 }
 

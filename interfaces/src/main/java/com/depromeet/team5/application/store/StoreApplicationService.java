@@ -7,12 +7,14 @@ import com.depromeet.team5.dto.StoresGroupByDistanceDto;
 import com.depromeet.team5.dto.StoresGroupByRatingDto;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.service.StoreService;
+import com.depromeet.team5.dto.StoreResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Application Service
@@ -29,6 +31,12 @@ public class StoreApplicationService {
     public StoreDetailDto getStoreDetail(Long storeId, Double latitude, Double longitude) {
         Store store = storeService.getStore(storeId);
         return storeAssembler.toStoreDetailDto(store, latitude, longitude);
+    }
+
+    public List<StoreResponse> getStoreResponse(Location location, Double distance) {
+        return storeService.getStoresByLocationAndDistance(location, 0.5).stream()
+                .map(storeAssembler::toStoreResponse)
+                .collect(Collectors.toList());
     }
 
     public StoresGroupByDistanceDto getStoresByCategoryGroupByDistance(
