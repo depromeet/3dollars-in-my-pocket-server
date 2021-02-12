@@ -184,9 +184,6 @@ public class Store {
     }
 
     private void updateCategories(List<CategoryType> categoryTypes) {
-        if (CollectionUtils.isEmpty(categoryTypes)) {
-            return;
-        }
         Set<CategoryType> beforeCategoryTypeSet = this.categories.stream()
                 .map(StoreCategory::getCategory)
                 .collect(Collectors.toSet());
