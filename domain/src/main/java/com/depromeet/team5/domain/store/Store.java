@@ -132,9 +132,7 @@ public class Store {
         store.storeName = storeCreateValue.getStoreName();
         store.storeType = storeCreateValue.getStoreType();
         store.category = storeCreateValue.getCategoryType();
-        store.categories.addAll(storeCreateValue.getCategoryTypes().stream()
-                .map(StoreCategory::from)
-                .collect(Collectors.toList()));
+        store.updateCategories(storeCreateValue.getCategoryTypes());
         store.images = imageList;
         store.user = user;
 
@@ -191,7 +189,7 @@ public class Store {
                 .collect(Collectors.toSet());
         Set<CategoryType> afterCategoryTypeSet = new HashSet<>(categoryTypes);
 
-        this.categories.removeIf(it -> !afterCategoryTypeSet.contains(it));
+        this.categories.removeIf(it -> !afterCategoryTypeSet.contains(it.getCategory()));
         this.categories.addAll(categoryTypes.stream()
                 .filter(it -> !beforeCategoryTypeSet.contains(it))
                 .map(StoreCategory::from)
