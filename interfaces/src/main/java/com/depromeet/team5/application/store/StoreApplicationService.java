@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,9 +87,8 @@ public class StoreApplicationService {
     public List<ImageResponse> getStoreImages(Long storeId) {
         Assert.notNull(storeId, "'storeId' must not be null");
 
-        return storeService.getStoreImages(storeId).stream()
-                .map(storeAssembler::toImageResponse)
-                .collect(Collectors.toList());
+        List<Image> images = storeService.getStoreImages(storeId);
+        return storeAssembler.toImageResponses(images);
     }
 
     /**

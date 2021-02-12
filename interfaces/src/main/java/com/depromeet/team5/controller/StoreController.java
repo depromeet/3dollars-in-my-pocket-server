@@ -206,7 +206,7 @@ public class StoreController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation("특정 가게의 이미지를 조회합니다. 인증이 필요한 요청입니다.")
+    @ApiOperation("특정 가게의 이미지를 조회합니다. 인증이 필요한 요청입니다. 생성일 역순으로 정렬")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/{storeId}/images")
