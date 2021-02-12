@@ -4,8 +4,8 @@ import com.depromeet.team5.domain.ImageUploadValue;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.*;
 import com.depromeet.team5.domain.user.User;
-import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.StoreDeleteRequestDuplicatedException;
+import com.depromeet.team5.exception.StoreNotFoundException;
 import com.depromeet.team5.exception.UserNotFoundException;
 import com.depromeet.team5.repository.*;
 import com.depromeet.team5.service.S3FileUploadService;
@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -94,6 +95,12 @@ public class StoreServiceImpl implements StoreService {
     @Transactional(readOnly = true)
     public List<Store> getAll(Double latitude, Double longitude) {
         return storeRepository.findAllByAddress(latitude, longitude);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Store> getStoresByLocationAndDistance(Location location, Double distance) {
+        return storeRepository.findByLocationAndDistanceLessThan(location.getLatitude(), location.getLongitude(), distance);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.depromeet.team5.application.store;
 
 import com.depromeet.team5.application.review.ReviewAssembler;
+import com.depromeet.team5.application.user.UserAssembler;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.store.AppearanceDay;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StoreAssembler {
     private final ReviewAssembler reviewAssembler;
+    private final UserAssembler userAssembler;
 
     public StoreDetailDto toStoreDetailDto(Store store, Double latitude, Double longitude) {
         if (store == null) {
@@ -131,6 +133,23 @@ public class StoreAssembler {
             return null;
         }
         return StoreCardDto.of(store, location.getLatitude(), location.getLongitude());
+    }
+
+    public StoreResponse toStoreResponse(Store store) {
+        if (store == null) {
+            return null;
+        }
+        StoreResponse storeResponse = new StoreResponse();
+        storeResponse.setId(store.getId());
+        storeResponse.setUserResponse(userAssembler.toUserResponse(store.getUser()));
+        storeResponse.setStoreName(store.getStoreName());
+        storeResponse.setCategory(store.getCategory().name());
+        storeResponse.setImages(store.getImages());
+        storeResponse.setLatitude(store.getLatitude());
+        storeResponse.setLongitude(store.getLongitude());
+        storeResponse.setCreatedAt(store.getCreatedAt());
+        storeResponse.setUpdatedAt(store.getUpdatedAt());
+        return storeResponse;
     }
 
     public ImageResponse toImageResponse(Image image) {

@@ -11,13 +11,13 @@ import com.depromeet.team5.dto.StoresGroupByRatingDto;
 import com.depromeet.team5.dto.StoreDetailDto;
 import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
+import com.depromeet.team5.dto.StoreResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +35,13 @@ public class StoreApplicationService {
     public StoreDetailDto getStoreDetail(Long storeId, Double latitude, Double longitude) {
         Store store = storeService.getStore(storeId);
         return storeAssembler.toStoreDetailDto(store, latitude, longitude);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StoreResponse> getStoresByLocationAndDistance(Location location, Double distance) {
+        return storeService.getStoresByLocationAndDistance(location, distance).stream()
+                .map(storeAssembler::toStoreResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

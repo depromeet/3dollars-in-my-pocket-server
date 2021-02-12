@@ -23,6 +23,23 @@ public interface StoreRepository extends PagingAndSortingRepository<Store, Long>
             "    )" +
             "  ) AS distance" +
             "  FROM store" +
+            "  GROUP BY id" +
+            "  HAVING distance < :distance" +
+            "  ORDER BY distance", nativeQuery = true)
+    List<Store> findByLocationAndDistanceLessThan(@Param("latitude") final Double latitude,
+                                                  @Param("longitude") final Double longitude,
+                                                  @Param("distance") final Double distance);
+
+    @Query(value = "SELECT *, (" +
+            "    6371 * acos (" +
+            "      cos ( radians( :latitude ) )  " +
+            "      * cos( radians( latitude ) )" +
+            "      * cos( radians( longitude ) - radians( :longitude ) )" +
+            "      + sin ( radians( :latitude ) )" +
+            "      * sin( radians( latitude ) )" +
+            "    )" +
+            "  ) AS distance" +
+            "  FROM store" +
             "  ORDER BY distance" +
             "  LIMIT 0 , 5", nativeQuery = true)
     List<Store> findAllByAddress(@Param("latitude") final Double latitude,
