@@ -37,8 +37,11 @@ public class StoreDetailDto {
 
     private Set<PaymentMethodType> paymentMethods;
 
-
-    private List<ImageDto> image;
+    /**
+     * 이미지. 생성일 역순으로 정렬
+     */
+    @JsonProperty("image")
+    private List<ImageResponse> imageResponses;
 
     @JsonProperty("menu")
     private List<MenuResponse> menuResponses = new ArrayList<>();

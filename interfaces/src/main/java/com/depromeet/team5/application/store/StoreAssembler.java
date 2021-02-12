@@ -40,7 +40,7 @@ public class StoreAssembler {
         storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet()));
         storeDetailDto.setCategory(store.getCategory());
         storeDetailDto.setCategories(store.getCategoryTypes());
-        storeDetailDto.setImage(store.getImages().stream().map(ImageDto::from).collect(Collectors.toList()));
+        storeDetailDto.setImageResponses(this.toImageResponses(store.getImages()));
         storeDetailDto.setMenuResponses(store.getMenus().stream().map(MenuResponse::from).collect(Collectors.toList()));
         storeDetailDto.setReviewDetailResponses(store.getReviews().stream()
                 .filter(Review::isVisible)
@@ -150,6 +150,13 @@ public class StoreAssembler {
         storeResponse.setCreatedAt(store.getCreatedAt());
         storeResponse.setUpdatedAt(store.getUpdatedAt());
         return storeResponse;
+    }
+
+    public List<ImageResponse> toImageResponses(List<Image> images) {
+        return images.stream()
+                .map(this::toImageResponse)
+                .sorted(Comparator.comparing(ImageResponse::getCreatedAt).reversed())
+                .collect(Collectors.toList());
     }
 
     public ImageResponse toImageResponse(Image image) {
