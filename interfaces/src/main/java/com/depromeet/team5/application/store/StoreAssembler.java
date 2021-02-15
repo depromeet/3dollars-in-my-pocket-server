@@ -155,7 +155,7 @@ public class StoreAssembler {
     public List<ImageResponse> toImageResponses(List<Image> images) {
         return images.stream()
                 .map(this::toImageResponse)
-                .sorted(Comparator.comparing(ImageResponse::getCreatedAt).reversed())
+                .sorted(Comparator.comparing(ImageResponse::getId).reversed())
                 .collect(Collectors.toList());
     }
 
