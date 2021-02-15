@@ -33,6 +33,7 @@ public class StoreApplicationService {
     private final StoreAssembler storeAssembler;
     private final S3FileUploadService s3FileUploadService;
 
+    @Transactional(readOnly = true)
     public StoreDetailDto getStoreDetail(Long storeId, Double latitude, Double longitude) {
         Store store = storeService.getStore(storeId);
         return storeAssembler.toStoreDetailDto(store, latitude, longitude);
