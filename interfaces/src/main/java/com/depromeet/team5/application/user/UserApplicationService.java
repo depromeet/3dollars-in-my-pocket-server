@@ -30,7 +30,11 @@ public class UserApplicationService {
         SocialType socialType = socialVo.getSocialType();
         String token = socialVo.getToken();
 
-        if (token != null && !isValid(socialType, token)) {
+        /**
+         * 원래는 모든 로그인 토큰의 유효성을 검증해야하나,
+         * 하위호환성 유지를 위해 토큰이 있는 경우에만 검증을 진행합니다.
+         */
+        if (token != null && !isVerified(socialType, token)) {
             throw new InvalidAccessTokenException();
         }
 
@@ -45,7 +49,7 @@ public class UserApplicationService {
         return userAssembler.toUserResponse(user);
     }
 
-    private boolean isValid(SocialType socialType, String token) {
+    private boolean isVerified(SocialType socialType, String token) {
 
         if (Objects.equals(socialType, SocialType.KAKAO)) {
             return kakaoLoginTokenVerifier.isVerified(token);
