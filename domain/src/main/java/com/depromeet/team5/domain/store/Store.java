@@ -161,7 +161,9 @@ public class Store {
         latitude = storeUpdateValue.getLatitude();
         longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
-        category = storeUpdateValue.getCategoryType();
+        if (category != null) {
+            category = storeUpdateValue.getCategoryType();
+        }
         this.updateCategories(storeUpdateValue.getCategoryTypes());
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
