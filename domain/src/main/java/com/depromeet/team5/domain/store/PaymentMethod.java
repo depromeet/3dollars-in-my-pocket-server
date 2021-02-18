@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"method"})
+@EqualsAndHashCode(of = {"store", "method"})
 public class PaymentMethod {
 
     private PaymentMethod(Store store, PaymentMethodType method) {

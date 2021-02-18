@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"day"})
+@EqualsAndHashCode(of = {"store", "day"})
 public class AppearanceDay {
 
     private AppearanceDay(Store store, DayOfWeek day) {
