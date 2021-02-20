@@ -5,9 +5,8 @@ import com.depromeet.team5.dto.*;
 import com.depromeet.team5.integration.api.ReviewTestController;
 import com.depromeet.team5.integration.api.StoreTestController;
 import com.depromeet.team5.integration.api.UserTestController;
-import com.depromeet.team5.repository.ReviewRepository;
+import com.depromeet.team5.domain.review.ReviewRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,25 +32,25 @@ class ReviewTest {
     private ReviewRepository reviewRepository;
 
     private ReviewTestController reviewTestController;
+    private StoreTestController storeTestController;
 
     private String accessToken;
     private Long userId;
-    private Long storeId;
 
     @BeforeEach
     void setUp() throws Exception {
         reviewTestController = new ReviewTestController(mockMvc, objectMapper);
+        storeTestController = new StoreTestController(mockMvc, objectMapper);
 
-        LoginDto loginDto = new UserTestController(mockMvc, objectMapper).createTestUser();
-        this.accessToken = loginDto.getToken();
-        this.userId = loginDto.getUserId();
-        StoreIdDto storeIdDto = new StoreTestController(mockMvc, objectMapper).createStore(accessToken, loginDto.getUserId());
-        this.storeId = storeIdDto.getStoreId();
+        LoginResponse loginResponse = new UserTestController(mockMvc, objectMapper).createTestUser();
+        this.accessToken = loginResponse.getToken();
+        this.userId = loginResponse.getUserId();
     }
 
     @Test
     void save() throws Exception {
         // given
+        Long storeId = storeTestController.createStore(accessToken, userId).getStoreId();
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setContents("reviewContent");
         reviewDto.setRating(5);
@@ -67,11 +66,12 @@ class ReviewTest {
     @Test
     void update() throws Exception {
         // given
+        Long storeId = storeTestController.createStore(accessToken, userId).getStoreId();
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
-        Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
+        Long reviewId = reviewPomDto.getContent().get(0).getId();
         ReviewUpdateRequest reviewUpdateRequest = new ReviewUpdateRequest();
-        reviewUpdateRequest.setContent("updatedReviewContent");
+        reviewUpdateRequest.setContents("updatedReviewContent");
         reviewUpdateRequest.setRating(0);
         // when
         ReviewResponse reviewResponse = reviewTestController.update(accessToken, reviewId, reviewUpdateRequest);
@@ -83,13 +83,13 @@ class ReviewTest {
     @Test
     void delete() throws Exception {
         // given
+        Long storeId = storeTestController.createStore(accessToken, userId).getStoreId();
         reviewTestController.createReview(accessToken, userId, storeId);
         ReviewPomDto reviewPomDto = reviewTestController.getAllByUser(accessToken, userId, 1);
-        Long reviewId = reviewPomDto.getContent().get(0).getUser().getId();
+        Long reviewId = reviewPomDto.getContent().get(0).getId();
         // when
         reviewTestController.delete(accessToken, reviewId);
         // then
-        ReviewPomDto reviewPomDtoAfterDeleted = reviewTestController.getAllByUser(accessToken, userId, 1);
-        assertThat(reviewPomDtoAfterDeleted.getContent()).isEmpty();
+        assertThat(reviewTestController.getDetailReview(accessToken, reviewId).getResponse().getStatus()).isEqualTo(404);
     }
 }

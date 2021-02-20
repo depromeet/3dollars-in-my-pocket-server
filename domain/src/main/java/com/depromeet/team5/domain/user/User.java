@@ -20,7 +20,7 @@ public class User {
     private Long id;
 
     @Enumerated(value = EnumType.STRING)
-    private SocialTypes socialType;
+    private SocialType socialType;
 
     private String socialId;
 
@@ -37,7 +37,7 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public static User of(String socialId, SocialTypes socialType) {
+    public static User of(String socialId, SocialType socialType) {
         User user = new User();
         user.socialType = socialType;
         user.socialId = socialId;
@@ -74,10 +74,9 @@ public class User {
         throw new NickNameDuplicatedException(withdrawalUser.getUserId(), withdrawalUser.getName());
     }
 
-    public User signout() {
+    public void signOut() {
         this.setState(false);
         this.setStatus(UserStatusType.INACTIVE);
-        return this;
     }
 
     public boolean isWithdrawal() {

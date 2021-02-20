@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +33,15 @@ public class StoreServiceImpl implements StoreService {
     private final S3FileUploadService s3FileUploadService;
     private final MenuCategoryRepository menuCategoryRepository;
     private final StoreMenuCategoryRepository storeMenuCategoryRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     @Transactional
     public Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        List<Image> image = convertImage(imageUploadValues);
-        Store store = Store.from(storeCreateValue, image, user);
+        List<Image> images = convertImages(imageUploadValues);
+        imageRepository.saveAll(images);
+        Store store = Store.from(storeCreateValue, images, user);
         storeRepository.save(store);
         this.addStoreMenuCategory(store.getId());
         return store;
@@ -78,7 +81,7 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType) {
+    public List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryType categoryType) {
         return storeRepository.findByDistanceBetweenAndCategory(
                 location.getLatitude(),
                 location.getLongitude(),
@@ -117,9 +120,9 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
-        List<Image> image = convertImage(imageUploadValues);
-        store.setStore(storeUpdateValue, image);
-        storeRepository.save(store);
+        List<Image> images = convertImages(imageUploadValues);
+        imageRepository.saveAll(images);
+        store.setStore(storeUpdateValue, images);
     }
 
     @Override
@@ -137,7 +140,37 @@ public class StoreServiceImpl implements StoreService {
         }
     }
 
-    private List<Image> convertImage(List<ImageUploadValue> imageUploadValues) {
+    @Override
+    @Transactional
+    public Image addImage(Long storeId, String imageUrl) {
+        Assert.notNull(storeId, "'storeId' must not be null");
+        Assert.hasText(imageUrl, "'imageUrl' must not be null, empty or blank");
+
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
+        Image image = Image.from(imageUrl);
+        imageRepository.save(image);
+        store.addImage(image);
+        return image;
+    }
+
+    @Override
+    @Transactional
+    public void deleteImage(Long imageId) {
+        imageRepository.findById(imageId)
+                .ifPresent(image -> {
+                    imageRepository.delete(image);
+                    s3FileUploadService.delete(image.getUrl());
+                });
+    }
+
+    @Override
+    @Transactional
+    public List<Image> getStoreImages(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreNotFoundException(storeId));
+        return store.getImages();
+    }
+
+    private List<Image> convertImages(List<ImageUploadValue> imageUploadValues) {
         return imageUploadValues.stream()
                 .filter(Objects::nonNull)
                 .map(s3FileUploadService::upload)

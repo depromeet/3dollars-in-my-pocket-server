@@ -8,9 +8,9 @@ import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.exception.ReviewNotFoundException;
 import com.depromeet.team5.exception.StoreNotFoundException;
-import com.depromeet.team5.repository.ReviewRepository;
+import com.depromeet.team5.domain.review.ReviewRepository;
 import com.depromeet.team5.repository.StoreRepository;
-import com.depromeet.team5.service.ReviewService;
+import com.depromeet.team5.domain.review.ReviewService;
 import com.depromeet.team5.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -80,6 +82,11 @@ public class ReviewServiceImpl implements ReviewService {
                     this.calculateRating(review.getStoreId());
                     reviewRepository.save(review);
                 });
+    }
+
+    @Override
+    public Optional<Review> getReview(Long reviewId) {
+        return reviewRepository.findByIdAndStatus(reviewId, ReviewStatus.POSTED);
     }
 
     // TODO: migration 끝나면 삭제된 리뷰 제외하고 계산하도록 쿼리 수정해야함.

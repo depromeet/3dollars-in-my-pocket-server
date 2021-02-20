@@ -20,8 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +45,7 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PostMapping("/save")
-    public ResponseEntity<StoreIdDto> save(StoreDto storeDto,
+    public ResponseEntity<StoreIdDto> save(@Valid StoreDto storeDto,
                                            @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                            @RequestParam Long userId) {
         Store store = storeService.saveStore(
@@ -51,9 +54,16 @@ public class StoreController {
                         storeDto.getLongitude(),
                         storeDto.getStoreName(),
                         storeDto.getCategory(),
+                        storeDto.getCategories() != null ? storeDto.getCategories() : Collections.emptyList(),
+                        storeDto.getStoreType(),
+                        Optional.ofNullable(storeDto.getAppearanceDays()).orElse(Collections.emptySet()),
+                        Optional.ofNullable(storeDto.getPaymentMethods()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeDto.getMenu())
                                 .map(menu -> menu.stream()
-                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .map(it -> MenuCreateValue.of(
+                                                it.getCategory() != null ? it.getCategory() : storeDto.getCategory(),
+                                                it.getName(),
+                                                it.getPrice()))
                                         .collect(Collectors.toList())
                                 ).orElse(Collections.emptyList())
                 ),
@@ -121,14 +131,14 @@ public class StoreController {
     @GetMapping
     public ResponseEntity<List<StoreResponse>> getStoresByLocation(@RequestParam Double latitude,
                                                                    @RequestParam Double longitude) {
-        return ResponseEntity.ok(storeApplicationService.getStoreResponse(Location.of(latitude, longitude), 0.5));
+        return ResponseEntity.ok(storeApplicationService.getStoresByLocationAndDistance(Location.of(latitude, longitude), 0.5));
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @PutMapping("/update")
-    public ResponseEntity<String> updateStore(StoreUpdateDto storeUpdateDto,
+    public ResponseEntity<String> updateStore(@Valid StoreUpdateDto storeUpdateDto,
                                               @RequestPart(value = "image", required = false) List<MultipartFile> image,
                                               @RequestParam Long storeId) {
         storeService.updateStore(
@@ -136,9 +146,17 @@ public class StoreController {
                         storeUpdateDto.getLatitude(),
                         storeUpdateDto.getLongitude(),
                         storeUpdateDto.getStoreName(),
+                        storeUpdateDto.getCategory(),
+                        storeUpdateDto.getCategories() != null ? storeUpdateDto.getCategories() : Collections.emptyList(),
+                        storeUpdateDto.getStoreType(),
+                        Optional.ofNullable(storeUpdateDto.getAppearanceDays()).orElse(Collections.emptySet()),
+                        Optional.ofNullable(storeUpdateDto.getPaymentMethods()).orElse(Collections.emptySet()),
                         Optional.ofNullable(storeUpdateDto.getMenu())
                                 .map(menu -> menu.stream()
-                                        .map(it -> MenuCreateValue.of(it.getName(), it.getPrice()))
+                                        .map(it -> MenuCreateValue.of(
+                                                it.getCategory() != null ? it.getCategory() : storeService.getStore(storeId).getCategory(),
+                                                it.getName(),
+                                                it.getPrice()))
                                         .collect(Collectors.toList()))
                                 .orElse(Collections.emptyList())
                 ),
@@ -161,6 +179,39 @@ public class StoreController {
                                          @RequestParam DeleteReasonType deleteReasonType) {
         storeService.deleteStore(storeId, userId, deleteReasonType);
         return new ResponseEntity<>("store delete success", HttpStatus.OK);
+    }
+
+    @ApiOperation("가게의 이미지를 등록합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @PostMapping("/{storeId}/images")
+    public ResponseEntity<ImageResponse> addImage(@PathVariable Long storeId,
+                                                  @RequestPart(value = "image") MultipartFile multipartFile) {
+        ImageUploadValue imageUploadValue = this.toImageUploadValue(multipartFile);
+        ImageResponse imageResponse = storeApplicationService.addImage(storeId, imageUploadValue);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(imageResponse.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(imageResponse);
+    }
+
+    @ApiOperation("가게의 이미지를 삭제합니다. 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @DeleteMapping("{storeId}/images/{imageId}")
+    public ResponseEntity<String> deleteImage(@PathVariable Long storeId,
+                                              @PathVariable Long imageId) {
+        storeService.deleteImage(imageId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ApiOperation("특정 가게의 이미지를 조회합니다. 인증이 필요한 요청입니다. 생성일 역순으로 정렬")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @GetMapping("/{storeId}/images")
+    public ResponseEntity<List<ImageResponse>> getStoreImages(@PathVariable Long storeId) {
+        return ResponseEntity.ok(storeApplicationService.getStoreImages(storeId));
     }
 
     private ImageUploadValue toImageUploadValue(MultipartFile multipartFile) {

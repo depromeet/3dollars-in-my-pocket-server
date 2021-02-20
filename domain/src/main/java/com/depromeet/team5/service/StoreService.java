@@ -12,7 +12,7 @@ import java.util.List;
 public interface StoreService {
     Store saveStore(StoreCreateValue storeCreateValue, Long userId, List<ImageUploadValue> imageUploadValues);
 
-    List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryTypes categoryType);
+    List<Store> getStoresByDistanceBetweenAndCategory(Location location, Double distanceStart, Double distanceEnd, CategoryType categoryType);
 
     List<Store> getAll(Double latitude, Double longitude);
 
@@ -25,4 +25,10 @@ public interface StoreService {
     void updateStore(StoreUpdateValue storeUpdateValue, Long storeId, List<ImageUploadValue> imageUploadValues);
 
     void deleteStore(Long storeId, Long userId, DeleteReasonType deleteReasonType);
+
+    Image addImage(Long storeId, String imageUrl);
+
+    void deleteImage(Long imageId);
+
+    List<Image> getStoreImages(Long storeId);
 }

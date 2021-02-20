@@ -8,6 +8,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * 메뉴에 카테고리 추가하게 되어서, 가게에서는 카테고리 정보를 관리하지 않습니다.
+ */
+@Deprecated
 @Table(
         uniqueConstraints = @UniqueConstraint(
                 name = "unique_storeId_menuCategoryId",

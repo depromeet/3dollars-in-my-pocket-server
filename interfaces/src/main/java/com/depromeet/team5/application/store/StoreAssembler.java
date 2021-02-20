@@ -4,6 +4,9 @@ import com.depromeet.team5.application.review.ReviewAssembler;
 import com.depromeet.team5.application.user.UserAssembler;
 import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.review.Review;
+import com.depromeet.team5.domain.store.AppearanceDay;
+import com.depromeet.team5.domain.store.Image;
+import com.depromeet.team5.domain.store.PaymentMethod;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.util.LocationDistanceUtils;
@@ -32,17 +35,21 @@ public class StoreAssembler {
         storeDetailDto.setLatitude(store.getLatitude());
         storeDetailDto.setLongitude(store.getLongitude());
         storeDetailDto.setStoreName(store.getStoreName());
+        storeDetailDto.setStoreType(store.getStoreType());
+        storeDetailDto.setAppearanceDays(store.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toSet()));
+        storeDetailDto.setPaymentMethods(store.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet()));
         storeDetailDto.setCategory(store.getCategory());
-        storeDetailDto.setImage(store.getImage().stream().map(ImageDto::from).collect(Collectors.toList()));
-        storeDetailDto.setMenu(store.getMenu().stream().map(MenuDto::from).collect(Collectors.toList()));
-        storeDetailDto.setReviewDetailResponses(store.getReview().stream()
+        storeDetailDto.setCategories(store.getCategoryTypes());
+        storeDetailDto.setImageResponses(this.toImageResponses(store.getImages()));
+        storeDetailDto.setMenuResponses(store.getMenus().stream().map(MenuResponse::from).collect(Collectors.toList()));
+        storeDetailDto.setReviewDetailResponses(store.getReviews().stream()
                 .filter(Review::isVisible)
                 .map(reviewAssembler::toReviewDetailResponse)
                 .sorted(Comparator.comparing(ReviewDetailResponse::getCreatedAt).reversed())
                 .collect(Collectors.toList()));
         storeDetailDto.setRating(Optional.ofNullable(store.getRating()).orElseGet(() -> {
-           log.error("'rating' must not be null. storeId: {}", store.getId());
-           return 0f;
+            log.error("'rating' must not be null. storeId: {}", store.getId());
+            return 0f;
         }));
         storeDetailDto.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter"));
         storeDetailDto.setUser(store.getUser());
@@ -52,7 +59,7 @@ public class StoreAssembler {
     /**
      * 입력받은 위치를 기준으로 가게와의 거리를 계산하고 dto 로 변환합니다.
      *
-     * @param stores 가게 목록
+     * @param stores   가게 목록
      * @param location 기준 위치
      * @return 거리별로 구분된 dto
      */
@@ -88,7 +95,7 @@ public class StoreAssembler {
     /**
      * 입력받은 위치를 기준으로 가게와의 거리를 계산하고 dto 로 변환합니다.
      *
-     * @param stores 가게 목록
+     * @param stores   가게 목록
      * @param location 기준 위치
      * @return 별점 별로 구분된 dto
      */
@@ -137,11 +144,25 @@ public class StoreAssembler {
         storeResponse.setUserResponse(userAssembler.toUserResponse(store.getUser()));
         storeResponse.setStoreName(store.getStoreName());
         storeResponse.setCategory(store.getCategory().name());
-        storeResponse.setImages(store.getImage());
+        storeResponse.setImages(store.getImages());
         storeResponse.setLatitude(store.getLatitude());
         storeResponse.setLongitude(store.getLongitude());
         storeResponse.setCreatedAt(store.getCreatedAt());
         storeResponse.setUpdatedAt(store.getUpdatedAt());
         return storeResponse;
+    }
+
+    public List<ImageResponse> toImageResponses(List<Image> images) {
+        return images.stream()
+                .map(this::toImageResponse)
+                .sorted(Comparator.comparing(ImageResponse::getId).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public ImageResponse toImageResponse(Image image) {
+        if (image == null) {
+            return null;
+        }
+        return ImageResponse.from(image);
     }
 }

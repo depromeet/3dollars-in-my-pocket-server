@@ -1,7 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
-import com.depromeet.team5.domain.user.SocialTypes;
+import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.dto.*;
 import com.depromeet.team5.integration.api.FaqTestController;
 import com.depromeet.team5.integration.api.UserTestController;
@@ -42,7 +42,7 @@ class FaqTest {
         faqTestController = new FaqTestController(mockMvc, objectMapper);
         UserDto userDto = new UserDto();
         userDto.setSocialId("kakao1");
-        userDto.setSocialType(SocialTypes.KAKAO);
+        userDto.setSocialType(SocialType.KAKAO);
         token = new UserTestController(mockMvc, objectMapper).login(userDto).getToken();
     }
 
