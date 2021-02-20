@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(of = {"id", "latitude", "longitude", "storeName", "category", "createdAt"})
 @EntityListeners(AuditingEntityListener.class)
 public class Store {
+    private static final float DEFAULT_RATING = 0F;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,7 +90,7 @@ public class Store {
     /**
      * 평균 평점
      */
-    private Float rating;
+    private Float rating = DEFAULT_RATING;
     /**
      * 삭제 요청
      */

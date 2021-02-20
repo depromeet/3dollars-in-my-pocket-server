@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
-class StoreTest {
+class StoreApiTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -73,6 +73,7 @@ class StoreTest {
         assertThat(storeDetailDto).isNotNull();
         assertThat(storeDetailDto.getId()).isEqualTo(storeIdDto.getStoreId());
         assertThat(storeDetailDto.getStoreName()).isEqualTo("storeName");
+        assertThat(storeDetailDto.getRating()).isZero();
     }
 
     @Test
