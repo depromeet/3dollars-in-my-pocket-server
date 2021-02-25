@@ -93,6 +93,28 @@ public class StoreController {
         );
     }
 
+    @ApiOperation("내 주변 가게들을 조회합니다(반경 2km 이내). 인증이 필요한 요청입니다.")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
+    @Auth
+    @GetMapping("/getStoresByDistance")
+    public ResponseEntity<List<StoreCardDto>> getStoresByDistance(@RequestParam Double latitude,
+                                                                  @RequestParam Double longitude,
+                                                                  @RequestParam(required = false) Double mapLatitude,
+                                                                  @RequestParam(required = false) Double mapLongitude,
+                                                                  @RequestParam Double distance) {
+        Location userLocation = Location.of(latitude, longitude);
+        Location mapLocation = mapLatitude != null && mapLongitude != null
+                ? Location.of(mapLatitude, mapLongitude)
+                : userLocation;
+        return ResponseEntity.ok(
+                storeApplicationService.getStoresByDistance(
+                        userLocation,
+                        mapLocation,
+                        distance
+                )
+        );
+    }
+
     @ApiOperation("사용자가 작성한 가게의 정보를 조회합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
