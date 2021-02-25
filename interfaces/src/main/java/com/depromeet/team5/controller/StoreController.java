@@ -93,7 +93,7 @@ public class StoreController {
         );
     }
 
-    @ApiOperation("내 주변 가게들을 조회합니다(반경 2km 이내). 인증이 필요한 요청입니다.")
+    @ApiOperation("입력받은 반경 이내의 가게들을 조회합니다. 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/getStoresByDistance")
