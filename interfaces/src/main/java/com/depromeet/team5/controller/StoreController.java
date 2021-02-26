@@ -38,6 +38,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StoreController {
 
+    private static final int PAGE_SIZE = 20;
+
     private final StoreService storeService;
     private final StoreApplicationService storeApplicationService;
 
@@ -100,7 +102,7 @@ public class StoreController {
     @GetMapping("/user")
     public ResponseEntity<StoreMyPagePomDto> getAllByUser(@RequestParam Long userId,
                                                           @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("createdAt").descending());
         Page<Store> storePage = storeService.getAllByUser(userId, pageable);
         List<StoreMyPageDto> storeMyPageList = storePage
                 .getContent()
