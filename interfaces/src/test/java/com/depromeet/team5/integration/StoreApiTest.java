@@ -19,15 +19,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@SuppressWarnings("NonAsciiCharacters")
 @Transactional
 @SpringBootTest(classes = Team5InterfacesApplication.class)
 @AutoConfigureMockMvc
@@ -77,6 +79,41 @@ class StoreApiTest {
     }
 
     @Test
+    void getAllByUser_내가_등록한_가게가_없는_경우() throws Exception {
+        // given
+        LoginResponse loginResponse = userTestController.createTestUser();
+        double latitude = 37.0;
+        double longitude = 127.0;
+        // when
+        StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), latitude, longitude, 1);
+        // then
+        assertThat(actual.getTotalElements()).isZero();
+    }
+
+    @Test
+    void getAllByUser_내가_등록한_가게가_있고_위치정보는_입력하지않은_경우() throws Exception {
+        LoginResponse loginResponse = userTestController.createTestUser();
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 1);
+        // when
+        StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), 1);
+        // then
+        assertThat(actual.getTotalElements()).isEqualTo(1);
+        assertThat(actual.getContent()).allMatch(it -> it.getDistance() == null);
+    }
+
+    @Test
+    void getAllByUser_내가_등록한_가게가_있고_위치정보도_입력한_경우() throws Exception {
+        LoginResponse loginResponse = userTestController.createTestUser();
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 2);
+        double latitude = 37.0;
+        double longitude = 127.0;
+        // when
+        StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), latitude, longitude, 1);
+        // then
+        assertThat(actual.getContent()).allMatch(it -> it.getDistance() != null);
+    }
+
+    @Test
     void get_given_invalid_latitude_should_return_400_bad_request() throws Exception{
         //given
         LoginResponse loginResponse = userTestController.createTestUser();
@@ -85,5 +122,30 @@ class StoreApiTest {
                 .header("Authorization", loginResponse.getToken()))
                 //then
                 .andExpect(status().isBadRequest());
+    }
+
+    private List<StoreIdDto> createStores(String token, Long userId, int size) {
+        ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
+        return IntStream.range(1, size + 1)
+                .mapToObj(it -> {
+                    StoreDto storeDto = new StoreDto();
+                    storeDto.setStoreName("storeName" + it);
+                    storeDto.setStoreType(StoreType.ROAD);
+                    storeDto.setLatitude(37.0 + threadLocalRandom.nextDouble(1.0));
+                    storeDto.setLongitude(127.0 + threadLocalRandom.nextDouble(1.0));
+                    storeDto.setCategories(Collections.singletonList(
+                            CategoryType.values()[threadLocalRandom.nextInt(0, CategoryType.values().length)]
+                    ));
+                    return storeDto;
+                })
+                .map(it -> {
+                    try {
+                        return storeTestController.save(token, userId, it, Collections.emptyList());
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

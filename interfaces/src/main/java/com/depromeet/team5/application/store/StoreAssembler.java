@@ -9,6 +9,7 @@ import com.depromeet.team5.domain.store.Image;
 import com.depromeet.team5.domain.store.PaymentMethod;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.*;
+import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -147,7 +148,7 @@ public class StoreAssembler {
         storeResponse.setCategory(store.getCategory().name());
         storeResponse.setCategories(store.getCategoryTypes().stream().map(Enum::toString).collect(Collectors.toList()));
         storeResponse.setRating(store.getRating());
-        storeResponse.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), location.getLatitude(), location.getLongitude(), "meter"));
+        storeResponse.setDistance(LocationDistanceUtils.getDistance(store.getLocation(), location));
         storeResponse.setImages(store.getImages());
         storeResponse.setLatitude(store.getLatitude());
         storeResponse.setLongitude(store.getLongitude());
