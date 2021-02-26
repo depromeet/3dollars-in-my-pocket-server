@@ -132,7 +132,7 @@ public class Store {
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.storeType = storeCreateValue.getStoreType();
-        store.category = storeCreateValue.getCategoryType();
+        store.updateCategory(storeCreateValue.getCategoryType(), storeCreateValue.getCategoryTypes());
         store.updateCategories(storeCreateValue.getCategoryTypes());
         store.images = imageList;
         store.user = user;
@@ -162,9 +162,7 @@ public class Store {
         latitude = storeUpdateValue.getLatitude();
         longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
-        if (category != null) {
-            category = storeUpdateValue.getCategoryType();
-        }
+        this.updateCategory(storeUpdateValue.getCategoryType(), storeUpdateValue.getCategoryTypes());
         this.updateCategories(storeUpdateValue.getCategoryTypes());
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
@@ -183,6 +181,22 @@ public class Store {
         }
         if (storeUpdateValue.getMenus() != null) {
             menus.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
+        }
+    }
+
+    /**
+     * 대표 카테고리 수정
+     */
+    private void updateCategory(CategoryType categoryType, List<CategoryType> categoryTypes) {
+        if (categoryType != null) {
+            // category 를 직접 지정하는 경우 (v2 미만)
+            this.category = categoryType;
+        } else if (!CollectionUtils.isEmpty(categoryTypes)) {
+            // category == null && !categories.isEmpty (v2 이상)
+            this.category = categoryTypes.get(0);
+        } else {
+            // 방어코드
+            this.category = CategoryType.BUNGEOPPANG;
         }
     }
 
