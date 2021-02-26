@@ -9,7 +9,6 @@ import com.depromeet.team5.domain.store.Image;
 import com.depromeet.team5.domain.store.PaymentMethod;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.dto.*;
-import com.depromeet.team5.util.LocationDistanceUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +17,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.depromeet.team5.util.LocationDistanceUtils.*;
 
 @Slf4j
 @Component
@@ -51,7 +52,7 @@ public class StoreAssembler {
             log.error("'rating' must not be null. storeId: {}", store.getId());
             return 0f;
         }));
-        storeDetailDto.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter"));
+        storeDetailDto.setDistance(getDistance(store.getLocation(), Location.of(latitude, longitude)));
         storeDetailDto.setUser(store.getUser());
         return storeDetailDto;
     }
@@ -132,7 +133,7 @@ public class StoreAssembler {
         if (store == null) {
             return null;
         }
-        return StoreCardDto.of(store, location.getLatitude(), location.getLongitude());
+        return StoreCardDto.of(store, location);
     }
 
     public StoreResponse toStoreResponse(Store store, Location location) {

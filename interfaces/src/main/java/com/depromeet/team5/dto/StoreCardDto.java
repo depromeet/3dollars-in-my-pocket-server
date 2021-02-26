@@ -1,5 +1,6 @@
 package com.depromeet.team5.dto;
 
+import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.Store;
 import com.depromeet.team5.util.LocationDistanceUtils;
@@ -32,13 +33,13 @@ public class StoreCardDto {
 
     private Float rating;
 
-    public static StoreCardDto of(Store store, Double latitude, Double longitude) {
+    public static StoreCardDto of(Store store, Location userLocation) {
         StoreCardDto storeCardDto = new StoreCardDto();
         storeCardDto.id = store.getId();
         storeCardDto.storeName = store.getStoreName();
         storeCardDto.category = store.getCategory();
         storeCardDto.categories = store.getCategoryTypes();
-        storeCardDto.distance = (int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter");
+        storeCardDto.distance = LocationDistanceUtils.getDistance(store.getLocation(), userLocation);
         storeCardDto.latitude = store.getLatitude();
         storeCardDto.longitude = store.getLongitude();
         storeCardDto.rating = Optional.ofNullable(store.getRating()).orElse(0f);

@@ -1,46 +1,34 @@
 package com.depromeet.team5.util;
 
+import com.depromeet.team5.domain.Location;
+
 public class LocationDistanceUtils {
     private LocationDistanceUtils() {
     }
 
-    //    // 미터(Meter) 단위
-//    double distanceMeter =
-//            distance(37.504198, 127.047967, 37.501025, 127.037701, "meter");
-//
-//    // 킬로미터(Kilo Meter) 단위
-//    double distanceKiloMeter =
-//            distance(37.504198, 127.047967, 37.501025, 127.037701, "kilometer");
-
-
     /**
      * 두 지점간의 거리 계산
      *
-     * @param lat1 지점 1 위도
-     * @param lon1 지점 1 경도
-     * @param lat2 지점 2 위도
-     * @param lon2 지점 2 경도
-     * @param unit 거리 표출단위
-     * @return
+     * @param source 지점 1 위도, 경도
+     * @param target 지점 2 위도, 경도
+     * @return 두 지점의 거리 (단위: meter)
      */
-    public static double getDistance(double lat1, double lon1, double lat2, double lon2, String unit) {
+    public static Integer getDistance(Location source, Location target) {
+        if (source == null || source.isEmpty() || target == null || target.isEmpty()) {
+            return null;
+        }
+        double lat1 = source.getLatitude();
+        double lon1 = source.getLongitude();
+        double lat2 = target.getLatitude();
+        double lon2 = target.getLongitude();
 
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-
-        if ("kilometer".equals(unit)) {
-            dist = dist * 1.609344;
-        } else if ("meter".equals(unit)) {
-            dist = dist * 1609.344;
-        }
-
-        return (dist);
+        return (int) (dist * 1609.344);
     }
-
 
     // This function converts decimal degrees to radians
     private static double deg2rad(double deg) {
