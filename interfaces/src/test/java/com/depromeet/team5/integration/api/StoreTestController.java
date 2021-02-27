@@ -1,13 +1,11 @@
 package com.depromeet.team5.integration.api;
 
 import com.depromeet.team5.domain.store.CategoryType;
-import com.depromeet.team5.dto.MenuRequest;
+import com.depromeet.team5.dto.*;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
-import com.depromeet.team5.dto.StoreDetailDto;
-import com.depromeet.team5.dto.StoreDto;
-import com.depromeet.team5.dto.StoreIdDto;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -70,6 +68,19 @@ public class StoreTestController {
                 .queryParam("longitude", longitude.toString()))
                 .andReturn();
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreDetailDto.class);
+    }
+
+    public List<StoreResponse> getStoresByLocation(String accessToken, Double latitude, Double longitude, String category) throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/store")
+                .header("Authorization", accessToken)
+                .param("latitude", latitude.toString())
+                .param("longitude", longitude.toString())
+                .param("category", category))
+                .andReturn();
+        return objectMapper.readValue(
+                mvcResult.getResponse().getContentAsByteArray(),
+                new TypeReference<List<StoreResponse>>() {}
+        );
     }
 
     public void deleteImage(String accessToken, Long imageId) throws Exception {
