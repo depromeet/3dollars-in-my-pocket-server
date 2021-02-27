@@ -35,9 +35,16 @@ public class StoreApplicationService {
     }
 
     @Transactional(readOnly = true)
-    public List<StoreResponse> getStoresByLocationAndDistance(Location location, Double distance) {
-        return storeService.getStoresByLocationAndDistance(location, distance).stream()
-                .map(storeAssembler::toStoreResponse)
+    public List<StoreResponse> getStoresByLocationAndDistance(Location userLocation,
+                                                              Location mapLocation,
+                                                              Double distance
+    ) {
+        Assert.notNull(userLocation, "'userLocation' must not be null");
+        Assert.notNull(mapLocation, "'mapLocation' must not be null");
+        Assert.notNull(distance, "'distance' must not be null");
+
+        return storeService.getStoresByLocationAndDistance(mapLocation, distance).stream()
+                .map(it -> storeAssembler.toStoreResponse(it, userLocation))
                 .collect(Collectors.toList());
     }
 
@@ -77,21 +84,6 @@ public class StoreApplicationService {
                 categoryType
         );
         return storeAssembler.toCategoryReviewDto(storeList, userLocation);
-    }
-
-    @Transactional(readOnly = true)
-    public List<StoreCardDto> getStoresByDistance(
-            Location userLocation,
-            Location mapLocation,
-            Double distance
-    ) {
-        Assert.notNull(userLocation, "'userLocation' must not be null");
-        Assert.notNull(mapLocation, "'mapLocation' must not be null");
-        Assert.notNull(distance, "'distance' must not be null");
-
-        return storeService.getStoresByLocationAndDistance(mapLocation, distance).stream()
-                .map(it -> storeAssembler.toStoreCardDto(it, userLocation))
-                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
