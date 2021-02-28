@@ -144,8 +144,8 @@ public class StoreAssembler {
         storeResponse.setUserResponse(userAssembler.toUserResponse(store.getUser()));
         storeResponse.setStoreName(store.getStoreName());
         storeResponse.setCategory(store.getCategory().name());
-        storeResponse.setCategories(store.getCategoryTypes());
-        storeResponse.setRating(Optional.ofNullable(store.getRating()).orElse(0f));
+        storeResponse.setCategories(store.getCategoryTypes().stream().map(Enum::toString).collect(Collectors.toList()));
+        storeResponse.setRating(store.getRating());
         storeResponse.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), location.getLatitude(), location.getLongitude(), "meter"));
         storeResponse.setImages(store.getImages());
         storeResponse.setLatitude(store.getLatitude());

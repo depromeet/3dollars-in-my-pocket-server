@@ -131,17 +131,13 @@ public class StoreController {
     @GetMapping
     public ResponseEntity<List<StoreResponse>> getStoresByLocation(@RequestParam Double latitude,
                                                                    @RequestParam Double longitude,
-                                                                   @RequestParam(required = false) Double mapLatitude,
-                                                                   @RequestParam(required = false) Double mapLongitude,
+                                                                   @RequestParam Double mapLatitude,
+                                                                   @RequestParam Double mapLongitude,
                                                                    @RequestParam Double distance) {
-        Location userLocation = Location.of(latitude, longitude);
-        Location mapLocation = mapLatitude != null && mapLongitude != null
-                ? Location.of(mapLatitude, mapLongitude)
-                : userLocation;
         return ResponseEntity.ok(
                 storeApplicationService.getStoresByLocationAndDistance(
-                        userLocation,
-                        mapLocation,
+                        Location.of(latitude, longitude),
+                        Location.of(mapLatitude, mapLongitude),
                         distance
                 )
         );
