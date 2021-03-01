@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.depromeet.team5.util.LocationDistanceUtils.*;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -51,7 +53,7 @@ public class StoreAssembler {
             log.error("'rating' must not be null. storeId: {}", store.getId());
             return 0f;
         }));
-        storeDetailDto.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), latitude, longitude, "meter"));
+        storeDetailDto.setDistance(getDistance(store.getLocation(), Location.of(latitude, longitude)));
         storeDetailDto.setUser(store.getUser());
         return storeDetailDto;
     }
@@ -132,7 +134,7 @@ public class StoreAssembler {
         if (store == null) {
             return null;
         }
-        return StoreCardDto.of(store, location.getLatitude(), location.getLongitude());
+        return StoreCardDto.of(store, location);
     }
 
     public StoreResponse toStoreResponse(Store store, Location location) {
@@ -146,7 +148,7 @@ public class StoreAssembler {
         storeResponse.setCategory(store.getCategory().name());
         storeResponse.setCategories(store.getCategoryTypes().stream().map(Enum::toString).collect(Collectors.toList()));
         storeResponse.setRating(store.getRating());
-        storeResponse.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), location.getLatitude(), location.getLongitude(), "meter"));
+        storeResponse.setDistance(LocationDistanceUtils.getDistance(store.getLocation(), location));
         storeResponse.setImages(store.getImages());
         storeResponse.setLatitude(store.getLatitude());
         storeResponse.setLongitude(store.getLongitude());

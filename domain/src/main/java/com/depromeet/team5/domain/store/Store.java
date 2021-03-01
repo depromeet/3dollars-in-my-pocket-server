@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain.store;
 
+import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.review.Review;
 import com.depromeet.team5.domain.user.User;
 import lombok.AccessLevel;
@@ -306,5 +307,9 @@ public class Store {
     public void addImage(Image image) {
         Assert.notNull(image, "'image' must not be null");
         this.images.add(image);
+    }
+
+    public Location getLocation() {
+        return Location.of(latitude, longitude);
     }
 }

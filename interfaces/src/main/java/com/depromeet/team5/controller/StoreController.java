@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -37,6 +38,8 @@ import java.util.stream.Collectors;
 @RequestMapping({"/api/v1/store", "/api/v1/stores"})
 @RequiredArgsConstructor
 public class StoreController {
+
+    private static final int PAGE_SIZE = 20;
 
     private final StoreService storeService;
     private final StoreApplicationService storeApplicationService;
@@ -89,7 +92,7 @@ public class StoreController {
         return ResponseEntity.ok(
                 storeService.getAll(latitude, longitude)
                         .stream()
-                        .map(store -> StoreCardDto.of(store, latitude, longitude))
+                        .map(store -> StoreCardDto.of(store, Location.of(latitude, longitude)))
                         .collect(Collectors.toList())
         );
     }
@@ -98,14 +101,16 @@ public class StoreController {
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
     @GetMapping("/user")
-    public ResponseEntity<StoreMyPagePomDto> getAllByUser(@RequestParam Long userId,
-                                                          @RequestParam Integer page) {
-        Pageable pageable = PageRequest.of(page - 1, 5, Sort.by("createdAt").descending());
+    public ResponseEntity<StoreMyPagePomDto> getAllByUser(@ModelAttribute("userId") @ApiIgnore Long userId,
+                                                          @RequestParam(required = false) Double latitude,
+                                                          @RequestParam(required = false) Double longitude,
+                                                          @RequestParam(required = false, defaultValue = "1") Integer page) {
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("createdAt").descending());
         Page<Store> storePage = storeService.getAllByUser(userId, pageable);
         List<StoreMyPageDto> storeMyPageList = storePage
                 .getContent()
                 .stream()
-                .map(StoreMyPageDto::from)
+                .map(store -> StoreMyPageDto.of(store, Location.of(latitude, longitude)))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(
                 StoreMyPagePomDto.from(
