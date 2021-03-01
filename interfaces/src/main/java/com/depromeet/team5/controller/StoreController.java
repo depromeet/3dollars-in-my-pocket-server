@@ -79,6 +79,7 @@ public class StoreController {
         return ResponseEntity.ok(storeIdDto);
     }
 
+    @Deprecated
     @ApiOperation("내 주변 가게들을 조회합니다(거리 가까운순 5개). 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
@@ -138,7 +139,7 @@ public class StoreController {
                 storeApplicationService.getStoresByLocationAndDistance(
                         Location.of(latitude, longitude),
                         Location.of(mapLatitude, mapLongitude),
-                        distance
+                        distance / 1000
                 )
         );
     }
