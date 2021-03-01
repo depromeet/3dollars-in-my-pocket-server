@@ -19,7 +19,8 @@ public class StoreResponse {
     private Integer distance;
     private Double latitude;
     private Double longitude;
-    private List<Image> images;
+    @JsonProperty("images")
+    private List<ImageResponse> imageResponses;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
