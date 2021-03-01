@@ -93,7 +93,7 @@ class StoreApiTest {
     @Test
     void getAllByUser_내가_등록한_가게가_있고_위치정보는_입력하지않은_경우() throws Exception {
         LoginResponse loginResponse = userTestController.createTestUser();
-        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 1);
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 1, new Double[]{37.111}, new Double[]{127.111});
         // when
         StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), 1);
         // then
@@ -104,13 +104,42 @@ class StoreApiTest {
     @Test
     void getAllByUser_내가_등록한_가게가_있고_위치정보도_입력한_경우() throws Exception {
         LoginResponse loginResponse = userTestController.createTestUser();
-        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 2);
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 2, new Double[]{37.111, 37.112}, new Double[]{127.111, 127.112});
         double latitude = 37.0;
         double longitude = 127.0;
         // when
         StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), latitude, longitude, 1);
         // then
         assertThat(actual.getContent()).allMatch(it -> it.getDistance() != null);
+    }
+
+    @Test
+    void getStoresByLocation_2km_이내에_가게가_없는_경우() throws Exception {
+        // given
+        LoginResponse loginResponse = userTestController.createTestUser();
+        double latitude = 37.0;
+        double longitude = 127.0;
+        // when
+        StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), latitude, longitude, 1);
+        // then
+        assertThat(actual.getTotalElements()).isZero();
+    }
+
+    @Test
+    void getStoresByLocation_2km_이내에_가게가_있는_경우() throws Exception {
+        // given
+        LoginResponse loginResponse = userTestController.createTestUser();
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 3, new Double[]{37.111, 37.112, 37.113}, new Double[]{127.111, 127.112, 127.113});
+        double latitude = 37.110;
+        double longitude = 127.110;
+        double mapLatitude = 37.111;
+        double mapLongitude = 127.111;
+        double distance = 2000;
+        // when
+        List<StoreResponse> actual = storeTestController.getStoresByLocation(loginResponse.getToken(), latitude, longitude, mapLatitude, mapLongitude, distance);
+        // then
+        assertThat(actual).hasSize(3);
+        assertThat(actual).isSortedAccordingTo(Comparator.comparing(StoreResponse::getDistance));
     }
 
     @Test
@@ -124,15 +153,15 @@ class StoreApiTest {
                 .andExpect(status().isBadRequest());
     }
 
-    private List<StoreIdDto> createStores(String token, Long userId, int size) {
+    private List<StoreIdDto> createStores(String token, Long userId, int size, Double[] latitude, Double[] longitude) {
         ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
         return IntStream.range(1, size + 1)
                 .mapToObj(it -> {
                     StoreDto storeDto = new StoreDto();
                     storeDto.setStoreName("storeName" + it);
                     storeDto.setStoreType(StoreType.ROAD);
-                    storeDto.setLatitude(37.0 + threadLocalRandom.nextDouble(1.0));
-                    storeDto.setLongitude(127.0 + threadLocalRandom.nextDouble(1.0));
+                    storeDto.setLatitude(latitude[it - 1]);
+                    storeDto.setLongitude(longitude[it - 1]);
                     storeDto.setCategories(Collections.singletonList(
                             CategoryType.values()[threadLocalRandom.nextInt(0, CategoryType.values().length)]
                     ));

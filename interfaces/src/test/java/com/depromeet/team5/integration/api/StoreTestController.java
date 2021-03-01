@@ -81,12 +81,14 @@ public class StoreTestController {
         return objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), StoreDetailDto.class);
     }
 
-    public List<StoreResponse> getStoresByLocation(String accessToken, Double latitude, Double longitude, String category) throws Exception {
+    public List<StoreResponse> getStoresByLocation(String accessToken, Double latitude, Double longitude, Double mapLatitude, Double mapLongitude, Double distance) throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/store")
                 .header("Authorization", accessToken)
                 .param("latitude", latitude.toString())
                 .param("longitude", longitude.toString())
-                .param("category", category))
+                .param("mapLatitude", mapLatitude.toString())
+                .param("mapLongitude", mapLongitude.toString())
+                .param("distance", distance.toString()))
                 .andReturn();
         return objectMapper.readValue(
                 mvcResult.getResponse().getContentAsByteArray(),
