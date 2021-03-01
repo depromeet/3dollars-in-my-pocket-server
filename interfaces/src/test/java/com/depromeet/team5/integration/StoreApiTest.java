@@ -130,10 +130,10 @@ class StoreApiTest {
     void getStoresByLocation_2km_이내에_가게가_있는_경우() throws Exception {
         // given
         LoginResponse loginResponse = userTestController.createTestUser();
-        List locationList = new ArrayList();
-        locationList.add(new Location(37.111, 127.111));
-        locationList.add(new Location(37.112, 127.112));
-        locationList.add(new Location(37.113, 127.113));
+        List locationList = Arrays.asList(
+                new Location(37.111, 127.111),
+                new Location(37.112, 127.112),
+                new Location(37.113, 127.113));
         this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 3, locationList);
         double latitude = 37.110;
         double longitude = 127.110;
@@ -169,8 +169,8 @@ class StoreApiTest {
                         storeDto.setLatitude(37.0 + threadLocalRandom.nextDouble(1.0));
                         storeDto.setLongitude(127.0 + threadLocalRandom.nextDouble(1.0));
                     } else {
-                        storeDto.setLatitude(locationList.get(it-1).getLatitude());
-                        storeDto.setLongitude(locationList.get(it-1).getLongitude());
+                        storeDto.setLatitude(locationList.get(it - 1).getLatitude());
+                        storeDto.setLongitude(locationList.get(it - 1).getLongitude());
                     }
                     storeDto.setCategories(Collections.singletonList(
                             CategoryType.values()[threadLocalRandom.nextInt(0, CategoryType.values().length)]
