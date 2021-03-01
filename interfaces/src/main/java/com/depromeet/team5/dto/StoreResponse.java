@@ -14,6 +14,9 @@ public class StoreResponse {
     private UserResponse userResponse;
     private String storeName;
     private String category;
+    private List<String> categories;
+    private Float rating;
+    private Integer distance;
     private Double latitude;
     private Double longitude;
     private List<Image> images;

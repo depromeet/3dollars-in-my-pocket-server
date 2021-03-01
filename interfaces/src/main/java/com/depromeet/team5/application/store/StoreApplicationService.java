@@ -5,19 +5,14 @@ import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.Image;
 import com.depromeet.team5.domain.store.Store;
-import com.depromeet.team5.dto.ImageResponse;
-import com.depromeet.team5.dto.StoresGroupByDistanceDto;
-import com.depromeet.team5.dto.StoresGroupByRatingDto;
-import com.depromeet.team5.dto.StoreDetailDto;
+import com.depromeet.team5.dto.*;
 import com.depromeet.team5.service.S3FileUploadService;
 import com.depromeet.team5.service.StoreService;
-import com.depromeet.team5.dto.StoreResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +35,16 @@ public class StoreApplicationService {
     }
 
     @Transactional(readOnly = true)
-    public List<StoreResponse> getStoresByLocationAndDistance(Location location, Double distance) {
-        return storeService.getStoresByLocationAndDistance(location, distance).stream()
-                .map(storeAssembler::toStoreResponse)
+    public List<StoreResponse> getStoresByLocationAndDistance(Location userLocation,
+                                                              Location mapLocation,
+                                                              Double distance
+    ) {
+        Assert.notNull(userLocation, "'userLocation' must not be null");
+        Assert.notNull(mapLocation, "'mapLocation' must not be null");
+        Assert.notNull(distance, "'distance' must not be null");
+
+        return storeService.getStoresByLocationAndDistance(mapLocation, distance).stream()
+                .map(it -> storeAssembler.toStoreResponse(it, userLocation))
                 .collect(Collectors.toList());
     }
 

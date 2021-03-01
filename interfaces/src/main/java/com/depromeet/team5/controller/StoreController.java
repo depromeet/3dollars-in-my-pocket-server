@@ -79,6 +79,7 @@ public class StoreController {
         return ResponseEntity.ok(storeIdDto);
     }
 
+    @Deprecated
     @ApiOperation("내 주변 가게들을 조회합니다(거리 가까운순 5개). 인증이 필요한 요청입니다.")
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header")
     @Auth
@@ -130,8 +131,17 @@ public class StoreController {
     @Auth
     @GetMapping
     public ResponseEntity<List<StoreResponse>> getStoresByLocation(@RequestParam Double latitude,
-                                                                   @RequestParam Double longitude) {
-        return ResponseEntity.ok(storeApplicationService.getStoresByLocationAndDistance(Location.of(latitude, longitude), 0.5));
+                                                                   @RequestParam Double longitude,
+                                                                   @RequestParam Double mapLatitude,
+                                                                   @RequestParam Double mapLongitude,
+                                                                   @RequestParam Double distance) {
+        return ResponseEntity.ok(
+                storeApplicationService.getStoresByLocationAndDistance(
+                        Location.of(latitude, longitude),
+                        Location.of(mapLatitude, mapLongitude),
+                        distance / 1000
+                )
+        );
     }
 
     @ApiOperation("특정 가게의 정보를 수정합니다. 인증이 필요한 요청입니다.")
