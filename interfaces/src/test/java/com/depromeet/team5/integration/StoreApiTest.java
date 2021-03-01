@@ -1,6 +1,7 @@
 package com.depromeet.team5.integration;
 
 import com.depromeet.team5.Team5InterfacesApplication;
+import com.depromeet.team5.domain.Location;
 import com.depromeet.team5.domain.store.CategoryType;
 import com.depromeet.team5.domain.store.PaymentMethodType;
 import com.depromeet.team5.domain.store.StoreType;
@@ -93,7 +94,7 @@ class StoreApiTest {
     @Test
     void getAllByUser_내가_등록한_가게가_있고_위치정보는_입력하지않은_경우() throws Exception {
         LoginResponse loginResponse = userTestController.createTestUser();
-        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 1, new Double[]{37.111}, new Double[]{127.111});
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 1, Collections.emptyList());
         // when
         StoreMyPagePomDto actual = storeTestController.getAllByUser(loginResponse.getToken(), 1);
         // then
@@ -104,7 +105,7 @@ class StoreApiTest {
     @Test
     void getAllByUser_내가_등록한_가게가_있고_위치정보도_입력한_경우() throws Exception {
         LoginResponse loginResponse = userTestController.createTestUser();
-        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 2, new Double[]{37.111, 37.112}, new Double[]{127.111, 127.112});
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 2, Collections.emptyList());
         double latitude = 37.0;
         double longitude = 127.0;
         // when
@@ -129,7 +130,11 @@ class StoreApiTest {
     void getStoresByLocation_2km_이내에_가게가_있는_경우() throws Exception {
         // given
         LoginResponse loginResponse = userTestController.createTestUser();
-        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 3, new Double[]{37.111, 37.112, 37.113}, new Double[]{127.111, 127.112, 127.113});
+        List locationList = new ArrayList();
+        locationList.add(new Location(37.111, 127.111));
+        locationList.add(new Location(37.112, 127.112));
+        locationList.add(new Location(37.113, 127.113));
+        this.createStores(loginResponse.getToken(), loginResponse.getUserId(), 3, locationList);
         double latitude = 37.110;
         double longitude = 127.110;
         double mapLatitude = 37.111;
@@ -143,7 +148,7 @@ class StoreApiTest {
     }
 
     @Test
-    void get_given_invalid_latitude_should_return_400_bad_request() throws Exception{
+    void get_given_invalid_latitude_should_return_400_bad_request() throws Exception {
         //given
         LoginResponse loginResponse = userTestController.createTestUser();
         //when
@@ -153,15 +158,20 @@ class StoreApiTest {
                 .andExpect(status().isBadRequest());
     }
 
-    private List<StoreIdDto> createStores(String token, Long userId, int size, Double[] latitude, Double[] longitude) {
+    private List<StoreIdDto> createStores(String token, Long userId, int size, List<Location> locationList) {
         ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
         return IntStream.range(1, size + 1)
                 .mapToObj(it -> {
                     StoreDto storeDto = new StoreDto();
                     storeDto.setStoreName("storeName" + it);
                     storeDto.setStoreType(StoreType.ROAD);
-                    storeDto.setLatitude(latitude[it - 1]);
-                    storeDto.setLongitude(longitude[it - 1]);
+                    if (locationList.isEmpty()) {
+                        storeDto.setLatitude(37.0 + threadLocalRandom.nextDouble(1.0));
+                        storeDto.setLongitude(127.0 + threadLocalRandom.nextDouble(1.0));
+                    } else {
+                        storeDto.setLatitude(locationList.get(it-1).getLatitude());
+                        storeDto.setLongitude(locationList.get(it-1).getLongitude());
+                    }
                     storeDto.setCategories(Collections.singletonList(
                             CategoryType.values()[threadLocalRandom.nextInt(0, CategoryType.values().length)]
                     ));
