@@ -149,7 +149,7 @@ public class StoreAssembler {
         storeResponse.setCategories(store.getCategoryTypes().stream().map(Enum::toString).collect(Collectors.toList()));
         storeResponse.setRating(store.getRating());
         storeResponse.setDistance(LocationDistanceUtils.getDistance(store.getLocation(), location));
-        storeResponse.setImages(store.getImages());
+        storeResponse.setImageResponses(this.toImageResponses(store.getImages()));
         storeResponse.setLatitude(store.getLatitude());
         storeResponse.setLongitude(store.getLongitude());
         storeResponse.setCreatedAt(store.getCreatedAt());
