@@ -20,7 +20,7 @@ public enum CategoryType {
     TTEOKBOKKI("떡볶이"),
     TTANGKONGPPANG("땅콩빵"),
     GUNOKSUSU("군옥수수"),
-    DAKKKOCHI("닭꼬치"),
+    KKOCHI("꼬치"),
     TOAST("토스트"),
     WAFFLE("와플"),
     GUKWAPPANG("국화빵"),
