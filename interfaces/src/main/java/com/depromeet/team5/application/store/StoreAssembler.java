@@ -148,7 +148,11 @@ public class StoreAssembler {
         storeResponse.setCategory(store.getCategory().name());
         storeResponse.setCategories(store.getCategoryTypes().stream().map(Enum::toString).collect(Collectors.toList()));
         storeResponse.setRating(store.getRating());
+<<<<<<< HEAD
         storeResponse.setDistance(LocationDistanceUtils.getDistance(store.getLocation(), location));
+=======
+        storeResponse.setDistance((int) LocationDistanceUtils.getDistance(store.getLatitude(), store.getLongitude(), location.getLatitude(), location.getLongitude(), "meter"));
+>>>>>>> Squashed commit of the following:
         storeResponse.setImages(store.getImages());
         storeResponse.setLatitude(store.getLatitude());
         storeResponse.setLongitude(store.getLongitude());
