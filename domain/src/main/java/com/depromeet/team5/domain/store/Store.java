@@ -133,8 +133,6 @@ public class Store {
         store.longitude = storeCreateValue.getLongitude();
         store.storeName = storeCreateValue.getStoreName();
         store.storeType = storeCreateValue.getStoreType();
-        store.updateCategory(storeCreateValue.getCategoryType(), storeCreateValue.getCategoryTypes());
-        store.updateCategories(storeCreateValue.getCategoryTypes());
         store.images = imageList;
         store.user = user;
 
@@ -151,7 +149,10 @@ public class Store {
         if (storeCreateValue.getMenus() != null) {
             store.menus = storeCreateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList());
         }
-
+        // 메뉴 -> 카테고리 목록 -> 대표카테고리 순서로 변경해야함
+        // 대표 카테고리 결정할 때 메뉴, 카테고리 목록에 영향 받기 때문
+        store.updateCategories(storeCreateValue.getCategoryTypes());
+        store.updateCategory(storeCreateValue.getCategoryType(), storeCreateValue.getCategoryTypes());
         return store;
     }
 
@@ -163,8 +164,6 @@ public class Store {
         latitude = storeUpdateValue.getLatitude();
         longitude = storeUpdateValue.getLongitude();
         storeName = storeUpdateValue.getStoreName();
-        this.updateCategory(storeUpdateValue.getCategoryType(), storeUpdateValue.getCategoryTypes());
-        this.updateCategories(storeUpdateValue.getCategoryTypes());
         storeType = storeUpdateValue.getStoreType();
         appearanceDays.clear();
         paymentMethods.clear();
@@ -183,6 +182,10 @@ public class Store {
         if (storeUpdateValue.getMenus() != null) {
             menus.addAll(storeUpdateValue.getMenus().stream().map(Menu::from).collect(Collectors.toList()));
         }
+        // 메뉴 -> 카테고리 목록 -> 대표카테고리 순서로 변경해야함
+        // 대표 카테고리 결정할 때 메뉴, 카테고리 목록에 영향 받기 때문
+        this.updateCategories(storeUpdateValue.getCategoryTypes());
+        this.updateCategory(storeUpdateValue.getCategoryType(), storeUpdateValue.getCategoryTypes());
     }
 
     /**
@@ -194,7 +197,7 @@ public class Store {
             this.category = categoryType;
         } else if (!CollectionUtils.isEmpty(categoryTypes)) {
             // category == null && !categories.isEmpty (v2 이상)
-            this.category = categoryTypes.get(0);
+            this.category = this.resolveRepresentativeCategory(categoryTypes.get(0));
         } else {
             // 방어코드
             this.category = CategoryType.BUNGEOPPANG;
@@ -252,12 +255,12 @@ public class Store {
         if (category != null) {
             return category;
         }
-        return this.resolveRepresentativeCategory();
+        return this.resolveRepresentativeCategory(CategoryType.BUNGEOPPANG);
     }
 
-    private CategoryType resolveRepresentativeCategory() {
+    private CategoryType resolveRepresentativeCategory(CategoryType defaultCategoryType) {
         Map<CategoryType, List<Menu>> categoryMenuMap = menus.stream().collect(Collectors.groupingBy(Menu::getCategory));
-        CategoryType categoryType = CategoryType.BUNGEOPPANG;
+        CategoryType categoryType = defaultCategoryType;
         int count = 0;
         for (Map.Entry<CategoryType, List<Menu>> entry : categoryMenuMap.entrySet()) {
             int size = entry.getValue().size();
