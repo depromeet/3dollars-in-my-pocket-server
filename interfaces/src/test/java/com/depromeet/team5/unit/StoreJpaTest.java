@@ -35,8 +35,8 @@ class StoreJpaTest {
         // then
         Set<DayOfWeek> savedAppearanceDays = savedStore.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toSet());
         Set<PaymentMethodType> savedPaymentMethods = savedStore.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet());
-        assertThat(savedAppearanceDays).isEqualTo(Set.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
-        assertThat(savedPaymentMethods).isEqualTo(Set.of(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER));
+        assertThat(savedAppearanceDays).isEqualTo(new HashSet<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.FRIDAY)));
+        assertThat(savedPaymentMethods).isEqualTo(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.ACCOUNT_TRANSFER)));
     }
 
     @Test
@@ -56,8 +56,8 @@ class StoreJpaTest {
         Store updatedStore = storeRepository.findById(savedStore.getId()).orElseThrow(() -> new StoreNotFoundException(savedStore.getId()));
         Set<DayOfWeek> updatedAppearanceDays = updatedStore.getAppearanceDays().stream().map(AppearanceDay::getDay).collect(Collectors.toSet());
         Set<PaymentMethodType> updatedPaymentMethods = updatedStore.getPaymentMethods().stream().map(PaymentMethod::getMethod).collect(Collectors.toSet());
-        assertThat(updatedAppearanceDays).isEqualTo(Set.of(DayOfWeek.MONDAY, DayOfWeek.THURSDAY));
-        assertThat(updatedPaymentMethods).isEqualTo(Set.of(PaymentMethodType.CASH, PaymentMethodType.CARD));
+        assertThat(updatedAppearanceDays).isEqualTo(new HashSet<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.THURSDAY)));
+        assertThat(updatedPaymentMethods).isEqualTo(new HashSet<>(Arrays.asList(PaymentMethodType.CASH, PaymentMethodType.CARD)));
     }
 
     private Store createStore(Set<DayOfWeek> appearanceDays, Set<PaymentMethodType> paymentMethods) {
