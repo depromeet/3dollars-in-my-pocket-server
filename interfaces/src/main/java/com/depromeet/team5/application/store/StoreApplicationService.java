@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StoreApplicationService {
 
+    private static final double DISTANCE_LIMIT = 2.0;
+
     private final StoreService storeService;
     private final StoreAssembler storeAssembler;
     private final S3FileUploadService s3FileUploadService;
-
-    private static final double DISTANCE_LIMIT = 2.0;
 
     @Transactional(readOnly = true)
     public StoreDetailDto getStoreDetail(Long storeId, Double latitude, Double longitude) {
