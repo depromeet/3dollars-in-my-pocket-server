@@ -4,8 +4,8 @@ import com.depromeet.team5.domain.user.SocialType;
 import com.depromeet.team5.domain.user.SocialVo;
 import com.depromeet.team5.dto.LoginResponse;
 import com.depromeet.team5.exception.InvalidAccessTokenException;
-import com.depromeet.team5.infrastructure.apple.AppleLoginTokenValidator;
-import com.depromeet.team5.infrastructure.kakao.KakaoLoginTokenValidator;
+import com.depromeet.team5.infrastructure.apple.AppleLoginTokenVerifier;
+import com.depromeet.team5.infrastructure.kakao.KakaoLoginTokenVerifier;
 import com.depromeet.team5.domain.user.User;
 import com.depromeet.team5.dto.UserResponse;
 import com.depromeet.team5.service.UserService;
@@ -21,20 +21,20 @@ public class UserApplicationService {
 
     private final UserService userService;
     private final UserAssembler userAssembler;
-    private final KakaoLoginTokenValidator kakaoLoginTokenValidator;
-    private final AppleLoginTokenValidator appleLoginTokenValidator;
+    private final KakaoLoginTokenVerifier kakaoLoginTokenVerifier;
+    private final AppleLoginTokenVerifier appleLoginTokenVerifier;
 
     @Transactional
     public LoginResponse login(SocialVo socialVo) {
 
-        boolean isValid = true;
         SocialType socialType = socialVo.getSocialType();
         String token = socialVo.getToken();
 
-        if (token != null) {
-            isValid = checkLoginToken(socialType, token);
-        }
-        if (!isValid) {
+        /**
+         * 원래는 모든 로그인 토큰의 유효성을 검증해야하나,
+         * 하위호환성 유지를 위해 토큰이 있는 경우에만 검증을 진행합니다.
+         */
+        if (token != null && !isVerified(socialType, token)) {
             throw new InvalidAccessTokenException();
         }
 
@@ -49,12 +49,12 @@ public class UserApplicationService {
         return userAssembler.toUserResponse(user);
     }
 
-    private boolean checkLoginToken(SocialType socialType, String token) {
+    private boolean isVerified(SocialType socialType, String token) {
 
         if (Objects.equals(socialType, SocialType.KAKAO)) {
-            return kakaoLoginTokenValidator.isValid(token);
+            return kakaoLoginTokenVerifier.isVerified(token);
         } else if (Objects.equals(socialType, SocialType.APPLE)) {
-            return appleLoginTokenValidator.isValid(token);
+            return appleLoginTokenVerifier.isVerified(token);
         }
 
         return false;
