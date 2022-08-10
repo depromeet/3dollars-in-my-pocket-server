@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain.store;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"store", "method"})
 public class PaymentMethod {
 
     private PaymentMethod(Store store, PaymentMethodType method) {
@@ -38,6 +40,6 @@ public class PaymentMethod {
     private LocalDateTime updatedAt;
 
     public static PaymentMethod from(Store store, PaymentMethodType paymentMethodType) {
-       return new PaymentMethod(store, paymentMethodType);
+        return new PaymentMethod(store, paymentMethodType);
     }
 }

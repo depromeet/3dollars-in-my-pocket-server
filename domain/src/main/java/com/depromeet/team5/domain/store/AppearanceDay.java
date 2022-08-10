@@ -1,5 +1,6 @@
 package com.depromeet.team5.domain.store;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"store", "day"})
 public class AppearanceDay {
 
     private AppearanceDay(Store store, DayOfWeek day) {
